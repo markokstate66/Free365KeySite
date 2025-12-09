@@ -1,0 +1,13 @@
+{
+  "name": "free365key-api",
+  "version": "1.0.0",
+  "description": "Azure Functions API for Free365Key",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.2.2",
+    "uuid": "^9.0.0"
+  }
+}
