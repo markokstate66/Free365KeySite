@@ -1,6 +1,5 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import AdBanner from '../components/AdBanner'
 
 const pastWinners = [
   { month: 'November 2024', name: 'Sarah M.', location: 'California, USA', initials: 'SM' },
@@ -22,8 +21,6 @@ function WinnersPage() {
           <p>Congratulations to all our lucky Microsoft 365 license winners!</p>
         </div>
       </section>
-
-      <AdBanner slot="winners-top" format="horizontal" />
 
       <section className="content-section">
         <div className="container">
@@ -63,8 +60,6 @@ function WinnersPage() {
         </div>
       </section>
 
-      <AdBanner slot="winners-middle" format="horizontal" />
-
       <section className="content-section">
         <div className="container" style={{ maxWidth: '800px' }}>
           <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>What Winners Say</h2>
@@ -96,8 +91,6 @@ function WinnersPage() {
           </a>
         </div>
       </section>
-
-      <AdBanner slot="winners-bottom" format="horizontal" />
 
       <Footer />
     </div>

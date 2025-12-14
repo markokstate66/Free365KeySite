@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import AdBanner from '../components/AdBanner'
 import Newsletter from '../components/Newsletter'
 
 const blogPosts = [
@@ -73,8 +72,6 @@ function BlogPage() {
         </div>
       </section>
 
-      <AdBanner slot="blog-top" format="horizontal" />
-
       <section className="content-section">
         <div className="container">
           <div className="blog-grid">
@@ -98,15 +95,11 @@ function BlogPage() {
         </div>
       </section>
 
-      <AdBanner slot="blog-middle" format="horizontal" />
-
       <section className="content-section" style={{ background: '#f8f9fa' }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '600px' }}>
           <Newsletter variant="inline" />
         </div>
       </section>
-
-      <AdBanner slot="blog-bottom" format="horizontal" />
 
       <Footer />
     </div>

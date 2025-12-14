@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import AdBanner from '../components/AdBanner'
 
 function HowItWorksPage() {
   return (
@@ -14,8 +13,6 @@ function HowItWorksPage() {
           <p>Your simple guide to entering and winning a free Microsoft 365 license</p>
         </div>
       </section>
-
-      <AdBanner slot="how-it-works-top" format="horizontal" />
 
       <section className="content-section">
         <div className="container">
@@ -67,8 +64,6 @@ function HowItWorksPage() {
         </div>
       </section>
 
-      <AdBanner slot="how-it-works-middle" format="horizontal" />
-
       <section className="content-section" style={{ background: '#f8f9fa' }}>
         <div className="container">
           <h2 style={{ textAlign: 'center', marginBottom: '40px' }}>What You'll Win</h2>
@@ -97,8 +92,6 @@ function HowItWorksPage() {
           </Link>
         </div>
       </section>
-
-      <AdBanner slot="how-it-works-bottom" format="horizontal" />
 
       <Footer />
     </div>

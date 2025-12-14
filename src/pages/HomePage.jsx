@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import AdBanner from '../components/AdBanner'
 import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
 
@@ -28,8 +27,6 @@ function HomePage() {
           </p>
         </div>
       </section>
-
-      <AdBanner slot="top-banner" format="horizontal" />
 
       <section className="form-section">
         {!registered ? (
@@ -78,8 +75,6 @@ function HomePage() {
         </div>
       </section>
 
-      <AdBanner slot="middle-banner" format="horizontal" />
-
       <section className="features" style={{ background: '#f8f9fa' }}>
         <h2>Need More Licenses?</h2>
         <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
@@ -102,8 +97,6 @@ function HomePage() {
           <Newsletter />
         </div>
       </section>
-
-      <AdBanner slot="bottom-banner" format="horizontal" />
 
       <Footer />
     </div>

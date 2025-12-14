@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import AdBanner from '../components/AdBanner'
 
 const faqs = [
   {
@@ -76,8 +75,6 @@ function FAQPage() {
         </div>
       </section>
 
-      <AdBanner slot="faq-top" format="horizontal" />
-
       <section className="content-section">
         <div className="container" style={{ maxWidth: '800px' }}>
           <div className="faq-list">
@@ -87,8 +84,6 @@ function FAQPage() {
           </div>
         </div>
       </section>
-
-      <AdBanner slot="faq-middle" format="horizontal" />
 
       <section className="content-section" style={{ background: '#f8f9fa' }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '600px' }}>
@@ -105,8 +100,6 @@ function FAQPage() {
           </a>
         </div>
       </section>
-
-      <AdBanner slot="faq-bottom" format="horizontal" />
 
       <Footer />
     </div>
