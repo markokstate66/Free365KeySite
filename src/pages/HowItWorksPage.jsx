@@ -1,0 +1,108 @@
+import { Link } from 'react-router-dom'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import AdBanner from '../components/AdBanner'
+
+function HowItWorksPage() {
+  return (
+    <div>
+      <Header />
+
+      <section className="hero" style={{ padding: '60px 20px' }}>
+        <div className="container">
+          <h1>How It Works</h1>
+          <p>Your simple guide to entering and winning a free Microsoft 365 license</p>
+        </div>
+      </section>
+
+      <AdBanner slot="how-it-works-top" format="horizontal" />
+
+      <section className="content-section">
+        <div className="container">
+          <div className="steps-container">
+            <div className="step">
+              <div className="step-number">1</div>
+              <div className="step-content">
+                <h3>Register Your Entry</h3>
+                <p>
+                  Fill out the simple registration form on our homepage with your name and email address.
+                  Make sure to use a valid email as this is how we'll contact winners.
+                </p>
+              </div>
+            </div>
+
+            <div className="step">
+              <div className="step-number">2</div>
+              <div className="step-content">
+                <h3>Confirm Your Email</h3>
+                <p>
+                  Check your inbox for a confirmation email. Click the link to verify your entry
+                  and ensure you're eligible for the drawing.
+                </p>
+              </div>
+            </div>
+
+            <div className="step">
+              <div className="step-number">3</div>
+              <div className="step-content">
+                <h3>Wait for the Drawing</h3>
+                <p>
+                  We conduct random drawings every month. All verified entries from that month
+                  are included in the pool. The more months you're registered, the more chances you have!
+                </p>
+              </div>
+            </div>
+
+            <div className="step">
+              <div className="step-number">4</div>
+              <div className="step-content">
+                <h3>Claim Your Prize</h3>
+                <p>
+                  Winners are notified via email with instructions to claim their Microsoft 365 license key.
+                  You'll have 30 days to respond and claim your prize.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <AdBanner slot="how-it-works-middle" format="horizontal" />
+
+      <section className="content-section" style={{ background: '#f8f9fa' }}>
+        <div className="container">
+          <h2 style={{ textAlign: 'center', marginBottom: '40px' }}>What You'll Win</h2>
+          <div className="prize-details">
+            <div className="prize-card">
+              <h3>Microsoft 365 Personal</h3>
+              <ul>
+                <li>Word, Excel, PowerPoint, Outlook</li>
+                <li>1TB OneDrive cloud storage</li>
+                <li>Use on up to 5 devices</li>
+                <li>1 year subscription</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="content-section">
+        <div className="container" style={{ textAlign: 'center' }}>
+          <h2>Ready to Enter?</h2>
+          <p style={{ marginBottom: '30px', color: '#666' }}>
+            It only takes 30 seconds to register for your chance to win!
+          </p>
+          <Link to="/" className="submit-btn" style={{ display: 'inline-block', textDecoration: 'none', maxWidth: '300px' }}>
+            Enter Now
+          </Link>
+        </div>
+      </section>
+
+      <AdBanner slot="how-it-works-bottom" format="horizontal" />
+
+      <Footer />
+    </div>
+  )
+}
+
+export default HowItWorksPage

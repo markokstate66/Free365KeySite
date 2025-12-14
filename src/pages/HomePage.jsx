@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import AdBanner from '../components/AdBanner'
 import RegistrationForm from '../components/RegistrationForm'
+import Newsletter from '../components/Newsletter'
 
 function HomePage() {
   const [registered, setRegistered] = useState(false)
@@ -93,6 +94,12 @@ function HomePage() {
           >
             Contact Sales
           </a>
+        </div>
+      </section>
+
+      <section className="newsletter-section">
+        <div className="container">
+          <Newsletter />
         </div>
       </section>
 

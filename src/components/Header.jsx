@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 function Header() {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   return (
     <header className="header">
       <div className="header-content">
@@ -13,10 +16,15 @@ function Header() {
           </svg>
           Free365Key
         </Link>
-        <nav className="nav-links">
-          <Link to="/">Home</Link>
-          <Link to="/privacy">Privacy</Link>
-          <Link to="/terms">Terms</Link>
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? '✕' : '☰'}
+        </button>
+        <nav className={`nav-links ${menuOpen ? 'nav-open' : ''}`}>
+          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link to="/how-it-works" onClick={() => setMenuOpen(false)}>How It Works</Link>
+          <Link to="/winners" onClick={() => setMenuOpen(false)}>Winners</Link>
+          <Link to="/faq" onClick={() => setMenuOpen(false)}>FAQ</Link>
+          <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
         </nav>
       </div>
     </header>

@@ -1,17 +1,16 @@
-const { TableClient, AzureNamedKeyCredential } = require("@azure/data-tables");
+const { TableClient } = require("@azure/data-tables");
 
 const connectionString = process.env.STORAGE_CONNECTION_STRING || "UseDevelopmentStorage=true";
-const tableName = "registrations";
 
-let tableClient = null;
+const tableClients = {};
 
-async function getTableClient() {
-  if (!tableClient) {
-    tableClient = TableClient.fromConnectionString(connectionString, tableName);
+async function getTableClient(tableName = "registrations") {
+  if (!tableClients[tableName]) {
+    tableClients[tableName] = TableClient.fromConnectionString(connectionString, tableName);
 
     // Create table if it doesn't exist
     try {
-      await tableClient.createTable();
+      await tableClients[tableName].createTable();
     } catch (error) {
       // Table already exists, ignore error
       if (error.statusCode !== 409) {
@@ -19,7 +18,7 @@ async function getTableClient() {
       }
     }
   }
-  return tableClient;
+  return tableClients[tableName];
 }
 
 module.exports = { getTableClient };

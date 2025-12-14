@@ -8,7 +8,19 @@
       "Bash(az staticwebapp secrets list:*)",
       "Bash(gh repo create:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(gh secret set:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(gh run list:*)",
+      "Bash(timeout:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh secret list:*)",
+      "Bash(gh run rerun:*)",
+      "Bash(az staticwebapp show:*)"
     ]
   }
 }
