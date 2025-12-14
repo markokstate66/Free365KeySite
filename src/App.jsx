@@ -1,4 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { initAnalytics, trackPageView, initScrollTracking, resetSectionTracking } from './utils/analytics'
 import HomePage from './pages/HomePage'
 import AdminPage from './pages/AdminPage'
 import PrivacyPage from './pages/PrivacyPage'
@@ -9,6 +11,21 @@ import WinnersPage from './pages/WinnersPage'
 import BlogPage from './pages/BlogPage'
 
 function App() {
+  const location = useLocation()
+
+  // Initialize analytics on mount
+  useEffect(() => {
+    const cleanup = initAnalytics()
+    return cleanup
+  }, [])
+
+  // Track page views on route change
+  useEffect(() => {
+    trackPageView(document.title, location.pathname)
+    initScrollTracking()
+    resetSectionTracking()
+  }, [location.pathname])
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
