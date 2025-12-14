@@ -1,9 +1,12 @@
 const { getTableClient } = require("../shared/tableClient");
 const { sendNewsletter } = require("../shared/emailService");
 
-// This function runs every 5 minutes to check for scheduled newsletters
-module.exports = async function (context) {
+// This function checks for and processes scheduled newsletters
+// Called automatically when admin views newsletters or manually via API
+module.exports = async function (context, req) {
   context.log("Newsletter scheduler triggered at:", new Date().toISOString());
+
+  const results = { processed: 0, sent: [], errors: [] };
 
   try {
     const draftsClient = await getTableClient("newsletterDrafts");
@@ -57,7 +60,7 @@ module.exports = async function (context) {
         const htmlWithUnsubscribe = addUnsubscribeLink(newsletter.htmlContent);
 
         // Send the newsletter
-        const results = await sendNewsletter(
+        const sendResults = await sendNewsletter(
           newsletter.subject,
           htmlWithUnsubscribe,
           subscribers
@@ -66,12 +69,19 @@ module.exports = async function (context) {
         // Update newsletter status
         newsletter.status = "sent";
         newsletter.sentAt = now.toISOString();
-        newsletter.recipientCount = results.success;
+        newsletter.recipientCount = sendResults.success;
         newsletter.updatedAt = now.toISOString();
 
         await draftsClient.updateEntity(newsletter, "Replace");
 
-        context.log(`Newsletter sent: ${results.success} successful, ${results.failed} failed`);
+        context.log(`Newsletter sent: ${sendResults.success} successful, ${sendResults.failed} failed`);
+
+        results.sent.push({
+          id: newsletter.id,
+          subject: newsletter.subject,
+          recipients: sendResults.success
+        });
+        results.processed++;
 
       } catch (error) {
         context.log.error(`Failed to send newsletter ${newsletter.id}:`, error);
@@ -80,13 +90,29 @@ module.exports = async function (context) {
         newsletter.lastError = error.message;
         newsletter.updatedAt = now.toISOString();
         await draftsClient.updateEntity(newsletter, "Replace");
+
+        results.errors.push({
+          id: newsletter.id,
+          subject: newsletter.subject,
+          error: error.message
+        });
       }
     }
 
     context.log("Newsletter scheduler completed");
 
+    context.res = {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+      body: results
+    };
+
   } catch (error) {
     context.log.error("Newsletter scheduler error:", error);
+    context.res = {
+      status: 500,
+      body: { error: error.message }
+    };
   }
 };
 

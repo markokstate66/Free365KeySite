@@ -76,6 +76,9 @@ function AdminPage() {
 
   const fetchNewsletters = async () => {
     try {
+      // First, process any scheduled newsletters that are due
+      await fetch('/api/newsletter/process-scheduled', { method: 'POST' }).catch(() => {})
+
       const response = await fetch('/api/admin/newsletters')
       if (response.ok) {
         const data = await response.json()
