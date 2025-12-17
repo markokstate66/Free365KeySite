@@ -14,10 +14,31 @@ const quillModules = {
   ],
 }
 
+// Detect if HTML content is complex (email templates, tables, inline styles, etc.)
+// that ReactQuill can't handle properly
+function isComplexHtml(html) {
+  if (!html) return false
+  const complexPatterns = [
+    /<table/i,
+    /<style/i,
+    /style\s*=\s*["'][^"']*(?:width|height|margin|padding|background|border|font-family|display|position)/i,
+    /<!DOCTYPE/i,
+    /<html/i,
+    /<head/i,
+    /<body/i,
+    /<!--/,
+    /@media/i
+  ]
+  return complexPatterns.some(pattern => pattern.test(html))
+}
+
 function NewsletterEditor({ newsletter, onSave, onCancel, onSend }) {
   const [subject, setSubject] = useState(newsletter?.subject || '')
   const [htmlContent, setHtmlContent] = useState(newsletter?.htmlContent || '')
-  const [editorMode, setEditorMode] = useState('visual')
+  // Default to HTML mode if content is complex, otherwise visual
+  const [editorMode, setEditorMode] = useState(() => {
+    return isComplexHtml(newsletter?.htmlContent) ? 'html' : 'visual'
+  })
   const [rawHtml, setRawHtml] = useState(newsletter?.htmlContent || '')
   const [saving, setSaving] = useState(false)
   const [sending, setSending] = useState(false)
@@ -31,6 +52,10 @@ function NewsletterEditor({ newsletter, onSave, onCancel, onSend }) {
       setHtmlContent(newsletter.htmlContent || '')
       setRawHtml(newsletter.htmlContent || '')
       setScheduledAt(newsletter.scheduledAt || '')
+      // Update editor mode based on content complexity
+      if (isComplexHtml(newsletter.htmlContent)) {
+        setEditorMode('html')
+      }
     }
   }, [newsletter])
 
@@ -222,7 +247,14 @@ function NewsletterEditor({ newsletter, onSave, onCancel, onSend }) {
         <div className="editor-mode-tabs">
           <button
             className={`tab ${editorMode === 'visual' ? 'active' : ''}`}
-            onClick={() => setEditorMode('visual')}
+            onClick={() => {
+              if (isComplexHtml(htmlContent) && editorMode !== 'visual') {
+                if (!confirm('Warning: Your HTML contains complex formatting (tables, styles, etc.) that the Visual Editor cannot preserve. Switching may cause formatting loss. Continue?')) {
+                  return
+                }
+              }
+              setEditorMode('visual')
+            }}
           >
             Visual Editor
           </button>
