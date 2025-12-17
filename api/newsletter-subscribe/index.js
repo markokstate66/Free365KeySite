@@ -36,12 +36,30 @@ module.exports = async function (context, req) {
 
     const tableClient = await getTableClient("newsletters");
 
-    // Check for duplicate email
+    // Check for existing email
     const existingEntries = tableClient.listEntities({
       queryOptions: { filter: `email eq '${body.email.toLowerCase()}'` }
     });
 
     for await (const entity of existingEntries) {
+      // If inactive, reactivate the subscription
+      if (entity.isActive === false) {
+        await tableClient.updateEntity({
+          partitionKey: entity.partitionKey,
+          rowKey: entity.rowKey,
+          isActive: true,
+          resubscribedAt: new Date().toISOString()
+        }, "Merge");
+
+        context.res = {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+          body: { message: "Successfully resubscribed to newsletter" }
+        };
+        return;
+      }
+
+      // Already active subscriber
       context.res = {
         status: 409,
         body: { error: "This email is already subscribed" }
