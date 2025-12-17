@@ -16,9 +16,11 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
     }
   }, [timeLeft])
 
-  // Try to load AdSense ad
+  // Try to load AdSense ads
   useEffect(() => {
     try {
+      // Push both ad units
+      (window.adsbygoogle = window.adsbygoogle || []).push({})
       (window.adsbygoogle = window.adsbygoogle || []).push({})
     } catch (e) {
       console.log('Ad load error:', e)
@@ -62,14 +64,19 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
             </div>
 
             <div className="rewarded-ad-content">
-              {/* AdSense Ad Unit */}
+              {/* Large Rectangle Ad - 336x280 */}
               <ins
                 className="adsbygoogle"
-                style={{ display: 'block', width: '100%', minHeight: '250px' }}
+                style={{ display: 'inline-block', width: '336px', height: '280px' }}
                 data-ad-client="ca-pub-6676281664229738"
                 data-ad-slot="auto"
-                data-ad-format="auto"
-                data-full-width-responsive="true"
+              />
+              {/* Second ad unit below for more content */}
+              <ins
+                className="adsbygoogle"
+                style={{ display: 'inline-block', width: '336px', height: '280px', marginTop: '10px' }}
+                data-ad-client="ca-pub-6676281664229738"
+                data-ad-slot="auto"
               />
             </div>
 
@@ -128,9 +135,10 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
         .rewarded-ad-modal {
           background: white;
           border-radius: 16px;
-          max-width: 500px;
+          max-width: 400px;
           width: 100%;
-          overflow: hidden;
+          max-height: 90vh;
+          overflow-y: auto;
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
@@ -153,12 +161,14 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
         }
 
         .rewarded-ad-content {
-          padding: 20px;
-          min-height: 280px;
+          padding: 15px;
+          min-height: 400px;
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
           background: #f8f9fa;
+          gap: 10px;
         }
 
         .rewarded-ad-footer {
