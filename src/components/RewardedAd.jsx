@@ -16,11 +16,9 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
     }
   }, [timeLeft])
 
-  // Try to load AdSense ads
+  // Try to load AdSense ad
   useEffect(() => {
     try {
-      // Push both ad units
-      (window.adsbygoogle = window.adsbygoogle || []).push({})
       (window.adsbygoogle = window.adsbygoogle || []).push({})
     } catch (e) {
       console.log('Ad load error:', e)
@@ -64,19 +62,14 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
             </div>
 
             <div className="rewarded-ad-content">
-              {/* Large Rectangle Ad - 336x280 */}
+              {/* BigOleAd - Full width responsive */}
               <ins
                 className="adsbygoogle"
-                style={{ display: 'inline-block', width: '336px', height: '280px' }}
+                style={{ display: 'block', width: '100%', minHeight: '250px' }}
                 data-ad-client="ca-pub-6676281664229738"
-                data-ad-slot="auto"
-              />
-              {/* Second ad unit below for more content */}
-              <ins
-                className="adsbygoogle"
-                style={{ display: 'inline-block', width: '336px', height: '280px', marginTop: '10px' }}
-                data-ad-client="ca-pub-6676281664229738"
-                data-ad-slot="auto"
+                data-ad-slot="3397395853"
+                data-ad-format="auto"
+                data-full-width-responsive="true"
               />
             </div>
 
