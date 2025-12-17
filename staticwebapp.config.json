@@ -5,7 +5,7 @@
       "allowedRoles": ["authenticated"]
     },
     {
-      "route": "/api/admin-registrations",
+      "route": "/api/mgmt-registrations",
       "allowedRoles": ["anonymous"]
     },
     {
