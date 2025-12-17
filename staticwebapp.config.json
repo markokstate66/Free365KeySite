@@ -5,27 +5,7 @@
       "allowedRoles": ["authenticated"]
     },
     {
-      "route": "/api/mgmt-registrations",
-      "allowedRoles": ["anonymous"]
-    },
-    {
-      "route": "/api/admin-newsletters",
-      "allowedRoles": ["authenticated"]
-    },
-    {
-      "route": "/api/admin-subscribers",
-      "allowedRoles": ["authenticated"]
-    },
-    {
-      "route": "/api/admin-newsletter-send",
-      "allowedRoles": ["authenticated"]
-    },
-    {
-      "route": "/api/admin-mark-winner",
-      "allowedRoles": ["authenticated"]
-    },
-    {
-      "route": "/api/admin-login",
+      "route": "/api/mgmt-*",
       "allowedRoles": ["authenticated"]
     },
     {

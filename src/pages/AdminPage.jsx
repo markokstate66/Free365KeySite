@@ -52,7 +52,7 @@ function AdminPage() {
   const fetchRegistrations = async () => {
     setLoading(true)
     try {
-      const response = await fetch('/api/admin-registrations')
+      const response = await fetch('/api/mgmt-registrations')
       if (response.ok) {
         const data = await response.json()
         setRegistrations(data.registrations || [])
@@ -69,7 +69,7 @@ function AdminPage() {
       // First, process any scheduled newsletters that are due
       await fetch('/api/newsletter-scheduler', { method: 'POST' }).catch(() => {})
 
-      const response = await fetch('/api/admin-newsletters')
+      const response = await fetch('/api/mgmt-newsletters')
       if (response.ok) {
         const data = await response.json()
         setNewsletters(data.newsletters || [])
@@ -81,7 +81,7 @@ function AdminPage() {
 
   const fetchSubscribers = async () => {
     try {
-      const response = await fetch('/api/admin-subscribers')
+      const response = await fetch('/api/mgmt-subscribers')
       if (response.ok) {
         const data = await response.json()
         setSubscribers(data)
@@ -93,7 +93,7 @@ function AdminPage() {
 
   const handleSaveNewsletter = async (newsletterData) => {
     const method = newsletterData.id ? 'PUT' : 'POST'
-    const url = '/api/admin-newsletters' + (newsletterData.id ? `?id=${newsletterData.id}` : '')
+    const url = '/api/mgmt-newsletters' + (newsletterData.id ? `?id=${newsletterData.id}` : '')
 
     const response = await fetch(url, {
       method,
@@ -118,7 +118,7 @@ function AdminPage() {
   }
 
   const handleSendNewsletter = async (id) => {
-    const response = await fetch('/api/admin-newsletter-send', {
+    const response = await fetch('/api/mgmt-newsletter-send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })
@@ -140,7 +140,7 @@ function AdminPage() {
   const handleDeleteNewsletter = async (id) => {
     if (!confirm('Are you sure you want to delete this newsletter?')) return
 
-    const response = await fetch(`/api/admin-newsletters?id=${id}`, {
+    const response = await fetch(`/api/mgmt-newsletters?id=${id}`, {
       method: 'DELETE'
     })
 
@@ -191,7 +191,7 @@ function AdminPage() {
     const selectedWinner = eligibleEntries[randomIndex]
 
     try {
-      const response = await fetch('/api/admin-mark-winner', {
+      const response = await fetch('/api/mgmt-mark-winner', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: selectedWinner.id })
