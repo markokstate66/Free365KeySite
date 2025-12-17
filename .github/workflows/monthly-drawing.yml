@@ -1,0 +1,41 @@
+name: Monthly Winner Drawing
+
+on:
+  # Run on the 1st of every month at 12:00 PM UTC
+  schedule:
+    - cron: '0 12 1 * *'
+
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  draw-winner:
+    runs-on: ubuntu-latest
+    name: Draw Monthly Winner
+
+    steps:
+      - name: Draw Winner
+        run: |
+          echo "Triggering monthly winner drawing..."
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"secret": "${{ secrets.DRAW_SECRET }}"}' \
+            "https://www.free365key.com/api/draw-winner")
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "Response: $body"
+          echo "HTTP Status: $http_code"
+
+          if [ "$http_code" != "200" ]; then
+            echo "Drawing failed!"
+            exit 1
+          fi
+
+          echo "Drawing completed successfully!"
+
+      - name: Log Result
+        if: always()
+        run: |
+          echo "Monthly drawing workflow completed at $(date)"

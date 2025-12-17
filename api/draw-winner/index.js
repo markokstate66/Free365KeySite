@@ -1,0 +1,199 @@
+const { getTableClient } = require("../shared/tableClient");
+const { sendEmail, SITE_URL } = require("../shared/emailService");
+
+// Secret key for authorization (set in Azure app settings)
+const DRAW_SECRET = process.env.DRAW_SECRET || "free365key-draw-secret-2024";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "markokstate@gmail.com";
+
+module.exports = async function (context, req) {
+  context.log("Draw winner request received");
+
+  if (req.method !== "POST") {
+    context.res = { status: 405, body: { error: "Method not allowed" } };
+    return;
+  }
+
+  try {
+    // Verify authorization
+    const { secret } = req.body;
+    if (secret !== DRAW_SECRET) {
+      context.res = { status: 401, body: { error: "Unauthorized" } };
+      return;
+    }
+
+    const tableClient = await getTableClient();
+    const bonusClient = await getTableClient("bonusentries");
+    const now = new Date().toISOString();
+
+    // Get all eligible registrations (not won, not expired)
+    const eligibleEntries = [];
+    const registrations = tableClient.listEntities({
+      queryOptions: { filter: `isWinner eq false` }
+    });
+
+    for await (const reg of registrations) {
+      // Check if not expired (expiresAt > now, or no expiresAt for legacy entries)
+      if (!reg.expiresAt || reg.expiresAt > now) {
+        // Count bonus entries for weighted selection
+        let bonusCount = 0;
+        const bonuses = bonusClient.listEntities({
+          queryOptions: { filter: `registrationId eq '${reg.rowKey}'` }
+        });
+
+        for await (const bonus of bonuses) {
+          // Only count non-expired bonus entries
+          bonusCount++;
+        }
+
+        // Add to pool: 1 base entry + bonus entries
+        const totalWeight = 1 + bonusCount;
+        eligibleEntries.push({
+          registration: reg,
+          bonusCount,
+          totalWeight
+        });
+      }
+    }
+
+    if (eligibleEntries.length === 0) {
+      context.res = {
+        status: 200,
+        body: {
+          success: false,
+          message: "No eligible entries found",
+          stats: { total: 0 }
+        }
+      };
+      return;
+    }
+
+    // Create weighted pool for random selection
+    const weightedPool = [];
+    for (const entry of eligibleEntries) {
+      for (let i = 0; i < entry.totalWeight; i++) {
+        weightedPool.push(entry);
+      }
+    }
+
+    // Random selection
+    const randomIndex = Math.floor(Math.random() * weightedPool.length);
+    const winner = weightedPool[randomIndex];
+
+    // Mark as winner in database
+    const updatedEntity = {
+      ...winner.registration,
+      isWinner: true,
+      wonAt: new Date().toISOString()
+    };
+    await tableClient.updateEntity(updatedEntity, "Replace");
+
+    // Prepare winner info
+    const winnerInfo = {
+      id: winner.registration.rowKey,
+      firstName: winner.registration.firstName,
+      lastName: winner.registration.lastName,
+      email: winner.registration.email,
+      phone: winner.registration.phone,
+      companyName: winner.registration.companyName,
+      registeredAt: winner.registration.registeredAt,
+      bonusEntries: winner.bonusCount,
+      totalEntries: winner.totalWeight,
+      wonAt: updatedEntity.wonAt
+    };
+
+    // Send notification email to admin
+    const adminEmailHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #6366f1;">Monthly Winner Drawing Results</h1>
+        <p>A winner has been randomly selected for the Microsoft 365 Key Giveaway!</p>
+
+        <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h2 style="color: #10b981; margin-top: 0;">Winner Details</h2>
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr><td style="padding: 8px 0; font-weight: bold;">Name:</td><td>${winnerInfo.firstName} ${winnerInfo.lastName}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Email:</td><td>${winnerInfo.email}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Phone:</td><td>${winnerInfo.phone}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Company:</td><td>${winnerInfo.companyName || 'N/A'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Registered:</td><td>${new Date(winnerInfo.registeredAt).toLocaleDateString()}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Bonus Entries:</td><td>${winnerInfo.bonusEntries}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Total Entries:</td><td>${winnerInfo.totalEntries}</td></tr>
+          </table>
+        </div>
+
+        <div style="background: #e0e7ff; padding: 20px; border-radius: 8px;">
+          <h3 style="margin-top: 0;">Drawing Statistics</h3>
+          <p>Total eligible participants: ${eligibleEntries.length}</p>
+          <p>Total entries in pool: ${weightedPool.length}</p>
+          <p>Drawing date: ${new Date().toLocaleString()}</p>
+        </div>
+
+        <p style="margin-top: 20px; color: #666;">
+          Please contact the winner to arrange delivery of their Microsoft 365 license key.
+        </p>
+      </div>
+    `;
+
+    try {
+      await sendEmail(ADMIN_EMAIL, "Free365Key Winner Selected!", adminEmailHtml);
+      context.log("Admin notification email sent successfully");
+    } catch (emailError) {
+      context.log.error("Failed to send admin email:", emailError);
+    }
+
+    // Also send congratulations email to winner
+    const winnerEmailHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #10b981;">Congratulations, ${winnerInfo.firstName}!</h1>
+        <p style="font-size: 1.2em;">You've been selected as the winner of our Microsoft 365 Key Giveaway!</p>
+
+        <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 30px; border-radius: 12px; margin: 20px 0; text-align: center;">
+          <h2 style="margin: 0;">You Won!</h2>
+          <p style="margin: 10px 0 0 0;">A FREE 30-day Microsoft 365 License Key</p>
+        </div>
+
+        <p>Out of ${eligibleEntries.length} participants and ${weightedPool.length} total entries, you were randomly selected!</p>
+
+        <p>Your ${winnerInfo.bonusEntries > 0 ? winnerInfo.totalEntries + ' entries (1 registration + ' + winnerInfo.bonusEntries + ' bonus)' : 'entry'} paid off!</p>
+
+        <h3>What's Next?</h3>
+        <p>We'll be in touch shortly at this email address or by phone to provide your Microsoft 365 license key and setup instructions.</p>
+
+        <p style="color: #666; font-size: 0.9em; margin-top: 30px;">
+          *This is a 30-day Microsoft 365 license key for 1 user. Cloud Solution Provider (CSP) agreement required to redeem.
+        </p>
+
+        <p style="margin-top: 20px;">
+          Thank you for participating!<br>
+          <strong>The Free365Key Team</strong>
+        </p>
+      </div>
+    `;
+
+    try {
+      await sendEmail(winnerInfo.email, "You Won the Microsoft 365 Giveaway!", winnerEmailHtml);
+      context.log("Winner notification email sent successfully");
+    } catch (emailError) {
+      context.log.error("Failed to send winner email:", emailError);
+    }
+
+    context.res = {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+      body: {
+        success: true,
+        winner: winnerInfo,
+        stats: {
+          eligibleParticipants: eligibleEntries.length,
+          totalEntriesInPool: weightedPool.length
+        }
+      }
+    };
+
+  } catch (error) {
+    context.log.error("Draw winner error:", error);
+    context.res = {
+      status: 500,
+      body: { error: "Internal server error", details: error.message }
+    };
+  }
+};

@@ -49,8 +49,12 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Create registration entity
+    // Create registration entity with 6-month expiration
     const id = uuidv4();
+    const now = new Date();
+    const expiresAt = new Date(now);
+    expiresAt.setMonth(expiresAt.getMonth() + 6);
+
     const entity = {
       partitionKey: "registration",
       rowKey: id,
@@ -63,7 +67,8 @@ module.exports = async function (context, req) {
       jobTitle: body.jobTitle || "",
       agreeTerms: body.agreeTerms || false,
       agreeMarketing: body.agreeMarketing || false,
-      registeredAt: body.registeredAt || new Date().toISOString(),
+      registeredAt: now.toISOString(),
+      expiresAt: expiresAt.toISOString(),
       isWinner: false
     };
 

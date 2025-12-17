@@ -55,9 +55,9 @@ function HomePage() {
           <p>
             Register now for your chance to win a genuine Microsoft 365 license key.
             <br />
-            Winners selected every month through random drawing!
+            Winners drawn on the 1st of every month!
             <br />
-            <small style={{ opacity: 0.9 }}>*Open to US residents only</small>
+            <small style={{ opacity: 0.9 }}>*Open to US residents only. Entries valid for 6 months.</small>
           </p>
         </div>
       </section>
@@ -167,7 +167,7 @@ function HomePage() {
           <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: '1.6' }}>
             *Giveaway is limited to US residents only. Prize is a free 30-day Microsoft 365 license key for 1 user.
             Cloud Solution Provider (CSP) agreement required to redeem. Winner is responsible for any applicable taxes.
-            No purchase necessary. Void where prohibited. See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
+            No purchase necessary. Void where prohibited. <strong>Entries are valid for 6 months from registration date. Winners are drawn monthly.</strong> See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
           </p>
         </div>
       </section>
