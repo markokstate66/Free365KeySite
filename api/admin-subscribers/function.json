@@ -6,7 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": ["get"],
-      "route": "admin/subscribers"
+      "route": "admin-subscribers"
     },
     {
       "type": "http",

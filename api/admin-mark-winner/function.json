@@ -6,7 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": ["post"],
-      "route": "admin/mark-winner"
+      "route": "admin-mark-winner"
     },
     {
       "type": "http",
