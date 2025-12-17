@@ -140,41 +140,8 @@ module.exports = async function (context, req) {
       context.log.error("Failed to send admin email:", emailError);
     }
 
-    // Also send congratulations email to winner
-    const winnerEmailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h1 style="color: #10b981;">Congratulations, ${winnerInfo.firstName}!</h1>
-        <p style="font-size: 1.2em;">You've been selected as the winner of our Microsoft 365 Key Giveaway!</p>
-
-        <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 30px; border-radius: 12px; margin: 20px 0; text-align: center;">
-          <h2 style="margin: 0;">You Won!</h2>
-          <p style="margin: 10px 0 0 0;">A FREE 30-day Microsoft 365 License Key</p>
-        </div>
-
-        <p>Out of ${eligibleEntries.length} participants and ${weightedPool.length} total entries, you were randomly selected!</p>
-
-        <p>Your ${winnerInfo.bonusEntries > 0 ? winnerInfo.totalEntries + ' entries (1 registration + ' + winnerInfo.bonusEntries + ' bonus)' : 'entry'} paid off!</p>
-
-        <h3>What's Next?</h3>
-        <p>We'll be in touch shortly at this email address or by phone to provide your Microsoft 365 license key and setup instructions.</p>
-
-        <p style="color: #666; font-size: 0.9em; margin-top: 30px;">
-          *This is a 30-day Microsoft 365 license key for 1 user. Cloud Solution Provider (CSP) agreement required to redeem.
-        </p>
-
-        <p style="margin-top: 20px;">
-          Thank you for participating!<br>
-          <strong>The Free365Key Team</strong>
-        </p>
-      </div>
-    `;
-
-    try {
-      await sendEmail(winnerInfo.email, "You Won the Microsoft 365 Giveaway!", winnerEmailHtml);
-      context.log("Winner notification email sent successfully");
-    } catch (emailError) {
-      context.log.error("Failed to send winner email:", emailError);
-    }
+    // NOTE: Winner email is NOT sent automatically
+    // Admin should verify winner and manually send notification via /api/notify-winner
 
     context.res = {
       status: 200,
