@@ -4,7 +4,7 @@ const getAppInsights = () => window.appInsights;
 // Track custom events
 export function trackEvent(name, properties = {}) {
   const ai = getAppInsights();
-  if (ai) {
+  if (ai && typeof ai.trackEvent === 'function') {
     ai.trackEvent({ name, properties });
   }
 }
@@ -12,7 +12,7 @@ export function trackEvent(name, properties = {}) {
 // Track page views (called automatically, but can be used for SPA navigation)
 export function trackPageView(name, url) {
   const ai = getAppInsights();
-  if (ai) {
+  if (ai && typeof ai.trackPageView === 'function') {
     ai.trackPageView({ name, uri: url });
   }
 }
