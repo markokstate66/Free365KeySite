@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function RegistrationForm({ onSuccess }) {
+function RegistrationForm({ onSuccess, onAlreadyRegistered }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -48,6 +48,11 @@ function RegistrationForm({ onSuccess }) {
       const data = await response.json()
 
       if (!response.ok) {
+        // Handle duplicate email specially
+        if (response.status === 409 && onAlreadyRegistered) {
+          onAlreadyRegistered(formData.email)
+          return
+        }
         throw new Error(data.error || 'Registration failed')
       }
 

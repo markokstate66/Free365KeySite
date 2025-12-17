@@ -10,10 +10,33 @@ function HomePage() {
   const [registrationData, setRegistrationData] = useState(null)
   const [showRewardedAd, setShowRewardedAd] = useState(false)
   const [totalEntries, setTotalEntries] = useState(1)
+  const [isReturningUser, setIsReturningUser] = useState(false)
 
   const handleSuccess = (data) => {
     setRegistered(true)
     setRegistrationData(data)
+    setIsReturningUser(false)
+  }
+
+  const handleAlreadyRegistered = async (email) => {
+    // Look up their existing registration
+    try {
+      const response = await fetch('/api/lookup-registration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        setRegistered(true)
+        setRegistrationData(data)
+        setTotalEntries(data.totalEntries || 1)
+        setIsReturningUser(true)
+      }
+    } catch (err) {
+      console.error('Lookup error:', err)
+    }
   }
 
   const handleBonusComplete = (data) => {
@@ -43,25 +66,37 @@ function HomePage() {
         {!registered ? (
           <>
             <h2>Enter the Giveaway</h2>
-            <RegistrationForm onSuccess={handleSuccess} />
+            <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} />
           </>
         ) : (
           <div className="success-message">
-            <h3>You're Entered!</h3>
+            <h3>{isReturningUser ? 'Welcome Back!' : "You're Entered!"}</h3>
             <p>
-              Thank you for registering, {registrationData?.firstName}!
-              <br />
-              We'll contact you at {registrationData?.email} if you're selected as a winner.
+              {isReturningUser ? (
+                <>
+                  Good to see you again, {registrationData?.firstName}!
+                  <br />
+                  You're already in the giveaway. Watch an ad below to earn bonus entries!
+                </>
+              ) : (
+                <>
+                  Thank you for registering, {registrationData?.firstName}!
+                  <br />
+                  We'll contact you at {registrationData?.email} if you're selected as a winner.
+                </>
+              )}
             </p>
             <p style={{ marginTop: '10px', fontSize: '1.1rem', fontWeight: 'bold' }}>
               Total Entries: {totalEntries}
             </p>
-            <p style={{ marginTop: '10px', opacity: 0.9, fontSize: '0.9rem' }}>
-              Entry ID: {registrationData?.id}
-            </p>
+            {!isReturningUser && (
+              <p style={{ marginTop: '10px', opacity: 0.9, fontSize: '0.9rem' }}>
+                Entry ID: {registrationData?.id}
+              </p>
+            )}
             <div style={{ marginTop: '25px', padding: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>
               <p style={{ margin: '0 0 15px 0', fontWeight: 'bold' }}>
-                Want another chance to win?
+                {isReturningUser ? 'Earn more entries!' : 'Want another chance to win?'}
               </p>
               <button
                 className="submit-btn"
