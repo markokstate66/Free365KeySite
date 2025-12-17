@@ -6,6 +6,31 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
   const [claiming, setClaiming] = useState(false)
   const [claimed, setClaimed] = useState(false)
   const [error, setError] = useState('')
+  const [adToken, setAdToken] = useState(null)
+  const [tokenError, setTokenError] = useState(false)
+
+  // Get secure token when modal opens
+  useEffect(() => {
+    const getToken = async () => {
+      try {
+        const response = await fetch('/api/start-ad-watch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ registrationId })
+        })
+        if (response.ok) {
+          const data = await response.json()
+          setAdToken(data.token)
+        } else {
+          setTokenError(true)
+        }
+      } catch (err) {
+        console.error('Token error:', err)
+        setTokenError(true)
+      }
+    }
+    getToken()
+  }, [registrationId])
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -26,6 +51,11 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
   }, [])
 
   const handleClaim = async () => {
+    if (!adToken) {
+      setError('Session error - please close and try again')
+      return
+    }
+
     setClaiming(true)
     setError('')
 
@@ -33,7 +63,7 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
       const response = await fetch('/api/bonus-entry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ registrationId })
+        body: JSON.stringify({ registrationId, token: adToken })
       })
 
       const data = await response.json()
@@ -43,6 +73,7 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
       }
 
       setClaimed(true)
+      setAdToken(null) // Clear token after use
       if (onComplete) onComplete(data)
     } catch (err) {
       setError(err.message)
