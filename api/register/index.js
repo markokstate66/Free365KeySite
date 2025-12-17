@@ -49,11 +49,11 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Create registration entity with 6-month expiration
+    // Create registration entity with 90-day expiration
     const id = uuidv4();
     const now = new Date();
     const expiresAt = new Date(now);
-    expiresAt.setMonth(expiresAt.getMonth() + 6);
+    expiresAt.setDate(expiresAt.getDate() + 90);
 
     const entity = {
       partitionKey: "registration",
