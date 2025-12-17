@@ -11,11 +11,26 @@ function HomePage() {
   const [showRewardedAd, setShowRewardedAd] = useState(false)
   const [totalEntries, setTotalEntries] = useState(1)
   const [isReturningUser, setIsReturningUser] = useState(false)
+  const [canClaimToday, setCanClaimToday] = useState(true)
+
+  // Check if user already claimed today (client-side check)
+  const checkCanClaimToday = (odebugrid) => {
+    const today = new Date().toISOString().split('T')[0]
+    const lastClaim = localStorage.getItem(`bonus_claimed_${odebugrid}`)
+    return lastClaim !== today
+  }
+
+  const markClaimedToday = (odebugrid) => {
+    const today = new Date().toISOString().split('T')[0]
+    localStorage.setItem(`bonus_claimed_${odebugrid}`, today)
+    setCanClaimToday(false)
+  }
 
   const handleSuccess = (data) => {
     setRegistered(true)
     setRegistrationData(data)
     setIsReturningUser(false)
+    setCanClaimToday(checkCanClaimToday(data.id))
   }
 
   const handleAlreadyRegistered = async (email) => {
@@ -33,6 +48,7 @@ function HomePage() {
         setRegistrationData(data)
         setTotalEntries(data.totalEntries || 1)
         setIsReturningUser(true)
+        setCanClaimToday(checkCanClaimToday(data.id))
       }
     } catch (err) {
       console.error('Lookup error:', err)
@@ -42,6 +58,10 @@ function HomePage() {
   const handleBonusComplete = (data) => {
     if (data.totalEntries) {
       setTotalEntries(data.totalEntries)
+    }
+    // Mark as claimed in localStorage
+    if (registrationData?.id) {
+      markClaimedToday(registrationData.id)
     }
   }
 
@@ -96,17 +116,30 @@ function HomePage() {
             )}
             <div style={{ marginTop: '25px', padding: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>
               <p style={{ margin: '0 0 15px 0', fontWeight: 'bold' }}>
-                {isReturningUser ? 'Earn more entries!' : 'Want another chance to win?'}
+                {canClaimToday
+                  ? (isReturningUser ? 'Earn more entries!' : 'Want another chance to win?')
+                  : 'Come back tomorrow!'
+                }
               </p>
-              <button
-                className="submit-btn"
-                onClick={() => setShowRewardedAd(true)}
-                style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
-              >
-                Watch Ad for Bonus Entry
-              </button>
+              {canClaimToday ? (
+                <button
+                  className="submit-btn"
+                  onClick={() => setShowRewardedAd(true)}
+                  style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+                >
+                  Watch Ad for Bonus Entry
+                </button>
+              ) : (
+                <button
+                  className="submit-btn"
+                  disabled
+                  style={{ background: '#9ca3af', cursor: 'not-allowed' }}
+                >
+                  Already Claimed Today
+                </button>
+              )}
               <p style={{ margin: '10px 0 0 0', fontSize: '0.8rem', opacity: 0.8 }}>
-                Earn 1 extra entry per day!
+                {canClaimToday ? 'Earn 1 extra entry per day!' : "You've earned your bonus entry for today!"}
               </p>
             </div>
           </div>
