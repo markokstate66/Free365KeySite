@@ -5,8 +5,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["post"],
-      "route": "newsletter-scheduler"
+      "methods": ["post"]
     },
     {
       "type": "http",

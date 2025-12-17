@@ -5,8 +5,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get", "post", "put", "delete"],
-      "route": "admin-newsletters"
+      "methods": ["get", "post", "put", "delete"]
     },
     {
       "type": "http",

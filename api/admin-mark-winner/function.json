@@ -5,8 +5,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["post"],
-      "route": "admin-mark-winner"
+      "methods": ["post"]
     },
     {
       "type": "http",
