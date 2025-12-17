@@ -40,23 +40,7 @@ module.exports = async function (context, req) {
     // Get bonus entries table
     const bonusClient = await getTableClient("bonusentries");
 
-    // Check if user already claimed a bonus entry today
-    const today = new Date().toISOString().split('T')[0];
-    const existingBonuses = bonusClient.listEntities({
-      queryOptions: {
-        filter: `registrationId eq '${registrationId}' and claimedDate eq '${today}'`
-      }
-    });
-
-    for await (const entity of existingBonuses) {
-      context.res = {
-        status: 409,
-        body: { error: "You've already claimed a bonus entry today. Come back tomorrow!" }
-      };
-      return;
-    }
-
-    // Create bonus entry
+    // Create bonus entry (no daily limit - users can earn as many as they want)
     const bonusId = uuidv4();
     const bonusEntity = {
       partitionKey: "bonus",
@@ -64,7 +48,6 @@ module.exports = async function (context, req) {
       id: bonusId,
       registrationId: registrationId,
       email: registration.email,
-      claimedDate: today,
       claimedAt: new Date().toISOString()
     };
 
