@@ -57,7 +57,7 @@ function HomePage() {
             <br />
             Winners drawn on the 1st of every month!
             <br />
-            <small style={{ opacity: 0.9 }}>*Open to US residents only. Entries valid for 90 days.</small>
+            <small style={{ opacity: 0.9 }}>*Open to US residents only. Bonus entries from ads valid for 90 days.</small>
           </p>
         </div>
       </section>
@@ -167,7 +167,7 @@ function HomePage() {
           <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: '1.6' }}>
             *Giveaway is limited to US residents only. Prize is a free 30-day Microsoft 365 license for 1 user.
             Winner must join our Cloud Solution Provider (CSP) reseller network to receive their license.
-            No purchase necessary. Void where prohibited. <strong>Entries are valid for 90 days from registration date. Winners are drawn monthly.</strong> See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
+            No purchase necessary. Void where prohibited. <strong>Base registration never expires. Bonus entries from watching ads are valid for 90 days. Winners are drawn monthly.</strong> See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
           </p>
         </div>
       </section>

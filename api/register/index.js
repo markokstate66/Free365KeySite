@@ -49,11 +49,9 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Create registration entity with 90-day expiration
+    // Create registration entity (base entry never expires)
     const id = uuidv4();
     const now = new Date();
-    const expiresAt = new Date(now);
-    expiresAt.setDate(expiresAt.getDate() + 90);
 
     const entity = {
       partitionKey: "registration",
@@ -68,7 +66,6 @@ module.exports = async function (context, req) {
       agreeTerms: body.agreeTerms || false,
       agreeMarketing: body.agreeMarketing || false,
       registeredAt: now.toISOString(),
-      expiresAt: expiresAt.toISOString(),
       isWinner: false
     };
 

@@ -23,36 +23,40 @@ module.exports = async function (context, req) {
 
     const tableClient = await getTableClient();
     const bonusClient = await getTableClient("bonusentries");
-    const now = new Date().toISOString();
+    const now = new Date();
 
-    // Get all eligible registrations (not won, not expired)
+    // Calculate 90-day cutoff for bonus entries
+    const bonusCutoff = new Date(now);
+    bonusCutoff.setDate(bonusCutoff.getDate() - 90);
+    const bonusCutoffISO = bonusCutoff.toISOString();
+
+    // Get all eligible registrations (not won - base entry never expires)
     const eligibleEntries = [];
     const registrations = tableClient.listEntities({
       queryOptions: { filter: `isWinner eq false` }
     });
 
     for await (const reg of registrations) {
-      // Check if not expired (expiresAt > now, or no expiresAt for legacy entries)
-      if (!reg.expiresAt || reg.expiresAt > now) {
-        // Count bonus entries for weighted selection
-        let bonusCount = 0;
-        const bonuses = bonusClient.listEntities({
-          queryOptions: { filter: `registrationId eq '${reg.rowKey}'` }
-        });
+      // Count bonus entries from last 90 days only
+      let bonusCount = 0;
+      const bonuses = bonusClient.listEntities({
+        queryOptions: { filter: `registrationId eq '${reg.rowKey}'` }
+      });
 
-        for await (const bonus of bonuses) {
-          // Only count non-expired bonus entries
+      for await (const bonus of bonuses) {
+        // Only count bonus entries from the last 90 days
+        if (bonus.earnedAt && bonus.earnedAt >= bonusCutoffISO) {
           bonusCount++;
         }
-
-        // Add to pool: 1 base entry + bonus entries
-        const totalWeight = 1 + bonusCount;
-        eligibleEntries.push({
-          registration: reg,
-          bonusCount,
-          totalWeight
-        });
       }
+
+      // Add to pool: 1 base entry + valid bonus entries
+      const totalWeight = 1 + bonusCount;
+      eligibleEntries.push({
+        registration: reg,
+        bonusCount,
+        totalWeight
+      });
     }
 
     if (eligibleEntries.length === 0) {
