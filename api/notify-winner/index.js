@@ -59,11 +59,11 @@ module.exports = async function (context, req) {
     const winnerEmailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h1 style="color: #10b981;">Congratulations, ${winner.firstName}!</h1>
-        <p style="font-size: 1.2em;">You've been selected as the winner of our Microsoft 365 Key Giveaway!</p>
+        <p style="font-size: 1.2em;">You've been selected as the winner of our Microsoft 365 Giveaway!</p>
 
         <div style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 30px; border-radius: 12px; margin: 20px 0; text-align: center;">
           <h2 style="margin: 0;">You Won!</h2>
-          <p style="margin: 10px 0 0 0;">A FREE 30-day Microsoft 365 License Key</p>
+          <p style="margin: 10px 0 0 0;">A FREE 30-day Microsoft 365 License</p>
         </div>
 
         <p>Your ${bonusCount > 0 ? totalEntries + ' entries (1 registration + ' + bonusCount + ' bonus)' : 'entry'} paid off!</p>
@@ -71,10 +71,17 @@ module.exports = async function (context, req) {
         ${customMessage ? `<div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;"><p style="margin: 0;">${customMessage}</p></div>` : ''}
 
         <h3>What's Next?</h3>
-        <p>We'll be in touch shortly at this email address or by phone to provide your Microsoft 365 license key and setup instructions.</p>
+        <p>To claim your free 30-day Microsoft 365 license, you'll need to:</p>
+        <ol style="line-height: 1.8;">
+          <li>Join our Cloud Solution Provider (CSP) reseller network</li>
+          <li>Complete a brief onboarding process</li>
+          <li>Receive your free 30-day Microsoft 365 license</li>
+        </ol>
+
+        <p>We'll be in touch shortly at this email address or by phone at <strong>${winner.phone}</strong> to walk you through the simple setup process.</p>
 
         <p style="color: #666; font-size: 0.9em; margin-top: 30px;">
-          *This is a 30-day Microsoft 365 license key for 1 user. Cloud Solution Provider (CSP) agreement required to redeem.
+          This is a free 30-day Microsoft 365 license for 1 user, provided through our Cloud Solution Provider partnership with Microsoft.
         </p>
 
         <p style="margin-top: 20px;">

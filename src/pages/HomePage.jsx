@@ -165,8 +165,8 @@ function HomePage() {
       <section className="disclaimer" style={{ background: '#f8f9fa', padding: '20px 0' }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
           <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: '1.6' }}>
-            *Giveaway is limited to US residents only. Prize is a free 30-day Microsoft 365 license key for 1 user.
-            Cloud Solution Provider (CSP) agreement required to redeem. Winner is responsible for any applicable taxes.
+            *Giveaway is limited to US residents only. Prize is a free 30-day Microsoft 365 license for 1 user.
+            Winner must join our Cloud Solution Provider (CSP) reseller network to receive their license.
             No purchase necessary. Void where prohibited. <strong>Entries are valid for 6 months from registration date. Winners are drawn monthly.</strong> See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
           </p>
         </div>
