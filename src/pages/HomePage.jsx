@@ -19,11 +19,13 @@ function HomePage() {
 
       <section className="hero">
         <div className="container">
-          <h1>Win a FREE Microsoft 365 License!</h1>
+          <h1>Win a FREE Microsoft 365 License!*</h1>
           <p>
             Register now for your chance to win a genuine Microsoft 365 license key.
             <br />
             Winners selected every month through random drawing!
+            <br />
+            <small style={{ opacity: 0.9 }}>*Open to US residents only</small>
           </p>
         </div>
       </section>
@@ -95,6 +97,16 @@ function HomePage() {
       <section className="newsletter-section">
         <div className="container">
           <Newsletter />
+        </div>
+      </section>
+
+      <section className="disclaimer" style={{ background: '#f8f9fa', padding: '20px 0' }}>
+        <div className="container" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+          <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: '1.6' }}>
+            *Giveaway is limited to US residents only. Prize is a free 30-day Microsoft 365 license key for 1 user.
+            Cloud Solution Provider (CSP) agreement required to redeem. Winner is responsible for any applicable taxes.
+            No purchase necessary. Void where prohibited. See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
+          </p>
         </div>
       </section>
 
