@@ -5,8 +5,8 @@ import NewsletterEditor from '../components/NewsletterEditor'
 
 function AdminPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [password, setPassword] = useState('')
-  const [loginError, setLoginError] = useState('')
+  const [userInfo, setUserInfo] = useState(null)
+  const [checkingAuth, setCheckingAuth] = useState(true)
   const [activeTab, setActiveTab] = useState('registrations')
 
   // Registrations state
@@ -21,12 +21,25 @@ function AdminPage() {
   const [editingNewsletter, setEditingNewsletter] = useState(null)
   const [showEditor, setShowEditor] = useState(false)
 
+  // Check Azure AD authentication
   useEffect(() => {
-    const session = sessionStorage.getItem('adminLoggedIn')
-    if (session === 'true') {
-      setIsLoggedIn(true)
-      fetchRegistrations()
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/.auth/me')
+        const data = await response.json()
+
+        if (data.clientPrincipal) {
+          setUserInfo(data.clientPrincipal)
+          setIsLoggedIn(true)
+          fetchRegistrations()
+        }
+      } catch (err) {
+        console.error('Auth check failed:', err)
+      } finally {
+        setCheckingAuth(false)
+      }
     }
+    checkAuth()
   }, [])
 
   useEffect(() => {
@@ -35,29 +48,6 @@ function AdminPage() {
       fetchSubscribers()
     }
   }, [isLoggedIn, activeTab])
-
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    setLoginError('')
-
-    try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
-      })
-
-      if (response.ok) {
-        sessionStorage.setItem('adminLoggedIn', 'true')
-        setIsLoggedIn(true)
-        fetchRegistrations()
-      } else {
-        setLoginError('Invalid password')
-      }
-    } catch (err) {
-      setLoginError('Login failed. Please try again.')
-    }
-  }
 
   const fetchRegistrations = async () => {
     setLoading(true)
@@ -220,32 +210,37 @@ function AdminPage() {
   }
 
   const handleLogout = () => {
-    sessionStorage.removeItem('adminLoggedIn')
-    setIsLoggedIn(false)
-    setRegistrations([])
-    setNewsletters([])
+    window.location.href = '/.auth/logout?post_logout_redirect_uri=/'
   }
 
+  // Show loading while checking authentication
+  if (checkingAuth) {
+    return (
+      <div className="login-container">
+        <div className="login-box">
+          <h2>Admin Dashboard</h2>
+          <p style={{ textAlign: 'center', color: '#666' }}>Checking authentication...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // If not logged in, show login option (SWA will redirect on 401, but provide manual option)
   if (!isLoggedIn) {
     return (
       <div className="login-container">
         <div className="login-box">
           <h2>Admin Login</h2>
-          {loginError && <div className="error-message">{loginError}</div>}
-          <form onSubmit={handleLogin}>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Enter admin password"
-              />
-            </div>
-            <button type="submit" className="submit-btn">Login</button>
-          </form>
+          <p style={{ textAlign: 'center', marginBottom: '20px', color: '#666' }}>
+            Sign in with your Azure AD account to access the admin dashboard.
+          </p>
+          <a
+            href="/.auth/login/aad?post_login_redirect_uri=/admin"
+            className="submit-btn"
+            style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+          >
+            Sign in with Microsoft
+          </a>
         </div>
       </div>
     )
@@ -278,9 +273,16 @@ function AdminPage() {
       <div className="admin-container">
         <div className="admin-header">
           <h1>Admin Dashboard</h1>
-          <button className="btn btn-secondary" onClick={handleLogout}>
-            Logout
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            {userInfo && (
+              <span style={{ color: '#666', fontSize: '0.9rem' }}>
+                {userInfo.userDetails || userInfo.userId}
+              </span>
+            )}
+            <button className="btn btn-secondary" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </div>
 
         <div className="admin-tabs">
