@@ -9,7 +9,8 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered }) {
     companyName: '',
     jobTitle: '',
     agreeTerms: false,
-    agreeMarketing: false
+    agreeMarketing: false,
+    joinNewsletter: true
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -172,6 +173,21 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered }) {
           />
           <label htmlFor="agreeMarketing">
             I agree to receive promotional emails and special offers about Microsoft licensing
+          </label>
+        </div>
+      </div>
+
+      <div className="form-group">
+        <div className="checkbox-group">
+          <input
+            type="checkbox"
+            id="joinNewsletter"
+            name="joinNewsletter"
+            checked={formData.joinNewsletter}
+            onChange={handleChange}
+          />
+          <label htmlFor="joinNewsletter">
+            Subscribe to our newsletter for Microsoft 365 tips, tricks, and giveaway announcements
           </label>
         </div>
       </div>

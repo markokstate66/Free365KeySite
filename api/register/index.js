@@ -74,6 +74,40 @@ module.exports = async function (context, req) {
 
     await tableClient.createEntity(entity);
 
+    // If user opted into newsletter, add them to subscribers
+    if (body.joinNewsletter) {
+      try {
+        const newsletterClient = await getTableClient("newsletters");
+
+        // Check if already subscribed
+        const existingSubs = newsletterClient.listEntities({
+          queryOptions: { filter: `email eq '${body.email.toLowerCase()}'` }
+        });
+
+        let alreadySubscribed = false;
+        for await (const sub of existingSubs) {
+          alreadySubscribed = true;
+          break;
+        }
+
+        if (!alreadySubscribed) {
+          const subEntity = {
+            partitionKey: "subscriber",
+            rowKey: uuidv4(),
+            email: body.email.toLowerCase(),
+            firstName: body.firstName,
+            subscribedAt: now.toISOString(),
+            source: "giveaway_registration",
+            isActive: true
+          };
+          await newsletterClient.createEntity(subEntity);
+        }
+      } catch (newsletterError) {
+        // Don't fail registration if newsletter subscription fails
+        context.log.error("Newsletter subscription error:", newsletterError);
+      }
+    }
+
     context.res = {
       status: 201,
       headers: { "Content-Type": "application/json" },
