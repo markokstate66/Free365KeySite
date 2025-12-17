@@ -3,14 +3,23 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
+import RewardedAd from '../components/RewardedAd'
 
 function HomePage() {
   const [registered, setRegistered] = useState(false)
   const [registrationData, setRegistrationData] = useState(null)
+  const [showRewardedAd, setShowRewardedAd] = useState(false)
+  const [totalEntries, setTotalEntries] = useState(1)
 
   const handleSuccess = (data) => {
     setRegistered(true)
     setRegistrationData(data)
+  }
+
+  const handleBonusComplete = (data) => {
+    if (data.totalEntries) {
+      setTotalEntries(data.totalEntries)
+    }
   }
 
   return (
@@ -44,9 +53,27 @@ function HomePage() {
               <br />
               We'll contact you at {registrationData?.email} if you're selected as a winner.
             </p>
-            <p style={{ marginTop: '20px', opacity: 0.9 }}>
+            <p style={{ marginTop: '10px', fontSize: '1.1rem', fontWeight: 'bold' }}>
+              Total Entries: {totalEntries}
+            </p>
+            <p style={{ marginTop: '10px', opacity: 0.9, fontSize: '0.9rem' }}>
               Entry ID: {registrationData?.id}
             </p>
+            <div style={{ marginTop: '25px', padding: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>
+              <p style={{ margin: '0 0 15px 0', fontWeight: 'bold' }}>
+                Want another chance to win?
+              </p>
+              <button
+                className="submit-btn"
+                onClick={() => setShowRewardedAd(true)}
+                style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
+              >
+                Watch Ad for Bonus Entry
+              </button>
+              <p style={{ margin: '10px 0 0 0', fontSize: '0.8rem', opacity: 0.8 }}>
+                Earn 1 extra entry per day!
+              </p>
+            </div>
           </div>
         )}
       </section>
@@ -111,6 +138,14 @@ function HomePage() {
       </section>
 
       <Footer />
+
+      {showRewardedAd && registrationData && (
+        <RewardedAd
+          registrationId={registrationData.id}
+          onComplete={handleBonusComplete}
+          onClose={() => setShowRewardedAd(false)}
+        />
+      )}
     </div>
   )
 }
