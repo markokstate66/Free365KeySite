@@ -6,7 +6,7 @@
     },
     {
       "route": "/api/admin-registrations",
-      "allowedRoles": ["authenticated"]
+      "allowedRoles": ["anonymous"]
     },
     {
       "route": "/api/admin-newsletters",
