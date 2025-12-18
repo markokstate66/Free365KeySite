@@ -74,18 +74,28 @@ function HomePage() {
             <h3>{isReturningUser ? 'Welcome Back!' : "Almost There!"}</h3>
             <p>
               {isReturningUser ? (
-                <>
-                  Good to see you again, {registrationData?.firstName}!
-                  <br />
-                  You're already in the giveaway. Watch an ad below to earn bonus entries!
-                </>
+                registrationData?.isVerified ? (
+                  <>
+                    Good to see you again, {registrationData?.firstName}!
+                    <br />
+                    You're in the giveaway with <strong>5 base entries</strong>. Watch an ad below for <strong>+2 bonus entries</strong>!
+                  </>
+                ) : (
+                  <>
+                    Welcome back, {registrationData?.firstName}!
+                    <br />
+                    <strong style={{ color: '#fbbf24' }}>Your email isn't verified yet.</strong> Check your inbox or spam folder for the confirmation link.
+                    <br />
+                    <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Verify to unlock 5 base entries!</span>
+                  </>
+                )
               ) : (
                 <>
                   Thank you for registering, {registrationData?.firstName}!
                   <br />
                   <strong style={{ color: '#fbbf24' }}>Please check your email ({registrationData?.email}) to confirm your entry.</strong>
                   <br />
-                  <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Your registration won't be complete until you verify your email.</span>
+                  <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Verify your email to unlock 5 base entries!</span>
                 </>
               )}
             </p>

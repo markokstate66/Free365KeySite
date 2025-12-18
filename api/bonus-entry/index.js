@@ -119,23 +119,42 @@ module.exports = async function (context, req) {
 
     await bonusClient.createEntity(bonusEntity);
 
-    // Count total entries for this user
-    let totalEntries = 1; // Base entry
+    // Count total entries for this user using new weighting:
+    // Verified = 5 base entries, each ad (within 90 days) = 2 entries
+    const isVerified = registration.isVerified === true;
+    const baseWeight = isVerified ? 5 : 0;
+
+    // Count ads watched in last 90 days
+    const now = new Date();
+    const cutoff = new Date(now);
+    cutoff.setDate(cutoff.getDate() - 90);
+    const cutoffISO = cutoff.toISOString();
+
+    let adCount = 0;
     const allBonuses = bonusClient.listEntities({
       queryOptions: { filter: `registrationId eq '${registrationId}'` }
     });
 
     for await (const bonus of allBonuses) {
-      totalEntries++;
+      // Only count ads from last 90 days
+      const earnedAt = bonus.claimedAt || bonus.earnedAt;
+      if (earnedAt && earnedAt >= cutoffISO) {
+        adCount++;
+      }
     }
+
+    const adWeight = adCount * 2;
+    const totalEntries = baseWeight + adWeight;
 
     context.res = {
       status: 201,
       headers: { "Content-Type": "application/json" },
       body: {
         success: true,
-        message: "Bonus entry added!",
-        totalEntries: totalEntries
+        message: `Bonus entry added! (+2 entries)`,
+        totalEntries: totalEntries,
+        adCount: adCount,
+        isVerified: isVerified
       }
     };
   } catch (error) {

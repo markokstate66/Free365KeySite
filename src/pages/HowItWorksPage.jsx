@@ -34,13 +34,24 @@ function HowItWorksPage() {
                 <h3>Confirm Your Email</h3>
                 <p>
                   Check your inbox for a confirmation email. Click the link to verify your entry
-                  and ensure you're eligible for the drawing.
+                  and unlock <strong>5 base entries</strong> in the drawing.
                 </p>
               </div>
             </div>
 
             <div className="step">
               <div className="step-number">3</div>
+              <div className="step-content">
+                <h3>Earn Bonus Entries</h3>
+                <p>
+                  Watch short ads to earn <strong>+2 bonus entries</strong> each! Bonus entries stay valid for 90 days,
+                  so keep watching to maximize your chances.
+                </p>
+              </div>
+            </div>
+
+            <div className="step">
+              <div className="step-number">4</div>
               <div className="step-content">
                 <h3>Wait for the Drawing</h3>
                 <p>
@@ -51,7 +62,7 @@ function HowItWorksPage() {
             </div>
 
             <div className="step">
-              <div className="step-number">4</div>
+              <div className="step-number">5</div>
               <div className="step-content">
                 <h3>Claim Your Prize</h3>
                 <p>

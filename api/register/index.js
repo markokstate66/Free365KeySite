@@ -157,7 +157,9 @@ module.exports = async function (context, req) {
         firstName: body.firstName,
         email: body.email,
         message: "Registration successful! Please check your email to confirm your entry.",
-        needsVerification: true
+        needsVerification: true,
+        totalEntries: 0,
+        isVerified: false
       }
     };
   } catch (error) {

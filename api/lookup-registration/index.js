@@ -30,17 +30,32 @@ module.exports = async function (context, req) {
     });
 
     for await (const entity of existingEntries) {
-      // Count bonus entries
-      const bonusClient = await getTableClient("bonusentries");
-      let bonusCount = 0;
+      // Calculate entry weight using new system:
+      // Verified = 5 base entries, each ad (within 90 days) = 2 entries
+      const isVerified = entity.isVerified === true;
+      const baseWeight = isVerified ? 5 : 0;
 
+      // Count ads watched in last 90 days
+      const bonusClient = await getTableClient("bonusentries");
+      const now = new Date();
+      const cutoff = new Date(now);
+      cutoff.setDate(cutoff.getDate() - 90);
+      const cutoffISO = cutoff.toISOString();
+
+      let adCount = 0;
       const bonuses = bonusClient.listEntities({
         queryOptions: { filter: `registrationId eq '${entity.rowKey}'` }
       });
 
       for await (const bonus of bonuses) {
-        bonusCount++;
+        const earnedAt = bonus.claimedAt || bonus.earnedAt;
+        if (earnedAt && earnedAt >= cutoffISO) {
+          adCount++;
+        }
       }
+
+      const adWeight = adCount * 2;
+      const totalEntries = baseWeight + adWeight;
 
       context.res = {
         status: 200,
@@ -49,7 +64,9 @@ module.exports = async function (context, req) {
           id: entity.rowKey,
           firstName: entity.firstName,
           email: entity.email,
-          totalEntries: 1 + bonusCount
+          isVerified: isVerified,
+          adCount: adCount,
+          totalEntries: totalEntries
         }
       };
       return;

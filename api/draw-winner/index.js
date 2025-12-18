@@ -37,8 +37,8 @@ module.exports = async function (context, req) {
     });
 
     for await (const reg of registrations) {
-      // Count bonus entries from last 90 days only
-      let bonusCount = 0;
+      // Count ad watches from last 90 days only
+      let adWatchCount = 0;
       const bonuses = bonusClient.listEntities({
         queryOptions: { filter: `registrationId eq '${reg.rowKey}'` }
       });
@@ -46,15 +46,19 @@ module.exports = async function (context, req) {
       for await (const bonus of bonuses) {
         // Only count bonus entries from the last 90 days
         if (bonus.earnedAt && bonus.earnedAt >= bonusCutoffISO) {
-          bonusCount++;
+          adWatchCount++;
         }
       }
 
-      // Add to pool: 1 base entry + valid bonus entries
-      const totalWeight = 1 + bonusCount;
+      // Weighting: verified = 5 base entries, each ad = 2 entries
+      const baseWeight = 5;
+      const adWeight = adWatchCount * 2;
+      const totalWeight = baseWeight + adWeight;
       eligibleEntries.push({
         registration: reg,
-        bonusCount,
+        adWatchCount,
+        baseWeight,
+        adWeight,
         totalWeight
       });
     }
@@ -100,7 +104,9 @@ module.exports = async function (context, req) {
       phone: winner.registration.phone,
       companyName: winner.registration.companyName,
       registeredAt: winner.registration.registeredAt,
-      bonusEntries: winner.bonusCount,
+      adWatchCount: winner.adWatchCount,
+      baseWeight: winner.baseWeight,
+      adWeight: winner.adWeight,
       totalEntries: winner.totalWeight,
       wonAt: updatedEntity.wonAt
     };
@@ -119,7 +125,8 @@ module.exports = async function (context, req) {
             <tr><td style="padding: 8px 0; font-weight: bold;">Phone:</td><td>${winnerInfo.phone}</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Company:</td><td>${winnerInfo.companyName || 'N/A'}</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Registered:</td><td>${new Date(winnerInfo.registeredAt).toLocaleDateString()}</td></tr>
-            <tr><td style="padding: 8px 0; font-weight: bold;">Bonus Entries:</td><td>${winnerInfo.bonusEntries}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Base Weight:</td><td>${winnerInfo.baseWeight} (verified email)</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Ads Watched:</td><td>${winnerInfo.adWatchCount} (${winnerInfo.adWeight} entries)</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Total Entries:</td><td>${winnerInfo.totalEntries}</td></tr>
           </table>
         </div>
