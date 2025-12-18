@@ -16,7 +16,7 @@ module.exports = async function (context, req) {
     const registrations = [];
 
     const entities = tableClient.listEntities({
-      queryOptions: { filter: "partitionKey eq 'registration'" }
+      queryOptions: { filter: "PartitionKey eq 'registration'" }
     });
 
     for await (const entity of entities) {
