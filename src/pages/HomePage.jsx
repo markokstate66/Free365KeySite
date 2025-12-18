@@ -12,6 +12,7 @@ function HomePage() {
   const [showRewardedAd, setShowRewardedAd] = useState(false)
   const [totalEntries, setTotalEntries] = useState(1)
   const [isReturningUser, setIsReturningUser] = useState(false)
+  const [resendStatus, setResendStatus] = useState(null) // null, 'sending', 'sent', 'error'
 
   const handleSuccess = (data) => {
     setRegistered(true)
@@ -43,6 +44,26 @@ function HomePage() {
   const handleBonusComplete = (data) => {
     if (data.totalEntries) {
       setTotalEntries(data.totalEntries)
+    }
+  }
+
+  const handleResendVerification = async () => {
+    if (!registrationData?.email) return
+    setResendStatus('sending')
+    try {
+      const response = await fetch('/api/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: registrationData.email })
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setResendStatus('sent')
+      } else {
+        setResendStatus('error')
+      }
+    } catch (err) {
+      setResendStatus('error')
     }
   }
 
@@ -98,6 +119,34 @@ function HomePage() {
                   <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Verify your email to unlock 5 base entries!</span>
                 </>
               )}
+            </p>
+            {!registrationData?.isVerified && (
+              <div style={{ marginTop: '15px' }}>
+                {resendStatus === 'sent' ? (
+                  <p style={{ color: '#4ade80', fontSize: '0.9rem' }}>Verification email sent! Check your inbox.</p>
+                ) : resendStatus === 'error' ? (
+                  <p style={{ color: '#f87171', fontSize: '0.9rem' }}>Failed to send. Please try again.</p>
+                ) : (
+                  <button
+                    onClick={handleResendVerification}
+                    disabled={resendStatus === 'sending'}
+                    style={{
+                      background: 'transparent',
+                      border: '1px solid rgba(255,255,255,0.5)',
+                      color: 'white',
+                      padding: '8px 16px',
+                      borderRadius: '6px',
+                      cursor: resendStatus === 'sending' ? 'wait' : 'pointer',
+                      fontSize: '0.85rem'
+                    }}
+                  >
+                    {resendStatus === 'sending' ? 'Sending...' : "Didn't get the email? Resend"}
+                  </button>
+                )}
+              </div>
+            )}
+            <p style={{ marginTop: '10px', fontSize: '0.85rem', opacity: 0.7 }}>
+              {!registrationData?.isVerified && "Tip: Check your spam folder if you don't see it."}
             </p>
             <p style={{ marginTop: '10px', fontSize: '1.1rem', fontWeight: 'bold' }}>
               Total Entries: {totalEntries}
