@@ -6,6 +6,7 @@ function ContactForm() {
     email: '',
     company: '',
     phone: '',
+    reason: '',
     licenseCount: '',
     message: ''
   })
@@ -42,6 +43,7 @@ function ContactForm() {
         email: '',
         company: '',
         phone: '',
+        reason: '',
         licenseCount: '',
         message: ''
       })
@@ -126,21 +128,41 @@ function ContactForm() {
       </div>
 
       <div className="form-group">
-        <label htmlFor="contact-licenses">How many licenses do you need?</label>
+        <label htmlFor="contact-reason">Reason for Contact *</label>
         <select
-          id="contact-licenses"
-          name="licenseCount"
-          value={formData.licenseCount}
+          id="contact-reason"
+          name="reason"
+          value={formData.reason}
           onChange={handleChange}
+          required
         >
-          <option value="">Select...</option>
-          <option value="1-10">1-10 licenses</option>
-          <option value="11-50">11-50 licenses</option>
-          <option value="51-100">51-100 licenses</option>
-          <option value="101-500">101-500 licenses</option>
-          <option value="500+">500+ licenses</option>
+          <option value="">Select a reason...</option>
+          <option value="licensing">Licensing Inquiry</option>
+          <option value="giveaway">Giveaway Question</option>
+          <option value="legal">Legal</option>
+          <option value="support">Technical Support</option>
+          <option value="other">Other</option>
         </select>
       </div>
+
+      {formData.reason === 'licensing' && (
+        <div className="form-group">
+          <label htmlFor="contact-licenses">How many licenses do you need?</label>
+          <select
+            id="contact-licenses"
+            name="licenseCount"
+            value={formData.licenseCount}
+            onChange={handleChange}
+          >
+            <option value="">Select...</option>
+            <option value="1-10">1-10 licenses</option>
+            <option value="11-50">11-50 licenses</option>
+            <option value="51-100">51-100 licenses</option>
+            <option value="101-500">101-500 licenses</option>
+            <option value="500+">500+ licenses</option>
+          </select>
+        </div>
+      )}
 
       <div className="form-group">
         <label htmlFor="contact-message">Message *</label>
