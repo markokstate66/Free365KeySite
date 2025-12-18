@@ -411,6 +411,7 @@ function AdminPage() {
                       <th>Job Title</th>
                       <th>Marketing</th>
                       <th>Date</th>
+                      <th>Verified</th>
                       <th>Status</th>
                     </tr>
                   </thead>
@@ -424,6 +425,11 @@ function AdminPage() {
                         <td>{reg.jobTitle || '-'}</td>
                         <td>{reg.agreeMarketing ? 'Yes' : 'No'}</td>
                         <td>{new Date(reg.registeredAt).toLocaleDateString()}</td>
+                        <td>
+                          <span className={`status-badge ${reg.isVerified ? 'status-verified' : 'status-unverified'}`}>
+                            {reg.isVerified ? 'Yes' : 'No'}
+                          </span>
+                        </td>
                         <td>
                           {reg.isWinner && <span className="winner-badge">Winner</span>}
                         </td>

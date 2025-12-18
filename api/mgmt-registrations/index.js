@@ -30,7 +30,8 @@ module.exports = async function (context, req) {
         jobTitle: entity.jobTitle,
         agreeMarketing: entity.agreeMarketing,
         registeredAt: entity.registeredAt,
-        isWinner: entity.isWinner || false
+        isWinner: entity.isWinner || false,
+        isVerified: entity.isVerified || false
       });
     }
 

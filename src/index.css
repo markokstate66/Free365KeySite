@@ -1205,6 +1205,16 @@ body {
   border-color: #10b981;
 }
 
+.status-verified {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-unverified {
+  background: #fef3c7;
+  color: #92400e;
+}
+
 .status-active {
   background: #d4edda;
   color: #155724;

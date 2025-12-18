@@ -1,5 +1,9 @@
 const { getTableClient } = require("../shared/tableClient");
+const { sendEmail } = require("../shared/emailService");
 const { v4: uuidv4 } = require("uuid");
+const crypto = require("crypto");
+
+const SITE_URL = process.env.SITE_URL || "https://www.free365key.com";
 
 module.exports = async function (context, req) {
   context.log("Registration request received");
@@ -51,6 +55,7 @@ module.exports = async function (context, req) {
 
     // Create registration entity (base entry never expires)
     const id = uuidv4();
+    const verificationToken = crypto.randomBytes(32).toString("hex");
     const now = new Date();
 
     const entity = {
@@ -66,10 +71,49 @@ module.exports = async function (context, req) {
       agreeTerms: body.agreeTerms || false,
       agreeMarketing: body.agreeMarketing || false,
       registeredAt: now.toISOString(),
-      isWinner: false
+      isWinner: false,
+      isVerified: false,
+      verificationToken: verificationToken
     };
 
     await tableClient.createEntity(entity);
+
+    // Send verification email
+    try {
+      const verifyUrl = `${SITE_URL}/verify-email?token=${verificationToken}&id=${id}`;
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0;">Free365Key</h1>
+          </div>
+          <div style="padding: 30px; background: #f8f9fa;">
+            <h2 style="color: #333;">Confirm Your Email</h2>
+            <p style="color: #666; line-height: 1.6;">
+              Hi ${body.firstName},<br><br>
+              Thank you for registering for the Microsoft 365 giveaway! Please confirm your email address to complete your entry.
+            </p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verifyUrl}" style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                Confirm My Email
+              </a>
+            </div>
+            <p style="color: #999; font-size: 0.9rem;">
+              If the button doesn't work, copy and paste this link into your browser:<br>
+              <a href="${verifyUrl}" style="color: #667eea; word-break: break-all;">${verifyUrl}</a>
+            </p>
+            <p style="color: #999; font-size: 0.85rem; margin-top: 30px;">
+              If you didn't register for this giveaway, you can safely ignore this email.
+            </p>
+          </div>
+        </div>
+      `;
+
+      await sendEmail(body.email, "Confirm your Free365Key registration", emailHtml);
+      context.log("Verification email sent to:", body.email);
+    } catch (emailError) {
+      // Don't fail registration if email fails, just log it
+      context.log.error("Failed to send verification email:", emailError);
+    }
 
     // If user opted into newsletter, add them to subscribers
     if (body.joinNewsletter) {
@@ -112,7 +156,8 @@ module.exports = async function (context, req) {
         id: id,
         firstName: body.firstName,
         email: body.email,
-        message: "Registration successful"
+        message: "Registration successful! Please check your email to confirm your entry.",
+        needsVerification: true
       }
     };
   } catch (error) {

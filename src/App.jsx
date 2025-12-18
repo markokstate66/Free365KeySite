@@ -10,6 +10,7 @@ import FAQPage from './pages/FAQPage'
 import WinnersPage from './pages/WinnersPage'
 import BlogPage from './pages/BlogPage'
 import UnsubscribePage from './pages/UnsubscribePage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 
 function App() {
   const location = useLocation()
@@ -38,6 +39,7 @@ function App() {
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/unsubscribe" element={<UnsubscribePage />} />
+      <Route path="/verify-email" element={<VerifyEmailPage />} />
     </Routes>
   )
 }

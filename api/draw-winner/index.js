@@ -30,10 +30,10 @@ module.exports = async function (context, req) {
     bonusCutoff.setDate(bonusCutoff.getDate() - 90);
     const bonusCutoffISO = bonusCutoff.toISOString();
 
-    // Get all eligible registrations (not won - base entry never expires)
+    // Get all eligible registrations (verified, not won - base entry never expires)
     const eligibleEntries = [];
     const registrations = tableClient.listEntities({
-      queryOptions: { filter: `isWinner eq false` }
+      queryOptions: { filter: `isWinner eq false and isVerified eq true` }
     });
 
     for await (const reg of registrations) {

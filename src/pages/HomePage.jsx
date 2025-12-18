@@ -71,7 +71,7 @@ function HomePage() {
           </>
         ) : (
           <div className="success-message">
-            <h3>{isReturningUser ? 'Welcome Back!' : "You're Entered!"}</h3>
+            <h3>{isReturningUser ? 'Welcome Back!' : "Almost There!"}</h3>
             <p>
               {isReturningUser ? (
                 <>
@@ -83,7 +83,9 @@ function HomePage() {
                 <>
                   Thank you for registering, {registrationData?.firstName}!
                   <br />
-                  We'll contact you at {registrationData?.email} if you're selected as a winner.
+                  <strong style={{ color: '#fbbf24' }}>Please check your email ({registrationData?.email}) to confirm your entry.</strong>
+                  <br />
+                  <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Your registration won't be complete until you verify your email.</span>
                 </>
               )}
             </p>
