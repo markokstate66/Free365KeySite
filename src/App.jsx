@@ -11,6 +11,7 @@ import WinnersPage from './pages/WinnersPage'
 import BlogPage from './pages/BlogPage'
 import UnsubscribePage from './pages/UnsubscribePage'
 import VerifyEmailPage from './pages/VerifyEmailPage'
+import ComparePage from './pages/ComparePage'
 
 function App() {
   const location = useLocation()
@@ -40,6 +41,7 @@ function App() {
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/unsubscribe" element={<UnsubscribePage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/compare" element={<ComparePage />} />
     </Routes>
   )
 }
