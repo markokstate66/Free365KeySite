@@ -55,7 +55,7 @@ function HowItWorksPage() {
               <div className="step-content">
                 <h3>Claim Your Prize</h3>
                 <p>
-                  Winners are notified via email with instructions to claim their Microsoft 365 license key.
+                  Winners are notified via email with instructions to claim their Microsoft 365 trial.
                   You'll have 30 days to respond and claim your prize.
                 </p>
               </div>

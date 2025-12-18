@@ -54,7 +54,7 @@ function HomePage() {
         <div className="container">
           <h1>Win a FREE Microsoft 365 License!*</h1>
           <p>
-            Register now for your chance to win a genuine Microsoft 365 license key.
+            Register now for your chance to win a free Microsoft 365 trial.
             <br />
             Winners drawn on the 1st of every month!
             <br />

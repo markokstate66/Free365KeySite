@@ -17,15 +17,15 @@ const faqs = [
   },
   {
     question: 'How will I know if I win?',
-    answer: 'Winners are notified via the email address they registered with. Make sure to check your spam folder! You\'ll receive instructions on how to claim your Microsoft 365 license key.'
+    answer: 'Winners are notified via the email address they registered with. Make sure to check your spam folder! You\'ll receive instructions on how to claim your Microsoft 365 trial.'
   },
   {
     question: 'What version of Microsoft 365 do winners receive?',
     answer: 'Winners receive a 1-month Microsoft 365 Business Basic subscription (no Teams), which includes web and mobile versions of Word, Excel, PowerPoint, and Outlook, plus 1 TB OneDrive storage, 50 GB Exchange mailbox, and SharePoint access. Note: Does not include desktop Office apps or Microsoft Teams.'
   },
   {
-    question: 'Are the license keys legitimate?',
-    answer: 'Absolutely. All license keys we provide are genuine Microsoft products purchased through authorized channels. They are fully legitimate and come with full Microsoft support.'
+    question: 'Is the trial legitimate?',
+    answer: 'Absolutely. All trials we provide are genuine Microsoft 365 subscriptions provisioned through our authorized Cloud Solution Provider (CSP) partnership. They are fully legitimate and come with full Microsoft support.'
   },
   {
     question: 'Who is eligible to enter?',
@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     question: 'Can I transfer my prize to someone else?',
-    answer: 'Prizes are non-transferable and must be claimed by the registered participant. The license key will be issued to the email address used during registration.'
+    answer: 'Prizes are non-transferable and must be claimed by the registered participant. The trial will be activated for the email address used during registration.'
   },
   {
     question: 'How do you select winners?',

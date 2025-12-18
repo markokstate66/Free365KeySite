@@ -13,7 +13,7 @@ function PrivacyPage() {
 
           <section style={{ marginBottom: '30px' }}>
             <h2 style={{ marginBottom: '15px' }}>1. Information We Collect</h2>
-            <p style={{ marginBottom: '10px' }}>When you register for our Microsoft 365 key giveaway, we collect:</p>
+            <p style={{ marginBottom: '10px' }}>When you register for our Microsoft 365 giveaway, we collect:</p>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li>First and last name</li>
               <li>Email address</li>
