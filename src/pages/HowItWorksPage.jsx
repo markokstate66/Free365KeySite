@@ -69,13 +69,17 @@ function HowItWorksPage() {
           <h2 style={{ textAlign: 'center', marginBottom: '40px' }}>What You'll Win</h2>
           <div className="prize-details">
             <div className="prize-card">
-              <h3>Microsoft 365 Personal</h3>
+              <h3>Microsoft 365 Business Basic</h3>
               <ul>
-                <li>Word, Excel, PowerPoint, Outlook</li>
-                <li>1TB OneDrive cloud storage</li>
-                <li>Use on up to 5 devices</li>
-                <li>1 year subscription</li>
+                <li>Web & mobile Office apps (Word, Excel, PowerPoint, Outlook)</li>
+                <li>1 TB OneDrive cloud storage</li>
+                <li>50 GB Exchange email mailbox</li>
+                <li>SharePoint file sharing</li>
+                <li>1 month subscription</li>
               </ul>
+              <p style={{ fontSize: '0.85rem', color: '#666', marginTop: '15px' }}>
+                *Does not include desktop Office apps or Microsoft Teams
+              </p>
             </div>
           </div>
         </div>

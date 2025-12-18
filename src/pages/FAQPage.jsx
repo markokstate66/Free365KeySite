@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     question: 'What version of Microsoft 365 do winners receive?',
-    answer: 'Winners receive a Microsoft 365 Personal subscription, which includes Word, Excel, PowerPoint, Outlook, 1TB OneDrive storage, and can be used on up to 5 devices for one year.'
+    answer: 'Winners receive a 1-month Microsoft 365 Business Basic subscription (no Teams), which includes web and mobile versions of Word, Excel, PowerPoint, and Outlook, plus 1 TB OneDrive storage, 50 GB Exchange mailbox, and SharePoint access. Note: Does not include desktop Office apps or Microsoft Teams.'
   },
   {
     question: 'Are the license keys legitimate?',
@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     question: 'Who is eligible to enter?',
-    answer: 'Anyone 18 years or older can enter. The giveaway is open internationally, though some regional restrictions may apply. Please review our Terms of Service for complete eligibility requirements.'
+    answer: 'US residents who are 18 years or older are eligible to enter. Please review our Terms of Service for complete eligibility requirements.'
   },
   {
     question: 'How long do I have to claim my prize?',

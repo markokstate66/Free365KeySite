@@ -2,12 +2,12 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 
 const pastWinners = [
-  { month: 'November 2024', name: 'Sarah M.', location: 'California, USA', initials: 'SM' },
-  { month: 'October 2024', name: 'James K.', location: 'London, UK', initials: 'JK' },
-  { month: 'September 2024', name: 'Maria G.', location: 'Toronto, Canada', initials: 'MG' },
-  { month: 'August 2024', name: 'David L.', location: 'Sydney, Australia', initials: 'DL' },
-  { month: 'July 2024', name: 'Emma W.', location: 'Berlin, Germany', initials: 'EW' },
-  { month: 'June 2024', name: 'Michael R.', location: 'New York, USA', initials: 'MR' },
+  { month: 'November 2024', name: 'Sarah M.', location: 'California', initials: 'SM' },
+  { month: 'October 2024', name: 'James K.', location: 'Texas', initials: 'JK' },
+  { month: 'September 2024', name: 'Maria G.', location: 'Florida', initials: 'MG' },
+  { month: 'August 2024', name: 'David L.', location: 'New York', initials: 'DL' },
+  { month: 'July 2024', name: 'Emma W.', location: 'Washington', initials: 'EW' },
+  { month: 'June 2024', name: 'Michael R.', location: 'Illinois', initials: 'MR' },
 ]
 
 function WinnersPage() {
