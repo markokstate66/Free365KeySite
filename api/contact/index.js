@@ -89,7 +89,7 @@ module.exports = async function (context, req) {
             </tr>
           </table>
           <p style="margin-top: 20px;">
-            <a href="https://free365key.com/admin" style="display: inline-block; padding: 10px 20px; background: #00a4ef; color: white; text-decoration: none; border-radius: 5px;">View in Admin Panel</a>
+            <a href="https://www.free365key.com/admin" style="display: inline-block; padding: 10px 20px; background: #00a4ef; color: white; text-decoration: none; border-radius: 5px;">View in Admin Panel</a>
           </p>
         </div>
       `;
