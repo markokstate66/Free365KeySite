@@ -4,6 +4,7 @@ import Footer from '../components/Footer'
 import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
 import RewardedAd from '../components/RewardedAd'
+import ContactForm from '../components/ContactForm'
 
 function HomePage() {
   const [registered, setRegistered] = useState(false)
@@ -139,20 +140,14 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="features" style={{ background: '#f8f9fa' }}>
+      <section className="features contact-section" style={{ background: '#f8f9fa' }}>
         <h2>Need More Licenses?</h2>
-        <div className="container" style={{ textAlign: 'center', maxWidth: '800px' }}>
-          <p style={{ fontSize: '1.2rem', marginBottom: '30px', color: '#666' }}>
+        <div className="container" style={{ maxWidth: '600px' }}>
+          <p style={{ fontSize: '1.1rem', marginBottom: '30px', color: '#666', textAlign: 'center' }}>
             We offer competitive pricing on Microsoft 365 licenses for businesses of all sizes.
-            Contact us for volume discounts and special enterprise packages.
+            Fill out the form below for volume discounts and enterprise packages.
           </p>
-          <a
-            href="mailto:sales@free365key.com"
-            className="submit-btn"
-            style={{ display: 'inline-block', textDecoration: 'none', maxWidth: '300px' }}
-          >
-            Contact Sales
-          </a>
+          <ContactForm />
         </div>
       </section>
 
