@@ -30,17 +30,18 @@ module.exports = async function (context, req) {
     });
 
     for await (const entity of existingEntries) {
-      // Calculate entry weight using new system:
-      // Verified = 5 base entries, each ad (within 90 days) = 2 entries
+      // Calculate entry weight using drawing-based expiration:
+      // Verified = 5 base entries, each valid ad = 2 entries
       const isVerified = entity.isVerified === true;
       const baseWeight = isVerified ? 5 : 0;
 
-      // Count ads watched in last 90 days
+      // Count ads valid for upcoming drawings
       const bonusClient = await getTableClient("bonusentries");
       const now = new Date();
-      const cutoff = new Date(now);
-      cutoff.setDate(cutoff.getDate() - 90);
-      const cutoffISO = cutoff.toISOString();
+
+      // Current drawing cycle (next month's drawing)
+      const nextDrawing = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      const currentDrawingCycle = `${nextDrawing.getFullYear()}-${String(nextDrawing.getMonth() + 1).padStart(2, '0')}`;
 
       let adCount = 0;
       const bonuses = bonusClient.listEntities({
@@ -48,9 +49,18 @@ module.exports = async function (context, req) {
       });
 
       for await (const bonus of bonuses) {
-        const earnedAt = bonus.claimedAt || bonus.earnedAt;
-        if (earnedAt && earnedAt >= cutoffISO) {
+        // Count ads valid for current or future drawings
+        const validUntil = bonus.validUntilDrawing;
+        if (validUntil && validUntil >= currentDrawingCycle) {
           adCount++;
+        } else if (!validUntil) {
+          // Legacy entries without validUntilDrawing - check by date (90 days)
+          const earnedAt = bonus.earnedAt || bonus.claimedAt;
+          const cutoff = new Date(now);
+          cutoff.setDate(cutoff.getDate() - 90);
+          if (earnedAt && earnedAt >= cutoff.toISOString()) {
+            adCount++;
+          }
         }
       }
 

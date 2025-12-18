@@ -25,10 +25,9 @@ module.exports = async function (context, req) {
     const bonusClient = await getTableClient("bonusentries");
     const now = new Date();
 
-    // Calculate 90-day cutoff for bonus entries
-    const bonusCutoff = new Date(now);
-    bonusCutoff.setDate(bonusCutoff.getDate() - 90);
-    const bonusCutoffISO = bonusCutoff.toISOString();
+    // Current drawing cycle (this month's drawing since we run on 1st)
+    const currentDrawingCycle = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    context.log(`Running drawing for cycle: ${currentDrawingCycle}`);
 
     // Get all eligible registrations (verified, not won - base entry never expires)
     const eligibleEntries = [];
@@ -37,16 +36,25 @@ module.exports = async function (context, req) {
     });
 
     for await (const reg of registrations) {
-      // Count ad watches from last 90 days only
+      // Count ads valid for this drawing
       let adWatchCount = 0;
       const bonuses = bonusClient.listEntities({
         queryOptions: { filter: `registrationId eq '${reg.rowKey}'` }
       });
 
       for await (const bonus of bonuses) {
-        // Only count bonus entries from the last 90 days
-        if (bonus.earnedAt && bonus.earnedAt >= bonusCutoffISO) {
+        // Count ads valid for this drawing cycle
+        const validUntil = bonus.validUntilDrawing;
+        if (validUntil && validUntil >= currentDrawingCycle) {
           adWatchCount++;
+        } else if (!validUntil) {
+          // Legacy entries without validUntilDrawing - check by date (90 days)
+          const earnedAt = bonus.earnedAt || bonus.claimedAt;
+          const cutoff = new Date(now);
+          cutoff.setDate(cutoff.getDate() - 90);
+          if (earnedAt && earnedAt >= cutoff.toISOString()) {
+            adWatchCount++;
+          }
         }
       }
 

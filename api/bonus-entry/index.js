@@ -104,6 +104,12 @@ module.exports = async function (context, req) {
       return;
     }
 
+    // Calculate validUntilDrawing (valid for next 3 drawings)
+    // Drawings happen on 1st of each month, so add 3 months to current date
+    const now = new Date();
+    const validUntil = new Date(now.getFullYear(), now.getMonth() + 3, 1);
+    const validUntilDrawing = `${validUntil.getFullYear()}-${String(validUntil.getMonth() + 1).padStart(2, '0')}`;
+
     // Create bonus entry with token hash to prevent replay
     const bonusId = uuidv4();
     const bonusEntity = {
@@ -114,21 +120,20 @@ module.exports = async function (context, req) {
       email: registration.email,
       tokenHash: tokenHash,
       watchDuration: Math.round(tokenResult.elapsedSeconds),
-      claimedAt: new Date().toISOString()
+      earnedAt: now.toISOString(),
+      validUntilDrawing: validUntilDrawing
     };
 
     await bonusClient.createEntity(bonusEntity);
 
-    // Count total entries for this user using new weighting:
-    // Verified = 5 base entries, each ad (within 90 days) = 2 entries
+    // Count total entries for this user using drawing-based expiration:
+    // Verified = 5 base entries, each valid ad = 2 entries
     const isVerified = registration.isVerified === true;
     const baseWeight = isVerified ? 5 : 0;
 
-    // Count ads watched in last 90 days
-    const now = new Date();
-    const cutoff = new Date(now);
-    cutoff.setDate(cutoff.getDate() - 90);
-    const cutoffISO = cutoff.toISOString();
+    // Current drawing cycle (next month's drawing)
+    const nextDrawing = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const currentDrawingCycle = `${nextDrawing.getFullYear()}-${String(nextDrawing.getMonth() + 1).padStart(2, '0')}`;
 
     let adCount = 0;
     const allBonuses = bonusClient.listEntities({
@@ -136,10 +141,18 @@ module.exports = async function (context, req) {
     });
 
     for await (const bonus of allBonuses) {
-      // Only count ads from last 90 days
-      const earnedAt = bonus.claimedAt || bonus.earnedAt;
-      if (earnedAt && earnedAt >= cutoffISO) {
+      // Count ads valid for current or future drawings
+      const validUntil = bonus.validUntilDrawing;
+      if (validUntil && validUntil >= currentDrawingCycle) {
         adCount++;
+      } else if (!validUntil) {
+        // Legacy entries without validUntilDrawing - check by date (90 days)
+        const earnedAt = bonus.earnedAt || bonus.claimedAt;
+        const cutoff = new Date(now);
+        cutoff.setDate(cutoff.getDate() - 90);
+        if (earnedAt && earnedAt >= cutoff.toISOString()) {
+          adCount++;
+        }
       }
     }
 
@@ -151,10 +164,11 @@ module.exports = async function (context, req) {
       headers: { "Content-Type": "application/json" },
       body: {
         success: true,
-        message: `Bonus entry added! (+2 entries)`,
+        message: `Bonus entry added! (+2 entries, valid for 3 drawings)`,
         totalEntries: totalEntries,
         adCount: adCount,
-        isVerified: isVerified
+        isVerified: isVerified,
+        validUntilDrawing: validUntilDrawing
       }
     };
   } catch (error) {

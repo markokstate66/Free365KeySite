@@ -44,8 +44,8 @@ function HowItWorksPage() {
               <div className="step-content">
                 <h3>Earn Bonus Entries</h3>
                 <p>
-                  Watch short ads to earn <strong>+2 bonus entries</strong> each! Bonus entries stay valid for 90 days,
-                  so keep watching to maximize your chances.
+                  Watch short ads to earn <strong>+2 bonus entries</strong> each! Each bonus is valid for the next
+                  <strong> 3 monthly drawings</strong>, so keep watching to maximize your chances.
                 </p>
               </div>
             </div>
