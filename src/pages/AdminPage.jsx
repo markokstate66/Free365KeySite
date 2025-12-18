@@ -21,6 +21,9 @@ function AdminPage() {
   const [editingNewsletter, setEditingNewsletter] = useState(null)
   const [showEditor, setShowEditor] = useState(false)
 
+  // Contacts state
+  const [contacts, setContacts] = useState({ contacts: [], total: 0, new: 0, contacted: 0, closed: 0 })
+
   // Check Azure AD authentication
   useEffect(() => {
     const checkAuth = async () => {
@@ -46,6 +49,9 @@ function AdminPage() {
     if (isLoggedIn && activeTab === 'newsletters') {
       fetchNewsletters()
       fetchSubscribers()
+    }
+    if (isLoggedIn && activeTab === 'contacts') {
+      fetchContacts()
     }
   }, [isLoggedIn, activeTab])
 
@@ -88,6 +94,47 @@ function AdminPage() {
       }
     } catch (err) {
       console.error('Failed to fetch subscribers:', err)
+    }
+  }
+
+  const fetchContacts = async () => {
+    try {
+      const response = await fetch('/api/mgmt-contacts')
+      if (response.ok) {
+        const data = await response.json()
+        setContacts(data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch contacts:', err)
+    }
+  }
+
+  const updateContactStatus = async (id, status) => {
+    try {
+      const response = await fetch(`/api/mgmt-contacts?id=${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      })
+      if (response.ok) {
+        fetchContacts()
+      }
+    } catch (err) {
+      console.error('Failed to update contact:', err)
+    }
+  }
+
+  const deleteContact = async (id) => {
+    if (!confirm('Are you sure you want to delete this contact?')) return
+    try {
+      const response = await fetch(`/api/mgmt-contacts?id=${id}`, {
+        method: 'DELETE'
+      })
+      if (response.ok) {
+        fetchContacts()
+      }
+    } catch (err) {
+      console.error('Failed to delete contact:', err)
     }
   }
 
@@ -297,6 +344,12 @@ function AdminPage() {
             onClick={() => setActiveTab('newsletters')}
           >
             Newsletters
+          </button>
+          <button
+            className={`admin-tab ${activeTab === 'contacts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('contacts')}
+          >
+            Contacts {contacts.new > 0 && <span className="tab-badge">{contacts.new}</span>}
           </button>
         </div>
 
@@ -553,6 +606,93 @@ function AdminPage() {
                 </div>
               </div>
             )}
+          </>
+        )}
+
+        {activeTab === 'contacts' && (
+          <>
+            <div className="admin-actions-bar">
+              <button className="btn btn-primary" onClick={fetchContacts}>
+                Refresh
+              </button>
+            </div>
+
+            <div className="stats-grid">
+              <div className="stat-card">
+                <h3>Total Inquiries</h3>
+                <div className="number">{contacts.total}</div>
+              </div>
+              <div className="stat-card">
+                <h3>New</h3>
+                <div className="number" style={{ color: '#f59e0b' }}>{contacts.new}</div>
+              </div>
+              <div className="stat-card">
+                <h3>Contacted</h3>
+                <div className="number" style={{ color: '#3b82f6' }}>{contacts.contacted}</div>
+              </div>
+              <div className="stat-card">
+                <h3>Closed</h3>
+                <div className="number" style={{ color: '#10b981' }}>{contacts.closed}</div>
+              </div>
+            </div>
+
+            <div className="data-table">
+              {contacts.contacts.length === 0 ? (
+                <p style={{ padding: '20px', textAlign: 'center' }}>No contact submissions yet</p>
+              ) : (
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Company</th>
+                      <th>Licenses</th>
+                      <th>Message</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {contacts.contacts.map((contact) => (
+                      <tr key={contact.id}>
+                        <td>{new Date(contact.submittedAt).toLocaleDateString()}</td>
+                        <td>{contact.name}</td>
+                        <td>
+                          <a href={`mailto:${contact.email}`} style={{ color: '#00a4ef' }}>
+                            {contact.email}
+                          </a>
+                        </td>
+                        <td>{contact.company || '-'}</td>
+                        <td>{contact.licenseCount || '-'}</td>
+                        <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={contact.message}>
+                          {contact.message}
+                        </td>
+                        <td>
+                          <select
+                            value={contact.status}
+                            onChange={(e) => updateContactStatus(contact.id, e.target.value)}
+                            className={`status-select status-${contact.status}`}
+                          >
+                            <option value="new">New</option>
+                            <option value="contacted">Contacted</option>
+                            <option value="closed">Closed</option>
+                          </select>
+                        </td>
+                        <td>
+                          <button
+                            className="btn-small btn-danger"
+                            onClick={() => deleteContact(contact.id)}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </>
         )}
       </div>

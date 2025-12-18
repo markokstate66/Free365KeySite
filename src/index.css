@@ -1100,6 +1100,15 @@ body {
   border-bottom-color: var(--ms-blue);
 }
 
+.tab-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 6px;
+}
+
 .admin-actions-bar {
   display: flex;
   gap: 15px;
@@ -1130,6 +1139,29 @@ body {
 .status-sent {
   background: #d4edda;
   color: #155724;
+}
+
+.status-select {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.status-select.status-new {
+  background: #fef3c7;
+  border-color: #f59e0b;
+}
+
+.status-select.status-contacted {
+  background: #dbeafe;
+  border-color: #3b82f6;
+}
+
+.status-select.status-closed {
+  background: #d1fae5;
+  border-color: #10b981;
 }
 
 .status-active {
