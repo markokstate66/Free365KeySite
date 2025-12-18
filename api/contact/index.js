@@ -1,5 +1,8 @@
 const { getTableClient } = require("../shared/tableClient");
+const { sendEmail } = require("../shared/emailService");
 const { v4: uuidv4 } = require("uuid");
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "markokstate@gmail.com";
 
 module.exports = async function (context, req) {
   context.log("Contact form submission received");
@@ -52,6 +55,55 @@ module.exports = async function (context, req) {
     };
 
     await tableClient.createEntity(entity);
+
+    // Send email notification to admin
+    try {
+      const notificationHtml = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #00a4ef;">New Contact Form Submission</h2>
+          <p>You have a new inquiry from the Free365Key website:</p>
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="background: #f5f5f5;">
+              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Name</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${name}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Email</td>
+              <td style="padding: 10px; border: 1px solid #ddd;"><a href="mailto:${email}">${email}</a></td>
+            </tr>
+            <tr style="background: #f5f5f5;">
+              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Phone</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${phone || 'Not provided'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Company</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${company || 'Not provided'}</td>
+            </tr>
+            <tr style="background: #f5f5f5;">
+              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Licenses Needed</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${licenseCount || 'Not specified'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Message</td>
+              <td style="padding: 10px; border: 1px solid #ddd;">${message}</td>
+            </tr>
+          </table>
+          <p style="margin-top: 20px;">
+            <a href="https://free365key.com/admin" style="display: inline-block; padding: 10px 20px; background: #00a4ef; color: white; text-decoration: none; border-radius: 5px;">View in Admin Panel</a>
+          </p>
+        </div>
+      `;
+
+      await sendEmail(
+        ADMIN_EMAIL,
+        `New Contact: ${name} - ${licenseCount || 'License Inquiry'}`,
+        notificationHtml
+      );
+      context.log("Admin notification email sent");
+    } catch (emailError) {
+      // Don't fail the request if email fails, just log it
+      context.log.error("Failed to send admin notification:", emailError);
+    }
 
     context.res = {
       status: 201,
