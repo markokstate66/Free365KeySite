@@ -10,13 +10,16 @@ function HomePage() {
   const [registered, setRegistered] = useState(false)
   const [registrationData, setRegistrationData] = useState(null)
   const [showRewardedAd, setShowRewardedAd] = useState(false)
-  const [totalEntries, setTotalEntries] = useState(1)
+  const [totalEntries, setTotalEntries] = useState(0)
+  const [activeAdCount, setActiveAdCount] = useState(0)
   const [isReturningUser, setIsReturningUser] = useState(false)
   const [resendStatus, setResendStatus] = useState(null) // null, 'sending', 'sent', 'error'
 
   const handleSuccess = (data) => {
     setRegistered(true)
     setRegistrationData(data)
+    setTotalEntries(data.totalEntries || 0)
+    setActiveAdCount(data.adCount || 0)
     setIsReturningUser(false)
   }
 
@@ -33,7 +36,8 @@ function HomePage() {
         const data = await response.json()
         setRegistered(true)
         setRegistrationData(data)
-        setTotalEntries(data.totalEntries || 1)
+        setTotalEntries(data.totalEntries || 0)
+        setActiveAdCount(data.adCount || 0)
         setIsReturningUser(true)
       }
     } catch (err) {
@@ -42,8 +46,11 @@ function HomePage() {
   }
 
   const handleBonusComplete = (data) => {
-    if (data.totalEntries) {
+    if (data.totalEntries !== undefined) {
       setTotalEntries(data.totalEntries)
+    }
+    if (data.adCount !== undefined) {
+      setActiveAdCount(data.adCount)
     }
   }
 
@@ -148,9 +155,24 @@ function HomePage() {
             <p style={{ marginTop: '10px', fontSize: '0.85rem', opacity: 0.7 }}>
               {!registrationData?.isVerified && "Tip: Check your spam folder if you don't see it."}
             </p>
-            <p style={{ marginTop: '10px', fontSize: '1.1rem', fontWeight: 'bold' }}>
-              Total Entries: {totalEntries}
-            </p>
+            <div style={{ marginTop: '15px', padding: '15px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }}>
+              <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '0 0 10px 0' }}>
+                Total Entries: {totalEntries}
+              </p>
+              <div style={{ fontSize: '0.85rem', opacity: 0.9 }}>
+                <p style={{ margin: '4px 0' }}>
+                  Base entries: {registrationData?.isVerified ? 5 : 0} {!registrationData?.isVerified && <span style={{ color: '#fbbf24' }}>(verify email to unlock)</span>}
+                </p>
+                <p style={{ margin: '4px 0' }}>
+                  Ad bonus: {activeAdCount} ad{activeAdCount !== 1 ? 's' : ''} × 2 = {activeAdCount * 2} entries
+                </p>
+                {activeAdCount > 0 && (
+                  <p style={{ margin: '8px 0 0 0', fontSize: '0.8rem', opacity: 0.7 }}>
+                    Bonus entries expire 90 days after earned
+                  </p>
+                )}
+              </div>
+            </div>
             {!isReturningUser && (
               <p style={{ marginTop: '10px', opacity: 0.9, fontSize: '0.9rem' }}>
                 Entry ID: {registrationData?.id}
