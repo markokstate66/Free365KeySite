@@ -16,21 +16,45 @@ module.exports = async function (context, req) {
     }
 
     try {
-      // Delete the registration
-      await tableClient.deleteEntity("registration", id);
+      context.log(`Attempting to delete registration with id: ${id}`);
 
-      // Also delete any bonus entries for this registration
-      const bonusTableClient = await getTableClient("bonusentries");
-      const bonusEntries = bonusTableClient.listEntities({
-        queryOptions: { filter: `registrationId eq '${id}'` }
+      // First find the entity to get its exact rowKey
+      const entities = tableClient.listEntities({
+        queryOptions: { filter: `PartitionKey eq 'registration' and id eq '${id}'` }
       });
 
-      for await (const entry of bonusEntries) {
-        try {
-          await bonusTableClient.deleteEntity(entry.partitionKey, entry.rowKey);
-        } catch (e) {
-          context.log.warn("Failed to delete bonus entry:", e.message);
+      let found = false;
+      for await (const entity of entities) {
+        context.log(`Found entity with rowKey: ${entity.rowKey}`);
+        await tableClient.deleteEntity("registration", entity.rowKey);
+        found = true;
+        break;
+      }
+
+      if (!found) {
+        context.res = {
+          status: 404,
+          body: { error: "Registration not found" }
+        };
+        return;
+      }
+
+      // Also delete any bonus entries for this registration
+      try {
+        const bonusTableClient = await getTableClient("bonusentries");
+        const bonusEntries = bonusTableClient.listEntities({
+          queryOptions: { filter: `registrationId eq '${id}'` }
+        });
+
+        for await (const entry of bonusEntries) {
+          try {
+            await bonusTableClient.deleteEntity(entry.partitionKey, entry.rowKey);
+          } catch (e) {
+            context.log.warn("Failed to delete bonus entry:", e.message);
+          }
         }
+      } catch (e) {
+        context.log.warn("Error cleaning up bonus entries:", e.message);
       }
 
       context.log(`Deleted registration ${id}`);
@@ -40,10 +64,10 @@ module.exports = async function (context, req) {
         body: { success: true, message: "Registration deleted" }
       };
     } catch (error) {
-      context.log.error("Error deleting registration:", error);
+      context.log.error("Error deleting registration:", error.message);
       context.res = {
         status: 500,
-        body: { error: "Failed to delete registration" }
+        body: { error: "Failed to delete registration: " + error.message }
       };
     }
     return;
