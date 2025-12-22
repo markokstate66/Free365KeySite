@@ -138,6 +138,23 @@ function AdminPage() {
     }
   }
 
+  const deleteRegistration = async (id, email) => {
+    if (!confirm(`Are you sure you want to delete the registration for ${email}? This will also remove any bonus entries.`)) return
+    try {
+      const response = await fetch(`/api/mgmt-registrations?id=${id}`, {
+        method: 'DELETE'
+      })
+      if (response.ok) {
+        fetchRegistrations()
+      } else {
+        alert('Failed to delete registration')
+      }
+    } catch (err) {
+      console.error('Failed to delete registration:', err)
+      alert('Failed to delete registration')
+    }
+  }
+
   const handleSaveNewsletter = async (newsletterData) => {
     const method = newsletterData.id ? 'PUT' : 'POST'
     const url = '/api/mgmt-newsletters' + (newsletterData.id ? `?id=${newsletterData.id}` : '')
@@ -408,11 +425,10 @@ function AdminPage() {
                       <th>Email</th>
                       <th>Phone</th>
                       <th>Company</th>
-                      <th>Job Title</th>
-                      <th>Marketing</th>
                       <th>Date</th>
                       <th>Verified</th>
                       <th>Status</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -422,8 +438,6 @@ function AdminPage() {
                         <td>{reg.email}</td>
                         <td>{reg.phone}</td>
                         <td>{reg.companyName || '-'}</td>
-                        <td>{reg.jobTitle || '-'}</td>
-                        <td>{reg.agreeMarketing ? 'Yes' : 'No'}</td>
                         <td>{new Date(reg.registeredAt).toLocaleDateString()}</td>
                         <td>
                           <span className={`status-badge ${reg.isVerified ? 'status-verified' : 'status-unverified'}`}>
@@ -432,6 +446,15 @@ function AdminPage() {
                         </td>
                         <td>
                           {reg.isWinner && <span className="winner-badge">Winner</span>}
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-danger btn-small"
+                            onClick={() => deleteRegistration(reg.id, reg.email)}
+                            title="Delete registration"
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
                     ))}
