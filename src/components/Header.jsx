@@ -23,9 +23,7 @@ function Header() {
           <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
           <Link to="/how-it-works" onClick={() => setMenuOpen(false)}>How It Works</Link>
           <Link to="/compare" onClick={() => setMenuOpen(false)}>Direct vs CSP</Link>
-          <Link to="/winners" onClick={() => setMenuOpen(false)}>Winners</Link>
           <Link to="/faq" onClick={() => setMenuOpen(false)}>FAQ</Link>
-          <Link to="/blog" onClick={() => setMenuOpen(false)}>Blog</Link>
         </nav>
       </div>
     </header>
