@@ -22,66 +22,30 @@ function ComparePage() {
             products, but the experience and benefits differ significantly.
           </p>
 
-          <div style={{
-            background: '#f8f9fa',
-            borderRadius: '12px',
-            padding: '30px',
-            marginBottom: '40px'
-          }}>
-            <h3 style={{ marginBottom: '20px', color: '#333' }}>Quick Comparison</h3>
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{
-                width: '100%',
-                borderCollapse: 'collapse',
-                background: 'white',
-                borderRadius: '8px',
-                overflow: 'hidden'
-              }}>
-                <thead>
-                  <tr style={{ background: '#0078d4', color: 'white' }}>
-                    <th style={{ padding: '15px', textAlign: 'left', fontWeight: '600' }}>Feature</th>
-                    <th style={{ padding: '15px', textAlign: 'center', fontWeight: '600' }}>Microsoft Direct</th>
-                    <th style={{ padding: '15px', textAlign: 'center', fontWeight: '600' }}>CSP Partner</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: '500' }}>Pricing</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center' }}>Fixed retail pricing</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center', background: '#e8f5e9' }}>Often discounted</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: '500' }}>Billing</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center' }}>Monthly/Annual to Microsoft</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center', background: '#e8f5e9' }}>Flexible partner terms</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: '500' }}>Support</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center' }}>Microsoft phone/web support</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center', background: '#e8f5e9' }}>Personal partner support + Microsoft escalation</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: '500' }}>Setup Help</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center' }}>Self-service documentation</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center', background: '#e8f5e9' }}>Hands-on assistance available</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: '500' }}>License Management</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center' }}>You manage everything</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center', background: '#e8f5e9' }}>Partner can manage for you</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', fontWeight: '500' }}>License Flexibility</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center' }}>Fixed subscription tiers</td>
-                    <td style={{ padding: '15px', borderBottom: '1px solid #eee', textAlign: 'center', background: '#e8f5e9' }}>Mix-and-match options</td>
-                  </tr>
-                  <tr>
-                    <td style={{ padding: '15px', fontWeight: '500' }}>Value-Added Services</td>
-                    <td style={{ padding: '15px', textAlign: 'center' }}>None</td>
-                    <td style={{ padding: '15px', textAlign: 'center', background: '#e8f5e9' }}>Training, migration, consulting</td>
-                  </tr>
-                </tbody>
-              </table>
+          <div className="compare-grid">
+            <div className="compare-card">
+              <div className="compare-card-header direct">Microsoft Direct</div>
+              <ul className="compare-list">
+                <li><span className="compare-label">Pricing:</span> Fixed retail pricing</li>
+                <li><span className="compare-label">Billing:</span> Monthly/Annual to Microsoft</li>
+                <li><span className="compare-label">Support:</span> Microsoft phone/web support</li>
+                <li><span className="compare-label">Setup:</span> Self-service documentation</li>
+                <li><span className="compare-label">Management:</span> You manage everything</li>
+                <li><span className="compare-label">Flexibility:</span> Fixed subscription tiers</li>
+                <li><span className="compare-label">Extras:</span> None</li>
+              </ul>
+            </div>
+            <div className="compare-card highlighted">
+              <div className="compare-card-header csp">CSP Partner</div>
+              <ul className="compare-list">
+                <li><span className="compare-label">Pricing:</span> Often discounted</li>
+                <li><span className="compare-label">Billing:</span> Flexible partner terms</li>
+                <li><span className="compare-label">Support:</span> Personal partner support</li>
+                <li><span className="compare-label">Setup:</span> Hands-on assistance</li>
+                <li><span className="compare-label">Management:</span> Partner can manage for you</li>
+                <li><span className="compare-label">Flexibility:</span> Mix-and-match options</li>
+                <li><span className="compare-label">Extras:</span> Training, migration, consulting</li>
+              </ul>
             </div>
           </div>
 
