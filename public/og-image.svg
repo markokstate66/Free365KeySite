@@ -1,0 +1,23 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea"/>
+      <stop offset="100%" style="stop-color:#764ba2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Main Title -->
+  <text x="600" y="250" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">Free365Key</text>
+
+  <!-- Subtitle -->
+  <text x="600" y="340" font-family="Arial, sans-serif" font-size="42" fill="rgba(255,255,255,0.95)" text-anchor="middle">Win a FREE Microsoft 365 License</text>
+
+  <!-- Tagline -->
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="28" fill="rgba(255,255,255,0.8)" text-anchor="middle">Monthly Giveaway - No Purchase Necessary</text>
+
+  <!-- Bottom URL -->
+  <text x="600" y="560" font-family="Arial, sans-serif" font-size="24" fill="rgba(255,255,255,0.6)" text-anchor="middle">www.free365key.com</text>
+</svg>
