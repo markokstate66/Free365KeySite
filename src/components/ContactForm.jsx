@@ -13,15 +13,36 @@ function ContactForm() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+
+  // Validates US phone numbers in various formats
+  const isValidPhone = (phone) => {
+    if (!phone) return true // Optional field
+    // Remove all non-digits except + for country code
+    const cleaned = phone.replace(/[^\d+]/g, '')
+    // Accept 10 digits, or 11 digits starting with 1, or +1 followed by 10 digits
+    return /^(\+?1)?[2-9]\d{9}$/.test(cleaned)
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
+    if (name === 'phone') {
+      setPhoneError('')
+    }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setPhoneError('')
+
+    // Validate phone if provided
+    if (formData.phone && !isValidPhone(formData.phone)) {
+      setPhoneError('Please enter a valid US phone number')
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -122,8 +143,10 @@ function ContactForm() {
             name="phone"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="+1 (555) 123-4567"
+            placeholder="(555) 123-4567"
+            className={phoneError ? 'input-error' : ''}
           />
+          {phoneError && <span className="field-error">{phoneError}</span>}
         </div>
       </div>
 

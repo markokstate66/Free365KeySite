@@ -347,6 +347,18 @@ body {
   text-align: center;
 }
 
+.input-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+}
+
+.field-error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: block;
+}
+
 /* Admin Styles */
 .admin-container {
   padding: 40px 20px;
