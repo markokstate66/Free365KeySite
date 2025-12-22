@@ -11,14 +11,31 @@ module.exports = async function (context, req) {
   try {
     // GET - List all newsletters or get one by ID
     if (method === "GET") {
+      // Get open counts from tracking table
+      const opensClient = await getTableClient("newsletteropens");
+      const openCounts = {};
+
+      try {
+        const openEntities = opensClient.listEntities();
+        for await (const open of openEntities) {
+          const nid = open.partitionKey;
+          openCounts[nid] = (openCounts[nid] || 0) + 1;
+        }
+      } catch (e) {
+        // Table might not exist yet, that's ok
+        context.log.warn("Could not fetch open counts:", e.message);
+      }
+
       if (id) {
         // Get single newsletter
         try {
           const entity = await tableClient.getEntity("newsletter", id);
+          const newsletter = entityToNewsletter(entity);
+          newsletter.openCount = openCounts[id] || 0;
           context.res = {
             status: 200,
             headers: { "Content-Type": "application/json" },
-            body: entityToNewsletter(entity)
+            body: newsletter
           };
         } catch (error) {
           context.res = {
@@ -34,7 +51,9 @@ module.exports = async function (context, req) {
         });
 
         for await (const entity of entities) {
-          newsletters.push(entityToNewsletter(entity));
+          const newsletter = entityToNewsletter(entity);
+          newsletter.openCount = openCounts[newsletter.id] || 0;
+          newsletters.push(newsletter);
         }
 
         // Sort by created date descending

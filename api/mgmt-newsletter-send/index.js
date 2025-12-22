@@ -78,12 +78,13 @@ module.exports = async function (context, req) {
     // Add unsubscribe link to the HTML content
     const htmlWithUnsubscribe = addUnsubscribeLink(newsletter.htmlContent);
 
-    // Send the newsletter
+    // Send the newsletter (with tracking pixel)
     context.log(`Sending newsletter to ${subscribers.length} subscribers`);
     const results = await sendNewsletter(
       newsletter.subject,
       htmlWithUnsubscribe,
-      subscribers
+      subscribers,
+      id // Pass newsletter ID for open tracking
     );
 
     // Update newsletter status

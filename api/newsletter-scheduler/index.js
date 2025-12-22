@@ -59,11 +59,12 @@ module.exports = async function (context, req) {
         // Add unsubscribe footer
         const htmlWithUnsubscribe = addUnsubscribeLink(newsletter.htmlContent);
 
-        // Send the newsletter
+        // Send the newsletter (with tracking pixel)
         const sendResults = await sendNewsletter(
           newsletter.subject,
           htmlWithUnsubscribe,
-          subscribers
+          subscribers,
+          newsletter.id // Pass newsletter ID for open tracking
         );
 
         // Update newsletter status

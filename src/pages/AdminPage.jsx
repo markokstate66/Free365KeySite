@@ -554,7 +554,8 @@ function AdminPage() {
                     <tr>
                       <th>Subject</th>
                       <th>Status</th>
-                      <th>Recipients</th>
+                      <th>Sent</th>
+                      <th>Opens</th>
                       <th>Created</th>
                       <th>Scheduled/Sent</th>
                       <th>Actions</th>
@@ -570,6 +571,18 @@ function AdminPage() {
                           </span>
                         </td>
                         <td>{nl.status === 'sent' ? nl.recipientCount : '-'}</td>
+                        <td>
+                          {nl.status === 'sent' ? (
+                            <span title={`${nl.openCount || 0} unique opens`}>
+                              {nl.openCount || 0}
+                              {nl.recipientCount > 0 && (
+                                <span style={{ color: '#666', fontSize: '0.85em' }}>
+                                  {' '}({Math.round((nl.openCount || 0) / nl.recipientCount * 100)}%)
+                                </span>
+                              )}
+                            </span>
+                          ) : '-'}
+                        </td>
                         <td>{new Date(nl.createdAt).toLocaleDateString()}</td>
                         <td>
                           {nl.status === 'scheduled'

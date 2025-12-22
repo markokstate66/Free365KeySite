@@ -1,9 +1,17 @@
 const { EmailClient } = require("@azure/communication-email");
+const crypto = require("crypto");
 
 const connectionString = process.env.ACS_CONNECTION_STRING;
 const FROM_EMAIL = process.env.FROM_EMAIL || "DoNotReply@4470ed37-8941-43d3-b968-02be113b2dee.azurecomm.net";
 const FROM_NAME = process.env.FROM_NAME || "Free365Key";
 const SITE_URL = process.env.SITE_URL || "https://free365key.com";
+
+/**
+ * Create a hash of an email address for tracking (privacy-friendly)
+ */
+function hashEmail(email) {
+  return crypto.createHash("sha256").update(email.toLowerCase()).digest("hex").substring(0, 16);
+}
 
 let emailClient = null;
 
@@ -19,9 +27,10 @@ function getEmailClient() {
  * @param {string} subject - Email subject
  * @param {string} htmlContent - HTML content of the email
  * @param {Array} subscribers - Array of subscriber objects with email property
+ * @param {string} newsletterId - Newsletter ID for open tracking
  * @returns {Promise<{success: number, failed: number, errors: Array}>}
  */
-async function sendNewsletter(subject, htmlContent, subscribers) {
+async function sendNewsletter(subject, htmlContent, subscribers, newsletterId = null) {
   const client = getEmailClient();
   if (!client) {
     throw new Error("ACS_CONNECTION_STRING environment variable not set");
@@ -42,10 +51,23 @@ async function sendNewsletter(subject, htmlContent, subscribers) {
 
     // Send emails in parallel within each batch
     const promises = batch.map(async (subscriber) => {
-      const personalizedHtml = htmlContent.replace(
+      let personalizedHtml = htmlContent.replace(
         /\{\{unsubscribe_url\}\}/g,
         `${SITE_URL}/unsubscribe?email=${encodeURIComponent(subscriber.email)}`
       );
+
+      // Add tracking pixel if newsletterId is provided
+      if (newsletterId) {
+        const emailHash = hashEmail(subscriber.email);
+        const trackingPixel = `<img src="${SITE_URL}/api/track-open?nid=${newsletterId}&eid=${emailHash}" width="1" height="1" alt="" style="display:block;width:1px;height:1px;border:0;" />`;
+
+        // Insert before </body> if present, otherwise append
+        if (personalizedHtml.includes("</body>")) {
+          personalizedHtml = personalizedHtml.replace("</body>", `${trackingPixel}</body>`);
+        } else {
+          personalizedHtml += trackingPixel;
+        }
+      }
 
       const message = {
         senderAddress: FROM_EMAIL,
