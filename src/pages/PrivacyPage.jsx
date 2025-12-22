@@ -78,10 +78,11 @@ function PrivacyPage() {
           <section style={{ marginBottom: '30px' }}>
             <h2 style={{ marginBottom: '15px' }}>7. Contact Us</h2>
             <p>
-              For privacy-related inquiries, please contact us at:{' '}
-              <a href="mailto:privacy@free365key.com" style={{ color: '#00a4ef' }}>
-                privacy@free365key.com
-              </a>
+              For privacy-related inquiries, please use our{' '}
+              <a href="/#contact" style={{ color: '#00a4ef' }}>
+                contact form
+              </a>{' '}
+              and select "Legal" as the reason for your inquiry.
             </p>
           </section>
         </div>
