@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function UnsubscribePage() {
   const [searchParams] = useSearchParams()
@@ -62,6 +63,12 @@ function UnsubscribePage() {
 
   return (
     <div>
+      <SEO
+        title="Unsubscribe"
+        path="/unsubscribe"
+        description="Unsubscribe from Free365Key newsletter emails."
+        noindex={true}
+      />
       <Header />
 
       <div className="container" style={{ padding: '60px 20px', minHeight: '60vh' }}>

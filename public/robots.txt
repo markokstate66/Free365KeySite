@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /api/
+Disallow: /verify-email
+Disallow: /unsubscribe
+
+Sitemap: https://www.free365key.com/sitemap.xml

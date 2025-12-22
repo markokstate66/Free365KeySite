@@ -5,6 +5,7 @@ import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
 import RewardedAd from '../components/RewardedAd'
 import ContactForm from '../components/ContactForm'
+import SEO from '../components/SEO'
 
 function HomePage() {
   const [registered, setRegistered] = useState(false)
@@ -76,6 +77,10 @@ function HomePage() {
 
   return (
     <div>
+      <SEO
+        path="/"
+        description="Register for a chance to win a FREE Microsoft 365 license key. Enter our monthly giveaway today - no purchase necessary!"
+      />
       <Header />
 
       <section className="hero">

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 const faqs = [
   {
@@ -66,6 +67,11 @@ function FAQItem({ question, answer }) {
 function FAQPage() {
   return (
     <div>
+      <SEO
+        title="FAQ"
+        path="/faq"
+        description="Frequently asked questions about our free Microsoft 365 giveaway. Learn about eligibility, entry system, prizes, and how winners are selected."
+      />
       <Header />
 
       <section className="hero" style={{ padding: '60px 20px' }}>

@@ -1,9 +1,15 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function PrivacyPage() {
   return (
     <div>
+      <SEO
+        title="Privacy Policy"
+        path="/privacy"
+        description="Privacy policy for Free365Key. Learn how we collect, use, and protect your personal information when you enter our Microsoft 365 giveaway."
+      />
       <Header />
 
       <div className="container" style={{ padding: '60px 20px' }}>

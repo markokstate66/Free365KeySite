@@ -1,9 +1,15 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function ComparePage() {
   return (
     <div>
+      <SEO
+        title="Microsoft Direct vs CSP"
+        path="/compare"
+        description="Compare buying Microsoft 365 directly from Microsoft vs through a Cloud Solution Provider (CSP). Learn the pros, cons, and pricing differences."
+      />
       <Header />
 
       <section className="hero" style={{ padding: '60px 20px' }}>

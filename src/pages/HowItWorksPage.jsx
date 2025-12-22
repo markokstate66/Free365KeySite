@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function HowItWorksPage() {
   return (
     <div>
+      <SEO
+        title="How It Works"
+        path="/how-it-works"
+        description="Learn how to enter our free Microsoft 365 giveaway. Simple 5-step process: register, verify email, earn bonus entries, and win!"
+      />
       <Header />
 
       <section className="hero" style={{ padding: '60px 20px' }}>

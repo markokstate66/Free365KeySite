@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function VerifyEmailPage() {
   const [searchParams] = useSearchParams()
@@ -46,6 +47,12 @@ function VerifyEmailPage() {
 
   return (
     <div>
+      <SEO
+        title="Verify Email"
+        path="/verify-email"
+        description="Verify your email to complete your giveaway registration."
+        noindex={true}
+      />
       <Header />
 
       <div className="container" style={{ padding: '60px 20px', minHeight: '60vh' }}>

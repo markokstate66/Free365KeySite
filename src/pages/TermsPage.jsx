@@ -1,9 +1,15 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import SEO from '../components/SEO'
 
 function TermsPage() {
   return (
     <div>
+      <SEO
+        title="Terms of Service"
+        path="/terms"
+        description="Terms of service for the Free365Key Microsoft 365 giveaway. Read about eligibility, entry rules, prize details, and legal terms."
+      />
       <Header />
 
       <div className="container" style={{ padding: '60px 20px' }}>
