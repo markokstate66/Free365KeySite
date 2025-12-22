@@ -18,25 +18,35 @@ module.exports = async function (context, req) {
     try {
       context.log(`Attempting to delete registration with id: ${id}`);
 
-      // First find the entity to get its exact rowKey
-      const entities = tableClient.listEntities({
-        queryOptions: { filter: `PartitionKey eq 'registration' and id eq '${id}'` }
-      });
+      // Try to delete directly using id as rowKey (they should match)
+      try {
+        await tableClient.deleteEntity("registration", id);
+        context.log(`Deleted registration ${id} directly`);
+      } catch (directError) {
+        context.log.warn(`Direct delete failed: ${directError.message}, trying search...`);
 
-      let found = false;
-      for await (const entity of entities) {
-        context.log(`Found entity with rowKey: ${entity.rowKey}`);
-        await tableClient.deleteEntity("registration", entity.rowKey);
-        found = true;
-        break;
-      }
+        // If direct delete fails, search for the entity
+        const entities = tableClient.listEntities({
+          queryOptions: { filter: `PartitionKey eq 'registration'` }
+        });
 
-      if (!found) {
-        context.res = {
-          status: 404,
-          body: { error: "Registration not found" }
-        };
-        return;
+        let found = false;
+        for await (const entity of entities) {
+          if (entity.id === id || entity.rowKey === id) {
+            context.log(`Found entity with rowKey: ${entity.rowKey}`);
+            await tableClient.deleteEntity("registration", entity.rowKey);
+            found = true;
+            break;
+          }
+        }
+
+        if (!found) {
+          context.res = {
+            status: 404,
+            body: { error: "Registration not found" }
+          };
+          return;
+        }
       }
 
       // Also delete any bonus entries for this registration
