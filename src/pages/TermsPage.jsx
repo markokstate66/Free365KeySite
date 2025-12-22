@@ -148,7 +148,58 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>9. Microsoft Disclaimer</h2>
+            <h2 style={{ marginBottom: '15px' }}>9. Additional Prize Terms</h2>
+            <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
+              <li><strong>No Cash Value:</strong> Prize has no cash value and cannot be redeemed for cash or cash equivalent</li>
+              <li><strong>No Substitution:</strong> Prize cannot be substituted by winner; however, Sponsor reserves the right to substitute a prize of equal or greater value if the advertised prize becomes unavailable</li>
+              <li><strong>Taxes:</strong> Winner is solely responsible for any federal, state, or local taxes on the prize</li>
+              <li><strong>Limit:</strong> One prize per person and per household during any 12-month period</li>
+              <li><strong>After Trial Ends:</strong> The subscription will expire after one month. No automatic renewal or billing will occur. Winner may choose to purchase a subscription at their own expense after the trial period</li>
+            </ul>
+          </section>
+
+          <section style={{ marginBottom: '30px' }}>
+            <h2 style={{ marginBottom: '15px' }}>10. Release & Waiver</h2>
+            <p style={{ marginBottom: '15px' }}>
+              By participating in this giveaway, you agree to release, discharge, and hold harmless
+              Free365Key, its officers, directors, employees, agents, and affiliates from any and all
+              claims, damages, or liability arising from your participation in the giveaway or
+              acceptance/use of the prize.
+            </p>
+            <p>
+              By accepting the prize, winners grant Free365Key permission to use their first name
+              and state of residence for promotional purposes without additional compensation,
+              unless prohibited by law.
+            </p>
+          </section>
+
+          <section style={{ marginBottom: '30px' }}>
+            <h2 style={{ marginBottom: '15px' }}>11. Governing Law & Disputes</h2>
+            <p style={{ marginBottom: '15px' }}>
+              These terms shall be governed by and construed in accordance with the laws of the
+              State of Oklahoma, without regard to conflict of law principles.
+            </p>
+            <p>
+              Any dispute arising from this giveaway shall be resolved through binding arbitration
+              in accordance with the rules of the American Arbitration Association. You agree to
+              waive any right to participate in a class action lawsuit or class-wide arbitration.
+            </p>
+          </section>
+
+          <section style={{ marginBottom: '30px' }}>
+            <h2 style={{ marginBottom: '15px' }}>12. Force Majeure</h2>
+            <p>
+              If for any reason this giveaway is not capable of running as planned due to
+              circumstances beyond our reasonable control, including but not limited to infection
+              by computer virus, bugs, tampering, unauthorized intervention, fraud, technical
+              failures, or any other causes which corrupt or affect the administration, security,
+              fairness, integrity, or proper conduct of the giveaway, we reserve the right to
+              cancel, terminate, modify, or suspend the giveaway.
+            </p>
+          </section>
+
+          <section style={{ marginBottom: '30px' }}>
+            <h2 style={{ marginBottom: '15px' }}>13. Microsoft Disclaimer</h2>
             <p>
               Microsoft 365 licenses provided through this giveaway are genuine and obtained through
               authorized Microsoft Cloud Solution Provider (CSP) channels. The licenses are subject
@@ -159,7 +210,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>10. User Conduct</h2>
+            <h2 style={{ marginBottom: '15px' }}>14. User Conduct</h2>
             <p style={{ marginBottom: '10px' }}>You agree not to:</p>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li>Submit false or misleading information</li>
@@ -171,7 +222,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>11. Limitation of Liability</h2>
+            <h2 style={{ marginBottom: '15px' }}>15. Limitation of Liability</h2>
             <p>
               We shall not be liable for any indirect, incidental, special, consequential, or
               punitive damages arising out of your use of this website or participation in the
@@ -180,7 +231,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>12. Changes to Terms</h2>
+            <h2 style={{ marginBottom: '15px' }}>16. Changes to Terms</h2>
             <p>
               We reserve the right to modify these terms at any time. Changes will be effective
               immediately upon posting. Your continued use of the website constitutes acceptance
@@ -190,7 +241,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>13. Contact</h2>
+            <h2 style={{ marginBottom: '15px' }}>17. Contact</h2>
             <p>
               For questions about these terms or the giveaway, please use our{' '}
               <a href="/#contact" style={{ color: '#00a4ef' }}>
