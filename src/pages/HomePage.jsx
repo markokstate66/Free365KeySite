@@ -1,13 +1,18 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
 import RewardedAd from '../components/RewardedAd'
 import ContactForm from '../components/ContactForm'
+import ShareReferral from '../components/ShareReferral'
 import SEO from '../components/SEO'
 
 function HomePage() {
+  const [searchParams] = useSearchParams()
+  const referredBy = searchParams.get('ref') || ''
+
   const [registered, setRegistered] = useState(false)
   const [registrationData, setRegistrationData] = useState(null)
   const [showRewardedAd, setShowRewardedAd] = useState(false)
@@ -15,12 +20,18 @@ function HomePage() {
   const [activeAdCount, setActiveAdCount] = useState(0)
   const [isReturningUser, setIsReturningUser] = useState(false)
   const [resendStatus, setResendStatus] = useState(null) // null, 'sending', 'sent', 'error'
+  const [referralCode, setReferralCode] = useState('')
+  const [referralCount, setReferralCount] = useState(0)
+  const [referralEntries, setReferralEntries] = useState(0)
 
   const handleSuccess = (data) => {
     setRegistered(true)
     setRegistrationData(data)
     setTotalEntries(data.totalEntries || 0)
     setActiveAdCount(data.adCount || 0)
+    setReferralCode(data.referralCode || '')
+    setReferralCount(data.referralCount || 0)
+    setReferralEntries(data.referralEntries || 0)
     setIsReturningUser(false)
   }
 
@@ -39,6 +50,9 @@ function HomePage() {
         setRegistrationData(data)
         setTotalEntries(data.totalEntries || 0)
         setActiveAdCount(data.adCount || 0)
+        setReferralCode(data.referralCode || '')
+        setReferralCount(data.referralCount || 0)
+        setReferralEntries(data.referralEntries || 0)
         setIsReturningUser(true)
       }
     } catch (err) {
@@ -100,7 +114,7 @@ function HomePage() {
         {!registered ? (
           <>
             <h2>Enter the Giveaway</h2>
-            <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} />
+            <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} referredBy={referredBy} />
           </>
         ) : (
           <div className="success-message">
@@ -171,6 +185,11 @@ function HomePage() {
                 <p style={{ margin: '4px 0' }}>
                   Ad bonus: {activeAdCount} ad{activeAdCount !== 1 ? 's' : ''} × 2 = {activeAdCount * 2} entries
                 </p>
+                {referralEntries > 0 && (
+                  <p style={{ margin: '4px 0', color: '#4ade80' }}>
+                    Referral bonus: {referralCount} referral{referralCount !== 1 ? 's' : ''} × 10 = {referralEntries} entries
+                  </p>
+                )}
                 {activeAdCount > 0 && (
                   <p style={{ margin: '8px 0 0 0', fontSize: '0.8rem', opacity: 0.7 }}>
                     Each ad bonus is valid for 3 monthly drawings
@@ -192,12 +211,21 @@ function HomePage() {
                 onClick={() => setShowRewardedAd(true)}
                 style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
               >
-                Watch Ad for +1 Entry
+                Watch Ad for +2 Entries
               </button>
               <p style={{ margin: '10px 0 0 0', fontSize: '0.8rem', opacity: 0.8 }}>
-                Watch as many ads as you want - each one earns another entry!
+                Watch as many ads as you want - each one earns +2 entries!
               </p>
             </div>
+
+            {/* Referral Share Section */}
+            {referralCode && (
+              <ShareReferral
+                referralCode={referralCode}
+                referralCount={referralCount}
+                referralEntries={referralEntries}
+              />
+            )}
           </div>
         )}
       </section>

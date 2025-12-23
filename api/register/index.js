@@ -5,6 +5,11 @@ const crypto = require("crypto");
 
 const SITE_URL = process.env.SITE_URL || "https://www.free365key.com";
 
+// Generate a short, unique referral code
+function generateReferralCode() {
+  return crypto.randomBytes(4).toString("hex").toUpperCase();
+}
+
 module.exports = async function (context, req) {
   context.log("Registration request received");
 
@@ -56,7 +61,21 @@ module.exports = async function (context, req) {
     // Create registration entity (base entry never expires)
     const id = uuidv4();
     const verificationToken = crypto.randomBytes(32).toString("hex");
+    const referralCode = generateReferralCode();
     const now = new Date();
+
+    // Check if referred by someone
+    let referredBy = null;
+    if (body.referredBy) {
+      // Validate the referral code exists
+      const referrerEntries = tableClient.listEntities({
+        queryOptions: { filter: `referralCode eq '${body.referredBy.toUpperCase()}'` }
+      });
+      for await (const referrer of referrerEntries) {
+        referredBy = body.referredBy.toUpperCase();
+        break;
+      }
+    }
 
     const entity = {
       partitionKey: "registration",
@@ -73,7 +92,11 @@ module.exports = async function (context, req) {
       registeredAt: now.toISOString(),
       isWinner: false,
       isVerified: false,
-      verificationToken: verificationToken
+      verificationToken: verificationToken,
+      referralCode: referralCode,
+      referredBy: referredBy || "",
+      referralCount: 0,
+      referralEntries: 0
     };
 
     await tableClient.createEntity(entity);
@@ -159,7 +182,10 @@ module.exports = async function (context, req) {
         message: "Registration successful! Please check your email to confirm your entry.",
         needsVerification: true,
         totalEntries: 0,
-        isVerified: false
+        isVerified: false,
+        referralCode: referralCode,
+        referralCount: 0,
+        referralEntries: 0
       }
     };
   } catch (error) {

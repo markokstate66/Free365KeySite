@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function RegistrationForm({ onSuccess, onAlreadyRegistered }) {
+function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -42,6 +42,7 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered }) {
         },
         body: JSON.stringify({
           ...formData,
+          referredBy: referredBy || '',
           registeredAt: new Date().toISOString()
         })
       })

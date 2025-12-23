@@ -65,7 +65,8 @@ module.exports = async function (context, req) {
       }
 
       const adWeight = adCount * 2;
-      const totalEntries = baseWeight + adWeight;
+      const referralEntries = entity.referralEntries || 0;
+      const totalEntries = baseWeight + adWeight + referralEntries;
 
       context.res = {
         status: 200,
@@ -76,7 +77,10 @@ module.exports = async function (context, req) {
           email: entity.email,
           isVerified: isVerified,
           adCount: adCount,
-          totalEntries: totalEntries
+          totalEntries: totalEntries,
+          referralCode: entity.referralCode || "",
+          referralCount: entity.referralCount || 0,
+          referralEntries: referralEntries
         }
       };
       return;

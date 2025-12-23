@@ -63,6 +63,32 @@ module.exports = async function (context, req) {
       verifiedAt: new Date().toISOString()
     }, "Merge");
 
+    // Award referral bonus to the referrer (+10 entries, never expire)
+    if (registration.referredBy) {
+      try {
+        const referrerEntries = tableClient.listEntities({
+          queryOptions: { filter: `referralCode eq '${registration.referredBy}'` }
+        });
+
+        for await (const referrer of referrerEntries) {
+          const currentReferralCount = referrer.referralCount || 0;
+          const currentReferralEntries = referrer.referralEntries || 0;
+
+          await tableClient.updateEntity({
+            partitionKey: "registration",
+            rowKey: referrer.rowKey,
+            referralCount: currentReferralCount + 1,
+            referralEntries: currentReferralEntries + 10
+          }, "Merge");
+
+          context.log(`Awarded +10 referral entries to ${referrer.email} for referring ${registration.email}`);
+          break;
+        }
+      } catch (referralError) {
+        context.log.error("Failed to award referral bonus:", referralError);
+      }
+    }
+
     context.res = {
       status: 200,
       headers: { "Content-Type": "application/json" },
