@@ -99,13 +99,11 @@ function HomePage() {
 
       <section className="hero">
         <div className="container">
-          <h1>Win a FREE Microsoft 365 License!*</h1>
+          <h1>Win a FREE Microsoft 365 License!</h1>
           <p>
             Register now for your chance to win a free Microsoft 365 trial.
             <br />
             Winners drawn on the 1st of every month!
-            <br />
-            <small style={{ opacity: 0.9 }}>*Open to US residents only. Bonus entries from ads valid for 3 monthly drawings.</small>
           </p>
         </div>
       </section>
