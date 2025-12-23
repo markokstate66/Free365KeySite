@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OG Image Generator - Screenshot This</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #333;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .og-image {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4338ca 60%, #1e1b4b 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Subtle gradient orbs */
+        .og-image::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+            top: -100px;
+            left: -100px;
+        }
+        .og-image::after {
+            content: '';
+            position: absolute;
+            width: 700px;
+            height: 500px;
+            background: radial-gradient(ellipse, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+            bottom: -150px;
+            right: -100px;
+        }
+        /* Extra glow for key icon */
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 72px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 42px;
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+        .accent-line {
+            width: 400px;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6, #10b981);
+            border-radius: 2px;
+            margin: 0 auto 30px;
+        }
+        .tagline {
+            font-size: 32px;
+            color: #c7d2fe;
+            margin-bottom: 40px;
+        }
+        .features {
+            font-size: 22px;
+            color: #a5b4fc;
+        }
+        .badge {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: 600;
+            z-index: 2;
+        }
+        .instructions {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #000;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="instructions">
+        <strong>To save as PNG:</strong><br>
+        1. Right-click the image below<br>
+        2. "Inspect" → find the .og-image div<br>
+        3. Right-click → "Capture node screenshot"<br>
+        <br>Or use a screenshot tool at 1200x630px
+        <br><br>Save as: <code>og-image.png</code>
+    </div>
+
+    <div class="og-image">
+        <div class="glow"></div>
+        <div class="badge">FREE GIVEAWAY</div>
+        <div class="content">
+            <div class="icon">🔑</div>
+            <div class="title">Free 365 Key</div>
+            <div class="subtitle">Win a Microsoft 365 License!</div>
+            <div class="accent-line"></div>
+            <div class="tagline">Monthly drawings on the 1st</div>
+            <div class="features">Register  |  Watch Ads  |  Refer Friends  |  Win!</div>
+        </div>
+    </div>
+</body>
+</html>
