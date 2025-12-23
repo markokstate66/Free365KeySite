@@ -116,199 +116,121 @@ function HomePage() {
           </>
         ) : (
           <div className="success-message">
-            <h3>{isReturningUser ? 'Welcome Back!' : "Almost There!"}</h3>
-            <p>
-              {isReturningUser ? (
-                registrationData?.isVerified ? (
-                  <>
-                    Good to see you again, {registrationData?.firstName}!
-                    <br />
-                    You're in the giveaway with <strong>5 base entries</strong>. Watch an ad below for <strong>+2 bonus entries</strong>!
-                  </>
-                ) : (
-                  <>
-                    Welcome back, {registrationData?.firstName}!
-                    <br />
-                    <strong style={{ color: '#fbbf24' }}>Your email isn't verified yet.</strong> Check your inbox or spam folder for the confirmation link.
-                    <br />
-                    <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Verify to unlock 5 base entries!</span>
-                  </>
-                )
-              ) : (
-                <>
-                  Thank you for registering, {registrationData?.firstName}!
-                  <br />
-                  <strong style={{ color: '#fbbf24' }}>Please check your email ({registrationData?.email}) to confirm your entry.</strong>
-                  <br />
-                  <span style={{ fontSize: '0.9rem', opacity: 0.9 }}>Verify your email to unlock 5 base entries!</span>
-                </>
-              )}
-            </p>
-            {!registrationData?.isVerified && (
-              <div style={{ marginTop: '15px' }}>
+            {/* Compact header with verification status */}
+            <h3 style={{ marginBottom: '8px' }}>
+              {registrationData?.isVerified ? `You're In, ${registrationData?.firstName}!` : 'Verify Your Email'}
+            </h3>
+
+            {!registrationData?.isVerified ? (
+              <div style={{ marginBottom: '15px' }}>
+                <p style={{ margin: '0 0 10px 0', fontSize: '0.9rem' }}>
+                  Check <strong style={{ color: '#fbbf24' }}>{registrationData?.email}</strong> to confirm
+                </p>
                 {resendStatus === 'sent' ? (
-                  <p style={{ color: '#4ade80', fontSize: '0.9rem' }}>Verification email sent! Check your inbox.</p>
-                ) : resendStatus === 'error' ? (
-                  <p style={{ color: '#f87171', fontSize: '0.9rem' }}>Failed to send. Please try again.</p>
+                  <span style={{ color: '#4ade80', fontSize: '0.85rem' }}>Sent! Check inbox.</span>
                 ) : (
                   <button
                     onClick={handleResendVerification}
                     disabled={resendStatus === 'sending'}
                     style={{
                       background: 'transparent',
-                      border: '1px solid rgba(255,255,255,0.5)',
+                      border: '1px solid rgba(255,255,255,0.4)',
                       color: 'white',
-                      padding: '8px 16px',
+                      padding: '6px 12px',
                       borderRadius: '6px',
-                      cursor: resendStatus === 'sending' ? 'wait' : 'pointer',
-                      fontSize: '0.85rem'
+                      cursor: 'pointer',
+                      fontSize: '0.8rem'
                     }}
                   >
-                    {resendStatus === 'sending' ? 'Sending...' : "Didn't get the email? Resend"}
+                    {resendStatus === 'sending' ? 'Sending...' : 'Resend'}
                   </button>
                 )}
               </div>
-            )}
-            <p style={{ marginTop: '10px', fontSize: '0.85rem', opacity: 0.7 }}>
-              {!registrationData?.isVerified && "Tip: Check your spam folder if you don't see it."}
-            </p>
-            <div style={{ marginTop: '15px', padding: '15px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }}>
-              <p style={{ fontSize: '1.2rem', fontWeight: 'bold', margin: '0 0 10px 0' }}>
-                Total Entries: {totalEntries}
-              </p>
-              <div style={{ fontSize: '0.85rem', opacity: 0.9 }}>
-                <p style={{ margin: '4px 0' }}>
-                  Base entries: {registrationData?.isVerified ? 5 : 0} {!registrationData?.isVerified && <span style={{ color: '#fbbf24' }}>(verify email to unlock)</span>}
-                </p>
-                <p style={{ margin: '4px 0' }}>
-                  Ad bonus: {activeAdCount} ad{activeAdCount !== 1 ? 's' : ''} × 2 = {activeAdCount * 2} entries
-                </p>
-                {referralEntries > 0 && (
-                  <p style={{ margin: '4px 0', color: '#4ade80' }}>
-                    Referral bonus: {referralCount} referral{referralCount !== 1 ? 's' : ''} × 10 = {referralEntries} entries
-                  </p>
-                )}
-                {activeAdCount > 0 && (
-                  <p style={{ margin: '8px 0 0 0', fontSize: '0.8rem', opacity: 0.7 }}>
-                    Each ad bonus is valid for 3 monthly drawings
-                  </p>
-                )}
-              </div>
+            ) : null}
+
+            {/* Compact entries display */}
+            <div style={{
+              padding: '12px 16px',
+              background: 'rgba(255,255,255,0.1)',
+              borderRadius: '8px',
+              marginBottom: '15px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <span style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>{totalEntries}</span>
+              <span style={{ fontSize: '0.85rem', opacity: 0.9 }}>
+                {totalEntries === 1 ? 'entry' : 'entries'}
+                {!registrationData?.isVerified && <span style={{ color: '#fbbf24' }}> (verify for 5)</span>}
+              </span>
             </div>
-            {!isReturningUser && (
-              <p style={{ marginTop: '10px', opacity: 0.9, fontSize: '0.9rem' }}>
-                Entry ID: {registrationData?.id}
-              </p>
-            )}
-            <div style={{ marginTop: '25px', padding: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>
-              <p style={{ margin: '0 0 20px 0', fontWeight: 'bold', fontSize: '1.1rem' }}>
-                {isReturningUser ? 'Earn more entries!' : 'Want more chances to win?'}
-              </p>
 
-              {/* Two options side by side on larger screens */}
-              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                {/* Watch Ad Option */}
-                <div style={{
-                  flex: '1 1 200px',
-                  maxWidth: '280px',
-                  padding: '20px',
-                  background: 'rgba(16, 185, 129, 0.2)',
-                  borderRadius: '10px',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
-                  textAlign: 'center'
-                }}>
-                  <p style={{ margin: '0 0 10px 0', fontWeight: '600', color: '#4ade80' }}>Watch Ads</p>
-                  <p style={{ margin: '0 0 15px 0', fontSize: '0.85rem', opacity: 0.9 }}>
-                    +2 entries per ad<br/>
-                    <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>Valid for 3 drawings</span>
-                  </p>
-                  <button
-                    className="submit-btn"
-                    onClick={() => setShowRewardedAd(true)}
-                    style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', width: '100%', margin: 0 }}
-                  >
-                    Watch Ad
-                  </button>
-                </div>
+            {/* Compact action buttons */}
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', justifyContent: 'center' }}>
+              {/* Watch Ad */}
+              <button
+                className="submit-btn"
+                onClick={() => setShowRewardedAd(true)}
+                style={{
+                  background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                  margin: 0,
+                  padding: '12px 20px',
+                  fontSize: '0.9rem',
+                  flex: '1 1 140px',
+                  maxWidth: '180px'
+                }}
+              >
+                Watch Ad +2
+              </button>
 
-                {/* Share Option - Inline */}
-                {referralCode && (() => {
-                  const referralLink = `https://www.free365key.com/?ref=${referralCode}`
-                  const shareText = "Enter for a chance to win a FREE Microsoft 365 license!"
-                  const handleCopy = async () => {
+              {/* Copy referral link */}
+              {referralCode && (
+                <button
+                  onClick={async () => {
                     try {
-                      await navigator.clipboard.writeText(referralLink)
+                      await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`)
                       setCopied(true)
                       setTimeout(() => setCopied(false), 2000)
                     } catch (err) {
                       console.error('Failed to copy:', err)
                     }
-                  }
+                  }}
+                  style={{
+                    background: copied ? '#10b981' : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '12px 20px',
+                    fontSize: '0.9rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    flex: '1 1 140px',
+                    maxWidth: '180px'
+                  }}
+                >
+                  {copied ? 'Copied!' : 'Share +10'}
+                </button>
+              )}
+            </div>
+
+            {/* Social share row */}
+            {referralCode && (
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '12px' }}>
+                {(() => {
+                  const referralLink = `https://www.free365key.com/?ref=${referralCode}`
+                  const shareText = "Enter for a chance to win a FREE Microsoft 365 license!"
                   return (
-                    <div style={{
-                      flex: '1 1 200px',
-                      maxWidth: '320px',
-                      padding: '20px',
-                      background: 'rgba(99, 102, 241, 0.2)',
-                      borderRadius: '10px',
-                      border: '1px solid rgba(99, 102, 241, 0.3)',
-                      textAlign: 'center'
-                    }}>
-                      <p style={{ margin: '0 0 8px 0', fontWeight: '600', color: '#a5b4fc' }}>Share & Refer</p>
-                      <p style={{ margin: '0 0 12px 0', fontSize: '0.8rem', opacity: 0.9 }}>
-                        +10 entries per referral
-                        {referralCount > 0 && <span style={{ color: '#4ade80' }}> ({referralCount} so far!)</span>}
-                      </p>
-
-                      {/* Copy Button */}
-                      <button
-                        onClick={handleCopy}
-                        style={{
-                          width: '100%',
-                          padding: '10px',
-                          borderRadius: '8px',
-                          border: 'none',
-                          background: copied ? '#10b981' : 'white',
-                          color: copied ? 'white' : '#333',
-                          fontWeight: '600',
-                          cursor: 'pointer',
-                          marginBottom: '10px',
-                          fontSize: '0.85rem'
-                        }}
-                      >
-                        {copied ? 'Copied!' : 'Copy Link'}
-                      </button>
-
-                      {/* Social Icons */}
-                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                        <a
-                          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(referralLink)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
-                        >X</a>
-                        <a
-                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
-                        >FB</a>
-                        <a
-                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
-                        >In</a>
-                        <a
-                          href={`mailto:?subject=${encodeURIComponent('Free Microsoft 365 Giveaway')}&body=${encodeURIComponent(`${shareText}\n\n${referralLink}`)}`}
-                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#666', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
-                        >Email</a>
-                      </div>
-                    </div>
+                    <>
+                      <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(referralLink)}`} target="_blank" rel="noopener noreferrer" style={{ padding: '6px 10px', borderRadius: '4px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.7rem' }}>X</a>
+                      <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`} target="_blank" rel="noopener noreferrer" style={{ padding: '6px 10px', borderRadius: '4px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.7rem' }}>FB</a>
+                      <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`} target="_blank" rel="noopener noreferrer" style={{ padding: '6px 10px', borderRadius: '4px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.7rem' }}>In</a>
+                      <a href={`mailto:?subject=${encodeURIComponent('Free Microsoft 365 Giveaway')}&body=${encodeURIComponent(`${shareText}\n\n${referralLink}`)}`} style={{ padding: '6px 10px', borderRadius: '4px', background: '#666', color: 'white', textDecoration: 'none', fontSize: '0.7rem' }}>Email</a>
+                    </>
                   )
                 })()}
               </div>
-            </div>
+            )}
           </div>
         )}
       </section>
