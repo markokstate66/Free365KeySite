@@ -52,9 +52,13 @@ function TermsPage() {
             </p>
 
             <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>Step 3: Earn Bonus Entries (Optional)</h3>
-            <p>
-              After verifying your email, you may earn additional entries by watching advertisements on our website.
+            <p style={{ marginBottom: '10px' }}>
+              After verifying your email, you may earn additional entries through:
             </p>
+            <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
+              <li><strong>Watching Ads:</strong> Each ad watched earns +2 bonus entries (valid for 3 monthly drawings)</li>
+              <li><strong>Referring Friends:</strong> Each verified referral earns +10 bonus entries (never expire)</li>
+            </ul>
           </section>
 
           <section style={{ marginBottom: '30px' }}>
@@ -70,11 +74,15 @@ function TermsPage() {
                 <tbody>
                   <tr style={{ borderBottom: '1px solid #ddd' }}>
                     <td style={{ padding: '10px 0' }}><strong>Verified Email</strong></td>
-                    <td style={{ padding: '10px 0', textAlign: 'right' }}>5 base entries</td>
+                    <td style={{ padding: '10px 0', textAlign: 'right' }}>5 base entries (never expire)</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #ddd' }}>
                     <td style={{ padding: '10px 0' }}><strong>Each Ad Watched</strong></td>
-                    <td style={{ padding: '10px 0', textAlign: 'right' }}>+2 bonus entries</td>
+                    <td style={{ padding: '10px 0', textAlign: 'right' }}>+2 bonus entries (expire after 3 drawings)</td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid #ddd' }}>
+                    <td style={{ padding: '10px 0' }}><strong>Each Verified Referral</strong></td>
+                    <td style={{ padding: '10px 0', textAlign: 'right' }}>+10 bonus entries (never expire)</td>
                   </tr>
                   <tr>
                     <td style={{ padding: '10px 0' }}><strong>Unverified Registration</strong></td>
@@ -87,7 +95,8 @@ function TermsPage() {
             <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>Entry Validity:</h3>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li><strong>Base entries (from email verification):</strong> Never expire. Once verified, your 5 base entries remain valid for all future drawings.</li>
-              <li><strong>Bonus entries (from watching ads):</strong> Valid for the next 3 monthly drawings after being earned. After 3 drawings, bonus entries expire and are no longer counted.</li>
+              <li><strong>Ad bonus entries:</strong> Valid for the next 3 monthly drawings after being earned. After 3 drawings, ad bonus entries expire and are no longer counted.</li>
+              <li><strong>Referral bonus entries:</strong> Never expire. Once a referred friend verifies their email, your +10 referral entries remain valid for all future drawings.</li>
             </ul>
 
             <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>Example:</h3>
@@ -99,7 +108,39 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>5. Drawing Schedule</h2>
+            <h2 style={{ marginBottom: '15px' }}>5. Referral Program</h2>
+            <p style={{ marginBottom: '15px' }}>
+              Participants may earn additional entries by referring new users to the giveaway.
+            </p>
+
+            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>How Referrals Work:</h3>
+            <ul style={{ marginLeft: '20px', lineHeight: '1.8', marginBottom: '15px' }}>
+              <li>After registering, each participant receives a unique referral link</li>
+              <li>Share your referral link with friends via social media, email, or direct message</li>
+              <li>When someone registers using your referral link AND verifies their email, you earn +10 bonus entries</li>
+              <li>Referral entries are credited immediately upon the referred user's email verification</li>
+              <li>Referral bonus entries never expire and remain valid for all future drawings</li>
+            </ul>
+
+            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>Referral Rules & Restrictions:</h3>
+            <ul style={{ marginLeft: '20px', lineHeight: '1.8', marginBottom: '15px' }}>
+              <li>You cannot refer yourself or use multiple accounts to generate referral entries</li>
+              <li>Referred users must be genuine, unique individuals who meet all eligibility requirements</li>
+              <li>Referral entries are only awarded when the referred user successfully verifies their email address</li>
+              <li>There is no limit to the number of people you can refer</li>
+              <li>We reserve the right to void referral entries obtained through fraudulent or deceptive means</li>
+              <li>Referral spam, fake accounts, or bot-generated referrals will result in disqualification</li>
+            </ul>
+
+            <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>Referral Tracking:</h3>
+            <p style={{ color: '#666' }}>
+              Your referral count and bonus entries are displayed on your dashboard after registration.
+              You can view how many friends have signed up using your link and how many bonus entries you've earned.
+            </p>
+          </section>
+
+          <section style={{ marginBottom: '30px' }}>
+            <h2 style={{ marginBottom: '15px' }}>6. Drawing Schedule</h2>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li>Drawings are held on the <strong>1st of each month</strong></li>
               <li>One winner is selected per monthly drawing</li>
@@ -110,7 +151,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>6. Winner Notification & Prize Claiming</h2>
+            <h2 style={{ marginBottom: '15px' }}>7. Winner Notification & Prize Claiming</h2>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li>Winners will be notified via the email address used during registration</li>
               <li>Winners must respond within <strong>30 days</strong> to claim their prize</li>
@@ -121,7 +162,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>7. Prize Details</h2>
+            <h2 style={{ marginBottom: '15px' }}>8. Prize Details</h2>
             <p style={{ marginBottom: '15px' }}>The prize is a <strong>Microsoft 365 Business Basic</strong> subscription for one user, valid for one month.</p>
             <p style={{ marginBottom: '10px' }}><strong>Prize includes:</strong></p>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8', marginBottom: '15px' }}>
@@ -143,7 +184,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>8. General Rules</h2>
+            <h2 style={{ marginBottom: '15px' }}>9. General Rules</h2>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li>No purchase necessary to enter or win</li>
               <li>We reserve the right to disqualify any entry at our sole discretion</li>
@@ -154,7 +195,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>9. Additional Prize Terms</h2>
+            <h2 style={{ marginBottom: '15px' }}>10. Additional Prize Terms</h2>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li><strong>No Cash Value:</strong> Prize has no cash value and cannot be redeemed for cash or cash equivalent</li>
               <li><strong>No Substitution:</strong> Prize cannot be substituted by winner; however, Sponsor reserves the right to substitute a prize of equal or greater value if the advertised prize becomes unavailable</li>
@@ -165,7 +206,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>10. Release & Waiver</h2>
+            <h2 style={{ marginBottom: '15px' }}>11. Release & Waiver</h2>
             <p style={{ marginBottom: '15px' }}>
               By participating in this giveaway, you agree to release, discharge, and hold harmless
               Free365Key, its officers, directors, employees, agents, and affiliates from any and all
@@ -180,7 +221,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>11. Governing Law & Disputes</h2>
+            <h2 style={{ marginBottom: '15px' }}>12. Governing Law & Disputes</h2>
             <p style={{ marginBottom: '15px' }}>
               These terms shall be governed by and construed in accordance with the laws of the
               State of Oklahoma, without regard to conflict of law principles.
@@ -193,7 +234,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>12. Force Majeure</h2>
+            <h2 style={{ marginBottom: '15px' }}>13. Force Majeure</h2>
             <p>
               If for any reason this giveaway is not capable of running as planned due to
               circumstances beyond our reasonable control, including but not limited to infection
@@ -205,7 +246,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>13. Microsoft Disclaimer</h2>
+            <h2 style={{ marginBottom: '15px' }}>14. Microsoft Disclaimer</h2>
             <p>
               Microsoft 365 licenses provided through this giveaway are genuine and obtained through
               authorized Microsoft Cloud Solution Provider (CSP) channels. The licenses are subject
@@ -216,7 +257,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>14. User Conduct</h2>
+            <h2 style={{ marginBottom: '15px' }}>15. User Conduct</h2>
             <p style={{ marginBottom: '10px' }}>You agree not to:</p>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li>Submit false or misleading information</li>
@@ -224,11 +265,14 @@ function TermsPage() {
               <li>Use automated systems, bots, or scripts to submit entries or watch ads</li>
               <li>Interfere with the proper functioning of the website</li>
               <li>Attempt to manipulate the drawing or entry system</li>
+              <li>Generate fake or fraudulent referrals using fictitious identities</li>
+              <li>Spam referral links or engage in deceptive referral practices</li>
+              <li>Create referral schemes with the intent to abuse the bonus entry system</li>
             </ul>
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>15. Limitation of Liability</h2>
+            <h2 style={{ marginBottom: '15px' }}>16. Limitation of Liability</h2>
             <p>
               We shall not be liable for any indirect, incidental, special, consequential, or
               punitive damages arising out of your use of this website or participation in the
@@ -237,7 +281,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>16. Changes to Terms</h2>
+            <h2 style={{ marginBottom: '15px' }}>17. Changes to Terms</h2>
             <p>
               We reserve the right to modify these terms at any time. Changes will be effective
               immediately upon posting. Your continued use of the website constitutes acceptance
@@ -247,7 +291,7 @@ function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>17. Contact</h2>
+            <h2 style={{ marginBottom: '15px' }}>18. Contact</h2>
             <p>
               For questions about these terms or the giveaway, please use our{' '}
               <a href="/#contact" style={{ color: '#00a4ef' }}>
