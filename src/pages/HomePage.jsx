@@ -115,45 +115,56 @@ function HomePage() {
             <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} referredBy={referredBy} />
           </>
         ) : (
-          <div className="success-message" style={{ padding: '20px' }}>
-            {/* Status line */}
-            <p style={{ margin: '0 0 15px 0', fontSize: '0.95rem' }}>
-              {registrationData?.isVerified ? (
-                <><strong>{totalEntries} entries</strong> - You're in, {registrationData?.firstName}!</>
-              ) : (
-                <>
-                  <span style={{ color: '#fbbf24' }}>Check your email to verify</span>
-                  {resendStatus !== 'sent' && (
-                    <button onClick={handleResendVerification} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
-                      {resendStatus === 'sending' ? '...' : 'resend'}
-                    </button>
-                  )}
-                  {resendStatus === 'sent' && <span style={{ color: '#4ade80', marginLeft: '8px' }}>Sent!</span>}
-                </>
-              )}
-            </p>
+          <div className="success-message">
+            {/* Header */}
+            <h3 style={{ marginBottom: '10px' }}>
+              {registrationData?.isVerified ? `You're In, ${registrationData?.firstName}!` : 'Almost There!'}
+            </h3>
 
-            {/* Full-width action buttons */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px', margin: '0 auto' }}>
+            {/* Verification or entry status */}
+            {!registrationData?.isVerified ? (
+              <p style={{ margin: '0 0 20px 0', fontSize: '0.95rem' }}>
+                <span style={{ color: '#fbbf24' }}>Check your email</span> to verify and unlock 5 entries
+                {resendStatus !== 'sent' && (
+                  <button onClick={handleResendVerification} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
+                    {resendStatus === 'sending' ? '...' : 'resend'}
+                  </button>
+                )}
+                {resendStatus === 'sent' && <span style={{ color: '#4ade80', marginLeft: '8px' }}>Sent!</span>}
+              </p>
+            ) : (
+              <p style={{ margin: '0 0 20px 0', fontSize: '1.1rem' }}>
+                <strong>{totalEntries} entries</strong> in the drawing
+              </p>
+            )}
+
+            {/* Action buttons */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '400px', margin: '0 auto' }}>
               <button onClick={() => setShowRewardedAd(true)} style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
                 Watch Ad for +2 Entries
               </button>
+
               {referralCode && (
-                <button onClick={async () => { await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`); setCopied(true); setTimeout(() => setCopied(false), 2000) }} style={{ background: copied ? '#10b981' : '#6366f1', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
-                  {copied ? 'Link Copied!' : 'Copy Referral Link +10'}
-                </button>
-              )}
-              {referralCode && (() => {
-                const url = encodeURIComponent(`https://www.free365key.com/?ref=${referralCode}`)
-                const txt = encodeURIComponent("Win a FREE Microsoft 365 license!")
-                return (
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <a href={`https://twitter.com/intent/tweet?text=${txt}&url=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Twitter</a>
-                    <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Facebook</a>
-                    <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>LinkedIn</a>
+                <>
+                  <button onClick={async () => { await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`); setCopied(true); setTimeout(() => setCopied(false), 2000) }} style={{ background: copied ? '#10b981' : '#6366f1', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
+                    {copied ? 'Link Copied!' : 'Copy Referral Link for +10'}
+                  </button>
+
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    {(() => {
+                      const url = encodeURIComponent(`https://www.free365key.com/?ref=${referralCode}`)
+                      const txt = encodeURIComponent("Win a FREE Microsoft 365 license!")
+                      return (
+                        <>
+                          <a href={`https://twitter.com/intent/tweet?text=${txt}&url=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Twitter</a>
+                          <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Facebook</a>
+                          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>LinkedIn</a>
+                        </>
+                      )
+                    })()}
                   </div>
-                )
-              })()}
+                </>
+              )}
             </div>
           </div>
         )}
