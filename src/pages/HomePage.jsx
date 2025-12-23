@@ -6,7 +6,6 @@ import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
 import RewardedAd from '../components/RewardedAd'
 import ContactForm from '../components/ContactForm'
-import ShareReferral from '../components/ShareReferral'
 import SEO from '../components/SEO'
 
 function HomePage() {
@@ -23,6 +22,7 @@ function HomePage() {
   const [referralCode, setReferralCode] = useState('')
   const [referralCount, setReferralCount] = useState(0)
   const [referralEntries, setReferralEntries] = useState(0)
+  const [copied, setCopied] = useState(false)
 
   const handleSuccess = (data) => {
     setRegistered(true)
@@ -231,44 +231,84 @@ function HomePage() {
                   </button>
                 </div>
 
-                {/* Share Option */}
-                {referralCode && (
-                  <div style={{
-                    flex: '1 1 200px',
-                    maxWidth: '280px',
-                    padding: '20px',
-                    background: 'rgba(99, 102, 241, 0.2)',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(99, 102, 241, 0.3)',
-                    textAlign: 'center'
-                  }}>
-                    <p style={{ margin: '0 0 10px 0', fontWeight: '600', color: '#a5b4fc' }}>Share & Refer</p>
-                    <p style={{ margin: '0 0 15px 0', fontSize: '0.85rem', opacity: 0.9 }}>
-                      +10 entries per referral<br/>
-                      <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>Valid for 6 drawings</span>
-                    </p>
-                    <button
-                      className="submit-btn"
-                      onClick={() => document.getElementById('share-section').scrollIntoView({ behavior: 'smooth' })}
-                      style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', width: '100%', margin: 0 }}
-                    >
-                      Share Link
-                    </button>
-                  </div>
-                )}
+                {/* Share Option - Inline */}
+                {referralCode && (() => {
+                  const referralLink = `https://www.free365key.com/?ref=${referralCode}`
+                  const shareText = "Enter for a chance to win a FREE Microsoft 365 license!"
+                  const handleCopy = async () => {
+                    try {
+                      await navigator.clipboard.writeText(referralLink)
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
+                    } catch (err) {
+                      console.error('Failed to copy:', err)
+                    }
+                  }
+                  return (
+                    <div style={{
+                      flex: '1 1 200px',
+                      maxWidth: '320px',
+                      padding: '20px',
+                      background: 'rgba(99, 102, 241, 0.2)',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(99, 102, 241, 0.3)',
+                      textAlign: 'center'
+                    }}>
+                      <p style={{ margin: '0 0 8px 0', fontWeight: '600', color: '#a5b4fc' }}>Share & Refer</p>
+                      <p style={{ margin: '0 0 12px 0', fontSize: '0.8rem', opacity: 0.9 }}>
+                        +10 entries per referral
+                        {referralCount > 0 && <span style={{ color: '#4ade80' }}> ({referralCount} so far!)</span>}
+                      </p>
+
+                      {/* Copy Button */}
+                      <button
+                        onClick={handleCopy}
+                        style={{
+                          width: '100%',
+                          padding: '10px',
+                          borderRadius: '8px',
+                          border: 'none',
+                          background: copied ? '#10b981' : 'white',
+                          color: copied ? 'white' : '#333',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          marginBottom: '10px',
+                          fontSize: '0.85rem'
+                        }}
+                      >
+                        {copied ? 'Copied!' : 'Copy Link'}
+                      </button>
+
+                      {/* Social Icons */}
+                      <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                        <a
+                          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(referralLink)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
+                        >X</a>
+                        <a
+                          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
+                        >FB</a>
+                        <a
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
+                        >In</a>
+                        <a
+                          href={`mailto:?subject=${encodeURIComponent('Free Microsoft 365 Giveaway')}&body=${encodeURIComponent(`${shareText}\n\n${referralLink}`)}`}
+                          style={{ padding: '8px 12px', borderRadius: '6px', background: '#666', color: 'white', textDecoration: 'none', fontSize: '0.75rem' }}
+                        >Email</a>
+                      </div>
+                    </div>
+                  )
+                })()}
               </div>
             </div>
-
-            {/* Full Referral Share Section */}
-            {referralCode && (
-              <div id="share-section">
-                <ShareReferral
-                  referralCode={referralCode}
-                  referralCount={referralCount}
-                  referralEntries={referralEntries}
-                />
-              </div>
-            )}
           </div>
         )}
       </section>
