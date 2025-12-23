@@ -1,0 +1,212 @@
+{
+  "version": "Notebook/1.0",
+  "items": [
+    {
+      "type": 1,
+      "content": {
+        "json": "# Free365Key Analytics Dashboard\n\nCustom event tracking for user engagement and conversion funnel."
+      },
+      "name": "header"
+    },
+    {
+      "type": 9,
+      "content": {
+        "version": "KqlParameterItem/1.0",
+        "parameters": [
+          {
+            "id": "timeRange",
+            "version": "KqlParameterItem/1.0",
+            "name": "TimeRange",
+            "type": 4,
+            "isRequired": true,
+            "value": {
+              "durationMs": 604800000
+            },
+            "typeSettings": {
+              "selectableValues": [
+                { "durationMs": 3600000, "displayName": "Last hour" },
+                { "durationMs": 86400000, "displayName": "Last 24 hours" },
+                { "durationMs": 604800000, "displayName": "Last 7 days" },
+                { "durationMs": 2592000000, "displayName": "Last 30 days" }
+              ]
+            }
+          }
+        ]
+      },
+      "name": "parameters"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## Registration Funnel"
+      },
+      "name": "registration-header"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name in ('Registration_Completed', 'Registration_ReturningUser', 'Registration_Failed')\n| summarize Count = count() by name\n| order by Count desc",
+        "size": 1,
+        "title": "Registration Events",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "piechart"
+      },
+      "customWidth": "50",
+      "name": "registration-pie"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name in ('Registration_Completed', 'Registration_ReturningUser', 'Registration_Failed')\n| summarize Count = count() by bin(timestamp, 1d), name\n| order by timestamp asc",
+        "size": 0,
+        "title": "Registrations Over Time",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "linechart"
+      },
+      "customWidth": "50",
+      "name": "registration-timeline"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## Ad Engagement"
+      },
+      "name": "ad-header"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name in ('Ad_WatchClicked', 'Ad_WatchCompleted', 'Ad_Skipped')\n| summarize Count = count() by name\n| order by Count desc",
+        "size": 1,
+        "title": "Ad Funnel",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "piechart"
+      },
+      "customWidth": "50",
+      "name": "ad-pie"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name == 'Ad_Skipped'\n| extend couldClaim = tostring(customDimensions.couldClaim)\n| summarize Count = count() by couldClaim\n| extend Status = iff(couldClaim == 'true', 'Skipped After Timer', 'Skipped Early')",
+        "size": 1,
+        "title": "Ad Skip Breakdown",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "piechart"
+      },
+      "customWidth": "50",
+      "name": "ad-skip-breakdown"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name in ('Ad_WatchClicked', 'Ad_WatchCompleted', 'Ad_Skipped')\n| summarize Count = count() by bin(timestamp, 1d), name\n| order by timestamp asc",
+        "size": 0,
+        "title": "Ad Engagement Over Time",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "linechart"
+      },
+      "name": "ad-timeline"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## Sharing & Referrals"
+      },
+      "name": "share-header"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name in ('Referral_LinkCopied', 'Share_Twitter', 'Share_Facebook', 'Share_LinkedIn')\n| summarize Count = count() by name\n| order by Count desc",
+        "size": 1,
+        "title": "Sharing Methods",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "barchart"
+      },
+      "customWidth": "50",
+      "name": "share-bar"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name in ('Referral_LinkCopied', 'Share_Twitter', 'Share_Facebook', 'Share_LinkedIn')\n| summarize Count = count() by bin(timestamp, 1d), name\n| order by timestamp asc",
+        "size": 0,
+        "title": "Sharing Over Time",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "linechart"
+      },
+      "customWidth": "50",
+      "name": "share-timeline"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## Email Verification"
+      },
+      "name": "verification-header"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| where name == 'Verification_ResendClicked'\n| summarize ResendClicks = count() by bin(timestamp, 1d)\n| order by timestamp asc",
+        "size": 0,
+        "title": "Verification Resend Requests",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "linechart"
+      },
+      "name": "verification-timeline"
+    },
+    {
+      "type": 1,
+      "content": {
+        "json": "## Summary Metrics"
+      },
+      "name": "summary-header"
+    },
+    {
+      "type": 3,
+      "content": {
+        "version": "KqlItem/1.0",
+        "query": "customEvents\n| where timestamp {TimeRange}\n| summarize\n    Registrations = countif(name == 'Registration_Completed'),\n    ReturningUsers = countif(name == 'Registration_ReturningUser'),\n    AdClicks = countif(name == 'Ad_WatchClicked'),\n    AdCompleted = countif(name == 'Ad_WatchCompleted'),\n    ReferralCopies = countif(name == 'Referral_LinkCopied'),\n    SocialShares = countif(name in ('Share_Twitter', 'Share_Facebook', 'Share_LinkedIn'))\n| extend AdConversion = round(100.0 * AdCompleted / AdClicks, 1)",
+        "size": 3,
+        "title": "Key Metrics",
+        "queryType": 0,
+        "resourceType": "microsoft.insights/components",
+        "visualization": "tiles",
+        "tileSettings": {
+          "showBorder": true,
+          "titleContent": {
+            "columnMatch": "Column1",
+            "formatter": 1
+          },
+          "leftContent": {
+            "columnMatch": "Registrations",
+            "formatter": 12,
+            "formatOptions": {
+              "palette": "auto"
+            }
+          }
+        }
+      },
+      "name": "summary-tiles"
+    }
+  ],
+  "$schema": "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
