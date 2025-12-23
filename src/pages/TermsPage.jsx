@@ -57,7 +57,7 @@ function TermsPage() {
             </p>
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li><strong>Watching Ads:</strong> Each ad watched earns +2 bonus entries (valid for 3 monthly drawings)</li>
-              <li><strong>Referring Friends:</strong> Each verified referral earns +10 bonus entries (never expire)</li>
+              <li><strong>Referring Friends:</strong> Each verified referral earns +10 bonus entries (valid for 6 monthly drawings)</li>
             </ul>
           </section>
 
@@ -82,7 +82,7 @@ function TermsPage() {
                   </tr>
                   <tr style={{ borderBottom: '1px solid #ddd' }}>
                     <td style={{ padding: '10px 0' }}><strong>Each Verified Referral</strong></td>
-                    <td style={{ padding: '10px 0', textAlign: 'right' }}>+10 bonus entries (never expire)</td>
+                    <td style={{ padding: '10px 0', textAlign: 'right' }}>+10 bonus entries (expire after 6 drawings)</td>
                   </tr>
                   <tr>
                     <td style={{ padding: '10px 0' }}><strong>Unverified Registration</strong></td>
@@ -96,14 +96,15 @@ function TermsPage() {
             <ul style={{ marginLeft: '20px', lineHeight: '1.8' }}>
               <li><strong>Base entries (from email verification):</strong> Never expire. Once verified, your 5 base entries remain valid for all future drawings.</li>
               <li><strong>Ad bonus entries:</strong> Valid for the next 3 monthly drawings after being earned. After 3 drawings, ad bonus entries expire and are no longer counted.</li>
-              <li><strong>Referral bonus entries:</strong> Never expire. Once a referred friend verifies their email, your +10 referral entries remain valid for all future drawings.</li>
+              <li><strong>Referral bonus entries:</strong> Valid for the next 6 monthly drawings after being earned. After 6 drawings, referral bonus entries expire and are no longer counted.</li>
             </ul>
 
             <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>Example:</h3>
             <p style={{ color: '#666' }}>
               If you watch an ad in December 2024, those 2 bonus entries will be valid for the January,
-              February, and March 2025 drawings. They will not count toward the April 2025 drawing or beyond.
-              To maintain bonus entries, you must continue watching ads periodically.
+              February, and March 2025 drawings. Similarly, if you refer a friend in December 2024, those 10 bonus entries
+              will be valid for the next 6 drawings (January through June 2025). To maintain bonus entries, you must
+              continue watching ads and referring friends periodically.
             </p>
           </section>
 
@@ -119,7 +120,7 @@ function TermsPage() {
               <li>Share your referral link with friends via social media, email, or direct message</li>
               <li>When someone registers using your referral link AND verifies their email, you earn +10 bonus entries</li>
               <li>Referral entries are credited immediately upon the referred user's email verification</li>
-              <li>Referral bonus entries never expire and remain valid for all future drawings</li>
+              <li>Referral bonus entries are valid for 6 monthly drawings from when they are earned</li>
             </ul>
 
             <h3 style={{ fontSize: '1.1rem', marginTop: '20px', marginBottom: '10px' }}>Referral Rules & Restrictions:</h3>

@@ -37,7 +37,7 @@ function ShareReferral({ referralCode, referralCount, referralEntries }) {
         Share for +10 Entries Each!
       </h4>
       <p style={{ margin: '0 0 15px 0', fontSize: '0.9rem', opacity: 0.9 }}>
-        When a friend signs up using your link and verifies their email, you earn +10 permanent entries!
+        When a friend signs up using your link and verifies their email, you earn +10 entries (valid for 6 drawings)!
       </p>
 
       {/* Stats */}

@@ -65,7 +65,39 @@ module.exports = async function (context, req) {
       }
 
       const adWeight = adCount * 2;
-      const referralEntries = entity.referralEntries || 0;
+
+      // Count valid referrals (valid for 6 drawings)
+      const referralsClient = await getTableClient("referrals");
+      let validReferralCount = 0;
+      let referralEntries = 0;
+
+      try {
+        const referrals = referralsClient.listEntities({
+          queryOptions: { filter: `referrerId eq '${entity.rowKey}'` }
+        });
+
+        for await (const referral of referrals) {
+          const validUntil = referral.validUntilDrawing;
+          if (validUntil && validUntil >= currentDrawingCycle) {
+            validReferralCount++;
+            referralEntries += (referral.entries || 10);
+          } else if (!validUntil) {
+            // Legacy entries without validUntilDrawing - check by date (180 days for 6 months)
+            const earnedAt = referral.earnedAt;
+            const cutoff = new Date(now);
+            cutoff.setDate(cutoff.getDate() - 180);
+            if (earnedAt && earnedAt >= cutoff.toISOString()) {
+              validReferralCount++;
+              referralEntries += (referral.entries || 10);
+            }
+          }
+        }
+      } catch (referralError) {
+        // If referrals table doesn't exist yet, use legacy stored value
+        referralEntries = entity.referralEntries || 0;
+        validReferralCount = entity.referralCount || 0;
+      }
+
       const totalEntries = baseWeight + adWeight + referralEntries;
 
       context.res = {

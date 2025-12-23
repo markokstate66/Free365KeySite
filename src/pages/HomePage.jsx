@@ -203,28 +203,73 @@ function HomePage() {
               </p>
             )}
             <div style={{ marginTop: '25px', padding: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '12px' }}>
-              <p style={{ margin: '0 0 15px 0', fontWeight: 'bold' }}>
+              <p style={{ margin: '0 0 20px 0', fontWeight: 'bold', fontSize: '1.1rem' }}>
                 {isReturningUser ? 'Earn more entries!' : 'Want more chances to win?'}
               </p>
-              <button
-                className="submit-btn"
-                onClick={() => setShowRewardedAd(true)}
-                style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' }}
-              >
-                Watch Ad for +2 Entries
-              </button>
-              <p style={{ margin: '10px 0 0 0', fontSize: '0.8rem', opacity: 0.8 }}>
-                Watch as many ads as you want - each one earns +2 entries!
-              </p>
+
+              {/* Two options side by side on larger screens */}
+              <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                {/* Watch Ad Option */}
+                <div style={{
+                  flex: '1 1 200px',
+                  maxWidth: '280px',
+                  padding: '20px',
+                  background: 'rgba(16, 185, 129, 0.2)',
+                  borderRadius: '10px',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  textAlign: 'center'
+                }}>
+                  <p style={{ margin: '0 0 10px 0', fontWeight: '600', color: '#4ade80' }}>Watch Ads</p>
+                  <p style={{ margin: '0 0 15px 0', fontSize: '0.85rem', opacity: 0.9 }}>
+                    +2 entries per ad<br/>
+                    <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>Valid for 3 drawings</span>
+                  </p>
+                  <button
+                    className="submit-btn"
+                    onClick={() => setShowRewardedAd(true)}
+                    style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', width: '100%', margin: 0 }}
+                  >
+                    Watch Ad
+                  </button>
+                </div>
+
+                {/* Share Option */}
+                {referralCode && (
+                  <div style={{
+                    flex: '1 1 200px',
+                    maxWidth: '280px',
+                    padding: '20px',
+                    background: 'rgba(99, 102, 241, 0.2)',
+                    borderRadius: '10px',
+                    border: '1px solid rgba(99, 102, 241, 0.3)',
+                    textAlign: 'center'
+                  }}>
+                    <p style={{ margin: '0 0 10px 0', fontWeight: '600', color: '#a5b4fc' }}>Share & Refer</p>
+                    <p style={{ margin: '0 0 15px 0', fontSize: '0.85rem', opacity: 0.9 }}>
+                      +10 entries per referral<br/>
+                      <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>Valid for 6 drawings</span>
+                    </p>
+                    <button
+                      className="submit-btn"
+                      onClick={() => document.getElementById('share-section').scrollIntoView({ behavior: 'smooth' })}
+                      style={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', width: '100%', margin: 0 }}
+                    >
+                      Share Link
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Referral Share Section */}
+            {/* Full Referral Share Section */}
             {referralCode && (
-              <ShareReferral
-                referralCode={referralCode}
-                referralCount={referralCount}
-                referralEntries={referralEntries}
-              />
+              <div id="share-section">
+                <ShareReferral
+                  referralCode={referralCode}
+                  referralCount={referralCount}
+                  referralEntries={referralEntries}
+                />
+              </div>
             )}
           </div>
         )}

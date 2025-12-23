@@ -23,6 +23,7 @@ module.exports = async function (context, req) {
 
     const tableClient = await getTableClient();
     const bonusClient = await getTableClient("bonusentries");
+    const referralsClient = await getTableClient("referrals");
     const now = new Date();
 
     // Current drawing cycle (this month's drawing since we run on 1st)
@@ -58,15 +59,47 @@ module.exports = async function (context, req) {
         }
       }
 
-      // Weighting: verified = 5 base entries, each ad = 2 entries
+      // Count referrals valid for this drawing (6 drawings)
+      let referralWeight = 0;
+      let referralCount = 0;
+      try {
+        const referrals = referralsClient.listEntities({
+          queryOptions: { filter: `referrerId eq '${reg.rowKey}'` }
+        });
+
+        for await (const referral of referrals) {
+          const validUntil = referral.validUntilDrawing;
+          if (validUntil && validUntil >= currentDrawingCycle) {
+            referralCount++;
+            referralWeight += (referral.entries || 10);
+          } else if (!validUntil) {
+            // Legacy entries - check by date (180 days for 6 months)
+            const earnedAt = referral.earnedAt;
+            const cutoff = new Date(now);
+            cutoff.setDate(cutoff.getDate() - 180);
+            if (earnedAt && earnedAt >= cutoff.toISOString()) {
+              referralCount++;
+              referralWeight += (referral.entries || 10);
+            }
+          }
+        }
+      } catch (refErr) {
+        // If referrals table doesn't exist, use legacy stored value
+        referralWeight = reg.referralEntries || 0;
+        referralCount = reg.referralCount || 0;
+      }
+
+      // Weighting: verified = 5 base entries, each ad = 2 entries, referrals = 10 each
       const baseWeight = 5;
       const adWeight = adWatchCount * 2;
-      const totalWeight = baseWeight + adWeight;
+      const totalWeight = baseWeight + adWeight + referralWeight;
       eligibleEntries.push({
         registration: reg,
         adWatchCount,
+        referralCount,
         baseWeight,
         adWeight,
+        referralWeight,
         totalWeight
       });
     }
@@ -113,8 +146,10 @@ module.exports = async function (context, req) {
       companyName: winner.registration.companyName,
       registeredAt: winner.registration.registeredAt,
       adWatchCount: winner.adWatchCount,
+      referralCount: winner.referralCount,
       baseWeight: winner.baseWeight,
       adWeight: winner.adWeight,
+      referralWeight: winner.referralWeight,
       totalEntries: winner.totalWeight,
       wonAt: updatedEntity.wonAt
     };
@@ -135,6 +170,7 @@ module.exports = async function (context, req) {
             <tr><td style="padding: 8px 0; font-weight: bold;">Registered:</td><td>${new Date(winnerInfo.registeredAt).toLocaleDateString()}</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Base Weight:</td><td>${winnerInfo.baseWeight} (verified email)</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Ads Watched:</td><td>${winnerInfo.adWatchCount} (${winnerInfo.adWeight} entries)</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Referrals:</td><td>${winnerInfo.referralCount} (${winnerInfo.referralWeight} entries)</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Total Entries:</td><td>${winnerInfo.totalEntries}</td></tr>
           </table>
         </div>

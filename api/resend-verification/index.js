@@ -81,7 +81,7 @@ module.exports = async function (context, req) {
             You requested a new verification link. Please confirm your email address to complete your entry in the Microsoft 365 giveaway.
           </p>
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${verifyUrl}" style="display: inline-block; padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            <a href="${verifyUrl}" style="display: inline-block; padding: 15px 40px; background-color: #667eea; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: bold;">
               Confirm My Email
             </a>
           </div>

@@ -62,7 +62,7 @@ function HowItWorksPage() {
                 <h3>Share & Refer Friends</h3>
                 <p>
                   Get your unique referral link and share it with friends. When someone signs up using your link
-                  and verifies their email, you earn <strong>+10 bonus entries</strong> that <strong>never expire</strong>!
+                  and verifies their email, you earn <strong>+10 bonus entries</strong> valid for <strong>6 monthly drawings</strong>!
                   Share on Twitter, Facebook, LinkedIn, or email.
                 </p>
               </div>
