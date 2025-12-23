@@ -1,5 +1,12 @@
 import { useState } from 'react'
 
+// Track events in Azure Application Insights
+const trackEvent = (name, properties = {}) => {
+  if (window.appInsights) {
+    window.appInsights.trackEvent({ name, properties })
+  }
+}
+
 function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -52,12 +59,18 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
       if (!response.ok) {
         // Handle duplicate email specially
         if (response.status === 409 && onAlreadyRegistered) {
+          trackEvent('Registration_ReturningUser')
           onAlreadyRegistered(formData.email)
           return
         }
+        trackEvent('Registration_Failed', { error: data.error })
         throw new Error(data.error || 'Registration failed')
       }
 
+      trackEvent('Registration_Completed', {
+        hasReferral: !!referredBy,
+        joinedNewsletter: formData.joinNewsletter
+      })
       onSuccess(data)
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')

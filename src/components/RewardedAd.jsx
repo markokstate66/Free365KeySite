@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react'
 
+// Track events in Azure Application Insights
+const trackEvent = (name, properties = {}) => {
+  if (window.appInsights) {
+    window.appInsights.trackEvent({ name, properties })
+  }
+}
+
 function RewardedAd({ registrationId, onComplete, onClose }) {
   const [timeLeft, setTimeLeft] = useState(30)
   const [canClaim, setCanClaim] = useState(false)
@@ -74,6 +81,7 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
 
       setClaimed(true)
       setAdToken(null) // Clear token after use
+      trackEvent('Ad_WatchCompleted')
       if (onComplete) onComplete(data)
     } catch (err) {
       setError(err.message)
@@ -124,7 +132,7 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
                   </button>
                 </>
               )}
-              <button className="skip-btn" onClick={onClose}>
+              <button className="skip-btn" onClick={() => { trackEvent('Ad_Skipped', { timeRemaining: timeLeft, couldClaim: canClaim }); onClose() }}>
                 {canClaim ? 'Close' : 'Skip'}
               </button>
             </div>

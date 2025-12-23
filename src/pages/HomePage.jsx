@@ -1,5 +1,12 @@
 import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+
+// Track events in Azure Application Insights
+const trackEvent = (name, properties = {}) => {
+  if (window.appInsights) {
+    window.appInsights.trackEvent({ name, properties })
+  }
+}
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import RegistrationForm from '../components/RegistrationForm'
@@ -126,7 +133,7 @@ function HomePage() {
               <p style={{ margin: '0 0 20px 0', fontSize: '0.95rem' }}>
                 <span style={{ color: '#fbbf24' }}>Check your email</span> to verify and unlock 5 entries
                 {resendStatus !== 'sent' && (
-                  <button onClick={handleResendVerification} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
+                  <button onClick={() => { trackEvent('Verification_ResendClicked'); handleResendVerification() }} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
                     {resendStatus === 'sending' ? '...' : 'resend'}
                   </button>
                 )}
@@ -140,13 +147,13 @@ function HomePage() {
 
             {/* Action buttons */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '400px', margin: '0 auto' }}>
-              <button onClick={() => setShowRewardedAd(true)} style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
+              <button onClick={() => { trackEvent('Ad_WatchClicked'); setShowRewardedAd(true) }} style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
                 Watch Ad for +2 Entries
               </button>
 
               {referralCode && (
                 <>
-                  <button onClick={async () => { await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`); setCopied(true); setTimeout(() => setCopied(false), 2000) }} style={{ background: copied ? '#10b981' : '#6366f1', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
+                  <button onClick={async () => { trackEvent('Referral_LinkCopied'); await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`); setCopied(true); setTimeout(() => setCopied(false), 2000) }} style={{ background: copied ? '#10b981' : '#6366f1', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
                     {copied ? 'Link Copied!' : 'Copy Referral Link for +10'}
                   </button>
 
@@ -156,9 +163,9 @@ function HomePage() {
                       const txt = encodeURIComponent("Win a FREE Microsoft 365 license!")
                       return (
                         <>
-                          <a href={`https://twitter.com/intent/tweet?text=${txt}&url=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Twitter</a>
-                          <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Facebook</a>
-                          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>LinkedIn</a>
+                          <a href={`https://twitter.com/intent/tweet?text=${txt}&url=${url}`} onClick={() => trackEvent('Share_Twitter')} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Twitter</a>
+                          <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} onClick={() => trackEvent('Share_Facebook')} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Facebook</a>
+                          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} onClick={() => trackEvent('Share_LinkedIn')} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>LinkedIn</a>
                         </>
                       )
                     })()}
