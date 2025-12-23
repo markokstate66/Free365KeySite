@@ -1,0 +1,33 @@
+{
+  "location": "eastus2",
+  "properties": {
+    "displayName": "New Registration Alert",
+    "description": "Triggered when a new user registers for the giveaway",
+    "severity": 4,
+    "enabled": true,
+    "evaluationFrequency": "PT5M",
+    "scopes": [
+      "/subscriptions/8062e979-030a-4e40-9bba-a3675ece40e2/resourceGroups/rg-free365key/providers/microsoft.insights/components/free365key-insights"
+    ],
+    "windowSize": "PT5M",
+    "criteria": {
+      "allOf": [
+        {
+          "query": "customEvents | where name == 'Registration_Completed'",
+          "timeAggregation": "Count",
+          "operator": "GreaterThan",
+          "threshold": 0,
+          "failingPeriods": {
+            "numberOfEvaluationPeriods": 1,
+            "minFailingPeriodsToAlert": 1
+          }
+        }
+      ]
+    },
+    "actions": {
+      "actionGroups": [
+        "/subscriptions/8062e979-030a-4e40-9bba-a3675ece40e2/resourceGroups/rg-free365key/providers/microsoft.insights/actionGroups/free365key-alerts"
+      ]
+    }
+  }
+}
