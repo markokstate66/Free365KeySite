@@ -10,7 +10,7 @@ const faqs = [
   },
   {
     question: 'How does the entry system work?',
-    answer: 'After registering and verifying your email, you receive 5 base entries. You can earn bonus entries by watching ads on our site - each ad watched gives you 2 additional entries. Bonus entries are valid for the next 3 monthly drawings.'
+    answer: 'After registering and verifying your email, you receive 5 base entries. You can earn bonus entries by watching ads (+2 entries each, valid for 3 drawings) or by referring friends (+10 entries each, never expire). The more entries you have, the higher your chances of winning!'
   },
   {
     question: 'Do I need to verify my email?',
@@ -21,12 +21,16 @@ const faqs = [
     answer: 'Each ad you watch earns you 2 bonus entries. These bonus entries are valid for the next 3 monthly drawings from when you watched the ad. You can return anytime to watch more ads and increase your chances.'
   },
   {
+    question: 'How does the referral program work?',
+    answer: 'After registering, you get a unique referral link to share with friends. When someone signs up using your link and verifies their email, you earn +10 bonus entries! Unlike ad entries, referral entries never expire - they\'re permanent. Share on Twitter, Facebook, LinkedIn, or email directly from your dashboard.'
+  },
+  {
     question: 'How often are winners selected?',
     answer: 'We conduct drawings on the 1st of every month. One winner is selected using a weighted random selection based on total entries. Winners are notified directly via email.'
   },
   {
     question: 'How do you select winners?',
-    answer: 'Winners are selected through a weighted random drawing. The more entries you have (base + bonus), the higher your chances of winning. For example, someone with 11 entries has roughly twice the chance of winning compared to someone with 5 entries.'
+    answer: 'Winners are selected through a weighted random drawing. The more entries you have (base + ad bonus + referral bonus), the higher your chances of winning. For example, someone with 25 entries (5 base + 10 from ads + 10 from a referral) has 5x the chance of winning compared to someone with just 5 base entries.'
   },
   {
     question: 'What do winners receive?',
