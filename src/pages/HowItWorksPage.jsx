@@ -9,7 +9,7 @@ function HowItWorksPage() {
       <SEO
         title="How It Works"
         path="/how-it-works"
-        description="Learn how to enter our free Microsoft 365 giveaway. Simple 5-step process: register, verify email, earn bonus entries, and win!"
+        description="Learn how to enter our free Microsoft 365 giveaway. Register, verify email, earn bonus entries by watching ads or referring friends, and win!"
       />
       <Header />
 
@@ -48,10 +48,10 @@ function HowItWorksPage() {
             <div className="step">
               <div className="step-number">3</div>
               <div className="step-content">
-                <h3>Earn Bonus Entries</h3>
+                <h3>Watch Ads for Bonus Entries</h3>
                 <p>
-                  Watch short ads to earn <strong>+2 bonus entries</strong> each! Each bonus is valid for the next
-                  <strong> 3 monthly drawings</strong>, so keep watching to maximize your chances.
+                  Watch short ads to earn <strong>+2 bonus entries</strong> each! Each ad bonus is valid for the next
+                  <strong> 3 monthly drawings</strong>. Watch as many as you want to boost your chances.
                 </p>
               </div>
             </div>
@@ -59,10 +59,11 @@ function HowItWorksPage() {
             <div className="step">
               <div className="step-number">4</div>
               <div className="step-content">
-                <h3>Wait for the Drawing</h3>
+                <h3>Share & Refer Friends</h3>
                 <p>
-                  We conduct random drawings every month. All verified entries from that month
-                  are included in the pool. The more months you're registered, the more chances you have!
+                  Get your unique referral link and share it with friends. When someone signs up using your link
+                  and verifies their email, you earn <strong>+10 bonus entries</strong> that <strong>never expire</strong>!
+                  Share on Twitter, Facebook, LinkedIn, or email.
                 </p>
               </div>
             </div>
@@ -70,9 +71,20 @@ function HowItWorksPage() {
             <div className="step">
               <div className="step-number">5</div>
               <div className="step-content">
+                <h3>Wait for the Drawing</h3>
+                <p>
+                  We conduct random drawings on the 1st of every month. The more entries you have
+                  (base + ads + referrals), the higher your chances of winning!
+                </p>
+              </div>
+            </div>
+
+            <div className="step">
+              <div className="step-number">6</div>
+              <div className="step-content">
                 <h3>Claim Your Prize</h3>
                 <p>
-                  Winners are notified via email with instructions to claim their Microsoft 365 trial.
+                  Winners are notified via email with instructions to claim their Microsoft 365 subscription.
                   You'll have 30 days to respond and claim your prize.
                 </p>
               </div>
