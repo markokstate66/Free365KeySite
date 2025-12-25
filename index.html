@@ -233,20 +233,42 @@
     }
     </script>
 
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SDD1HNEX51"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-SDD1HNEX51');
-    </script>
-
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6676281664229738" crossorigin="anonymous"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+
+    <!-- Deferred Third-Party Scripts (loaded after page is interactive for better LCP/FCP) -->
+    <script>
+      function loadDeferredScripts() {
+        // Google Analytics 4
+        var gaScript = document.createElement('script');
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-SDD1HNEX51';
+        gaScript.async = true;
+        document.head.appendChild(gaScript);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-SDD1HNEX51');
+
+        // Google AdSense (loaded after analytics)
+        setTimeout(function() {
+          var adsScript = document.createElement('script');
+          adsScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6676281664229738';
+          adsScript.async = true;
+          adsScript.crossOrigin = 'anonymous';
+          document.head.appendChild(adsScript);
+        }, 100);
+      }
+
+      // Use requestIdleCallback for best performance, fallback to load event
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadDeferredScripts, {timeout: 2000});
+      } else {
+        window.addEventListener('load', loadDeferredScripts);
+      }
+    </script>
   </body>
 </html>
