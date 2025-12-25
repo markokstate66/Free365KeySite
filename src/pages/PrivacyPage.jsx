@@ -73,11 +73,41 @@ function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '30px' }}>
-            <h2 style={{ marginBottom: '15px' }}>6. Cookies and Advertising</h2>
+            <h2 style={{ marginBottom: '15px' }}>6. Cookies and Tracking Technologies</h2>
+            <p style={{ marginBottom: '15px' }}>
+              Our website uses cookies and similar tracking technologies to enhance your experience,
+              analyze site traffic, and serve personalized advertisements.
+            </p>
+            <h3 style={{ marginBottom: '10px', fontSize: '1.1rem' }}>Google Analytics</h3>
+            <p style={{ marginBottom: '15px' }}>
+              We use Google Analytics to understand how visitors interact with our website. Google Analytics
+              uses cookies to collect information about your use of the site, including your IP address.
+              This information is transmitted to and stored by Google. For more information, see{' '}
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#00a4ef' }}>
+                Google's Privacy Policy
+              </a>.
+            </p>
+            <h3 style={{ marginBottom: '10px', fontSize: '1.1rem' }}>Google AdSense</h3>
+            <p style={{ marginBottom: '15px' }}>
+              We use Google AdSense to display advertisements on our website. Google AdSense uses cookies
+              to serve ads based on your prior visits to our website or other websites. Google's use of
+              advertising cookies enables it and its partners to serve ads based on your visit to our
+              site and/or other sites on the Internet.
+            </p>
+            <p style={{ marginBottom: '15px' }}>
+              You may opt out of personalized advertising by visiting{' '}
+              <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" style={{ color: '#00a4ef' }}>
+                Google Ads Settings
+              </a>. Alternatively, you can opt out of third-party vendors' use of cookies by visiting{' '}
+              <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" style={{ color: '#00a4ef' }}>
+                www.aboutads.info
+              </a>.
+            </p>
+            <h3 style={{ marginBottom: '10px', fontSize: '1.1rem' }}>Managing Cookies</h3>
             <p>
-              Our website uses cookies and may display third-party advertisements. These advertisers
-              may use cookies to track your browsing habits. You can manage cookie preferences
-              through your browser settings.
+              You can control and manage cookies through your browser settings. Please note that
+              disabling cookies may affect the functionality of this website and many other websites
+              you visit.
             </p>
           </section>
 
