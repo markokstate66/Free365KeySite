@@ -2,6 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- Preconnect MUST be first for performance (before any other requests) -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
+    <link rel="dns-prefetch" href="//www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="//www.google-analytics.com" />
+    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Register for a chance to win a FREE Microsoft 365 license key. Enter our monthly giveaway today - no purchase necessary. Winners drawn on the 1st of every month!" />
@@ -20,17 +28,6 @@
 
     <!-- Bing Webmaster Tools Verification -->
     <meta name="msvalidate.01" content="E4792860CAB72733FACE91C7EE52BB14" />
-
-    <!-- Performance: DNS Prefetch and Preconnect -->
-    <link rel="dns-prefetch" href="//www.googletagmanager.com" />
-    <link rel="dns-prefetch" href="//www.google-analytics.com" />
-    <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
-    <link rel="dns-prefetch" href="//js.monitor.azure.com" />
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-    <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossorigin />
-
-    <!-- Preload Critical Assets -->
-    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -239,15 +236,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <!-- Azure Application Insights - Moved to end of body to prevent render blocking -->
-    <script type="text/javascript">
-    !function(T,l,y){var S=T.location,k="script",D="instrumentationKey",C="ingestionendpoint",I="disableExceptionTracking",E="ai.device.",b="toLowerCase",w="crossOrigin",N="POST",e="appInsightsSDK",t=y.name||"appInsights";(y.name||T[e])&&(T[e]=t);var n=T[t]||function(d){var g=!1,f=!1,m={initialize:!0,queue:[],sv:"5",version:2,config:d};function v(e,t){var n={},a="Browser";return n[E+"id"]=a[b](),n[E+"type"]=a,n["ai.operation.name"]=S&&S.pathname||"_unknown_",n["ai.internal.sdkVersion"]="javascript:snippet:"+(m.sv||m.version),n}var i=d.url||y.src;if(i){function a(e){var t,n,a,i,r,o,s,c,u,p,l;g=!0,m.queue=[],f||(f=!0,t=i,s=function(){var e={},t=d.connectionString;if(t)for(var n=t.split(";"),a=0;a<n.length;a++){var i=n[a].split("=");2===i.length&&(e[i[0][b]()]=i[1])}if(!e[C]){var r=e.endpointsuffix,o=r?e.location:null;e[C]="https://"+(o?o+".":"")+"dc."+(r||"services.visualstudio.com")}return e}(),c=s[D]||d[D]||"",u=s[C],p=u?u+"/v2/track":d.endpointUrl,(l=[]).push((n="SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details)",a=t,i=p,(o=(r=v(c,"]]>")).telemertyItem)||(o=r.telemertyItem={}),o.baseType="ExceptionData",o.baseData={exceptions:[{typeName:"SDKLoadFailed",message:n.replace(/\./g,"-"),hasFullStack:!1,stack:n+"\nSnippet failed to load ["+a+"] -- Telemetry is disabled\nHelp Link: https://go.microsoft.com/fwlink/?linkid=2128109\nHost: "+(S&&S.pathname||"_unknown_")+"\nEndpoint: "+i,parsedStack:[]}]},r)),l.push(function(e,t,n,a){var i=v(c,"Message"),r=i.telemertyItem;return r.baseType="MessageData",(i=r.baseData).message='AI (Internal): 99 message:"'+("SDK LOAD Failure: Failed to load Application Insights SDK script (See stack for details) ("+n+")").replace(/\"/g,"")+'"',i.properties={endpoint:a},r}(0,0,t,p)),function(e,t){if(JSON){var n=T.fetch;if(n&&!y.useXhr)n(t,{method:N,body:JSON.stringify(e),mode:"cors"});else if(XMLHttpRequest){var a=new XMLHttpRequest;a.open(N,t),a.setRequestHeader("Content-type","application/json"),a.send(JSON.stringify(e))}}}(l,p))}function r(e,t){f||setTimeout(function(){!t&&m.core||a()},500)}var o=function(){var n=l.createElement(k);n.src=i,n.onload=r,n.onerror=a,l.getElementsByTagName(k)[0].parentNode.appendChild(n)};setTimeout(o,0)}m.hierarchyListener=function(){(T[t].hierarchyReset||function(){})()};return m}(y.cfg);(T[t]=n).queue&&0===n.queue.length&&n.trackPageView&&n.trackPageView({});
-    }(window,document,{
-    src: "https://js.monitor.azure.com/scripts/b/ai.2.min.js",
-    crossOrigin: "anonymous",
-    cfg: {
-        connectionString: "InstrumentationKey=0945f709-1061-4786-b460-d88ece895e4a;IngestionEndpoint=https://eastus2-3.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus2.livediagnostics.monitor.azure.com/;ApplicationId=26bd3d80-3808-4998-87fe-ccbc1fda243d"
-    }});
-    </script>
   </body>
 </html>

@@ -1,37 +1,43 @@
-// Azure Application Insights custom tracking
-const getAppInsights = () => window.appInsights;
+// Google Analytics 4 custom tracking
+const getGtag = () => window.gtag;
 
-// Track custom events
+// Track custom events via GA4
 export function trackEvent(name, properties = {}) {
-  const ai = getAppInsights();
-  if (ai && typeof ai.trackEvent === 'function') {
-    ai.trackEvent({ name, properties });
+  const gtag = getGtag();
+  if (gtag && typeof gtag === 'function') {
+    gtag('event', name, properties);
   }
 }
 
-// Track page views (called automatically, but can be used for SPA navigation)
+// Track page views (GA4 handles this automatically, but can be used for SPA navigation)
 export function trackPageView(name, url) {
-  const ai = getAppInsights();
-  if (ai && typeof ai.trackPageView === 'function') {
-    ai.trackPageView({ name, uri: url });
+  const gtag = getGtag();
+  if (gtag && typeof gtag === 'function') {
+    gtag('event', 'page_view', {
+      page_title: name,
+      page_location: url
+    });
   }
 }
 
 // Track outbound link clicks
 export function trackOutboundClick(url, linkText) {
-  trackEvent('OutboundClick', { url, linkText });
+  trackEvent('click', {
+    event_category: 'outbound',
+    event_label: url,
+    link_text: linkText
+  });
 }
 
 // Track internal navigation
 export function trackNavigation(from, to) {
-  trackEvent('InternalNavigation', { from, to });
+  trackEvent('navigation', { from, to });
 }
 
 // Track scroll depth
 let scrollDepthMarkers = { 25: false, 50: false, 75: false, 90: false, 100: false };
 
 export function initScrollTracking() {
-  // Reset markers on page change
   scrollDepthMarkers = { 25: false, 50: false, 75: false, 90: false, 100: false };
 
   const handleScroll = () => {
@@ -43,7 +49,10 @@ export function initScrollTracking() {
       const threshold = parseInt(marker);
       if (scrollPercent >= threshold && !scrollDepthMarkers[marker]) {
         scrollDepthMarkers[marker] = true;
-        trackEvent('ScrollDepth', { depth: `${threshold}%`, page: window.location.pathname });
+        trackEvent('scroll', {
+          percent_scrolled: threshold,
+          page_path: window.location.pathname
+        });
       }
     });
   };
@@ -52,31 +61,13 @@ export function initScrollTracking() {
   return () => window.removeEventListener('scroll', handleScroll);
 }
 
-// Track time on page
-let pageStartTime = Date.now();
-
-export function initTimeTracking() {
-  pageStartTime = Date.now();
-
-  const handleUnload = () => {
-    const timeOnPage = Math.round((Date.now() - pageStartTime) / 1000);
-    trackEvent('TimeOnPage', {
-      seconds: timeOnPage,
-      page: window.location.pathname
-    });
-  };
-
-  window.addEventListener('beforeunload', handleUnload);
-  return () => window.removeEventListener('beforeunload', handleUnload);
-}
-
-// Track section views (for pages with multiple sections)
+// Track section views
 const viewedSections = new Set();
 
 export function trackSectionView(sectionName) {
   if (!viewedSections.has(sectionName)) {
     viewedSections.add(sectionName);
-    trackEvent('SectionView', { section: sectionName, page: window.location.pathname });
+    trackEvent('section_view', { section: sectionName });
   }
 }
 
@@ -86,36 +77,35 @@ export function resetSectionTracking() {
 
 // Track form interactions
 export function trackFormStart(formName) {
-  trackEvent('FormStart', { form: formName });
+  trackEvent('form_start', { form_name: formName });
 }
 
 export function trackFormSubmit(formName, success = true) {
-  trackEvent('FormSubmit', { form: formName, success });
+  trackEvent('form_submit', { form_name: formName, success });
 }
 
 // Track giveaway-specific events
 export function trackGiveawayEntry(email) {
-  trackEvent('GiveawayEntry', { hasEmail: !!email });
+  trackEvent('giveaway_entry', { method: 'form' });
 }
 
 export function trackNewsletterSignup() {
-  trackEvent('NewsletterSignup', { page: window.location.pathname });
+  trackEvent('sign_up', { method: 'newsletter' });
 }
 
 // Track FAQ interactions
 export function trackFAQExpand(question) {
-  trackEvent('FAQExpand', { question: question.substring(0, 50) });
+  trackEvent('faq_expand', { question: question.substring(0, 50) });
 }
 
 // Track winner page views
 export function trackWinnerView() {
-  trackEvent('WinnerPageView', { timestamp: new Date().toISOString() });
+  trackEvent('winner_page_view');
 }
 
 // Initialize all tracking
 export function initAnalytics() {
   const cleanupScroll = initScrollTracking();
-  const cleanupTime = initTimeTracking();
 
   // Track all outbound clicks
   document.addEventListener('click', (e) => {
@@ -127,6 +117,5 @@ export function initAnalytics() {
 
   return () => {
     cleanupScroll();
-    cleanupTime();
   };
 }
