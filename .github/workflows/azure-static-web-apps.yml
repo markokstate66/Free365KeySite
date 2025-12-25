@@ -31,9 +31,13 @@ jobs:
           app_location: "/"
           api_location: "api"
           output_location: "dist"
+          # Use Node 20 for API functions (required by latest Azure SDK packages)
+          api_build_command: "npm install"
         env:
           # Pass environment variables to the build
           VITE_API_BASE_URL: ""
+          # Force Node 20 for API runtime
+          FUNCTIONS_WORKER_RUNTIME_VERSION: "~20"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
