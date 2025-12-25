@@ -171,7 +171,7 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
             onChange={handleChange}
           />
           <label htmlFor="agreeTerms">
-            I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a> *
+            I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> *
           </label>
         </div>
       </div>
