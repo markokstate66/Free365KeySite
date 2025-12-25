@@ -1,8 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// Plugin to make CSS non-blocking for better FCP
+const nonBlockingCss = () => ({
+  name: 'non-blocking-css',
+  transformIndexHtml(html) {
+    return html.replace(
+      /<link rel="stylesheet"([^>]*?)>/g,
+      '<link rel="stylesheet"$1 media="print" onload="this.media=\'all\'">'
+    )
+  }
+})
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), nonBlockingCss()],
   build: {
     outDir: 'dist',
     // Remove console.log/error in production for better performance and smaller bundles
