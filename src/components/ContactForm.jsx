@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function ContactForm() {
   const [formData, setFormData] = useState({
@@ -10,6 +10,15 @@ function ContactForm() {
     licenseCount: '',
     message: ''
   })
+
+  // Check URL params for pre-selected reason
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const reason = params.get('reason')
+    if (reason) {
+      setFormData(prev => ({ ...prev, reason }))
+    }
+  }, [])
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -160,6 +169,7 @@ function ContactForm() {
           required
         >
           <option value="">Select a reason...</option>
+          <option value="hire-expert">Hire an Expert</option>
           <option value="licensing">Licensing Inquiry</option>
           <option value="giveaway">Giveaway Question</option>
           <option value="legal">Legal</option>

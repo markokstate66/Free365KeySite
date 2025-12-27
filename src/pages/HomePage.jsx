@@ -203,7 +203,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="features contact-section" style={{ background: '#f8f9fa' }}>
+      <section id="contact" className="features contact-section" style={{ background: '#f8f9fa' }}>
         <h2>Need More Licenses?</h2>
         <div className="container" style={{ maxWidth: '600px' }}>
           <p style={{ fontSize: '1.1rem', marginBottom: '30px', color: '#666', textAlign: 'center' }}>

@@ -161,6 +161,30 @@ function ComparePage() {
         </div>
       </section>
 
+      <section className="content-section" style={{ background: 'linear-gradient(135deg, #0078d4 0%, #005a9e 100%)' }}>
+        <div className="container" style={{ textAlign: 'center', maxWidth: '700px' }}>
+          <h2 style={{ color: 'white', marginBottom: '15px' }}>Need Help Setting Up Microsoft 365?</h2>
+          <p style={{ marginBottom: '25px', color: 'rgba(255,255,255,0.9)', fontSize: '1.1rem', lineHeight: '1.7' }}>
+            Whether you need help with migration, configuration, training, or ongoing support,
+            our Microsoft-certified experts are here to help your business succeed.
+          </p>
+          <a
+            href="/?reason=hire-expert#contact"
+            className="submit-btn"
+            style={{
+              display: 'inline-block',
+              textDecoration: 'none',
+              maxWidth: '300px',
+              background: 'white',
+              color: '#0078d4',
+              fontWeight: '600'
+            }}
+          >
+            Hire an Expert
+          </a>
+        </div>
+      </section>
+
       <Footer />
     </div>
   )
