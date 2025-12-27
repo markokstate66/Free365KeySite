@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // Track events in Azure Application Insights
 const trackEvent = (name, properties = {}) => {
@@ -15,6 +15,8 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
   const [error, setError] = useState('')
   const [adToken, setAdToken] = useState(null)
   const [tokenError, setTokenError] = useState(false)
+  const adRef = useRef(null)
+  const adPushed = useRef(false)
 
   // Get secure token when modal opens
   useEffect(() => {
@@ -48,13 +50,36 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
     }
   }, [timeLeft])
 
-  // Try to load AdSense ad
+  // Load AdSense ad with retry logic
   useEffect(() => {
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({})
-    } catch (e) {
-      console.log('Ad load error:', e)
+    const pushAd = () => {
+      if (adPushed.current) return true
+      if (adRef.current && window.adsbygoogle) {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({})
+          adPushed.current = true
+          return true
+        } catch (e) {
+          console.log('Ad push error:', e)
+        }
+      }
+      return false
     }
+
+    // Try immediately
+    if (pushAd()) return
+
+    // Retry every 500ms until ad loads or 5 seconds pass
+    let attempts = 0
+    const maxAttempts = 10
+    const interval = setInterval(() => {
+      attempts++
+      if (pushAd() || attempts >= maxAttempts) {
+        clearInterval(interval)
+      }
+    }, 500)
+
+    return () => clearInterval(interval)
   }, [])
 
   const handleClaim = async () => {
@@ -103,6 +128,7 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
             <div className="rewarded-ad-content">
               {/* FreeEntries - Manual ad for bonus entries */}
               <ins
+                ref={adRef}
                 className="adsbygoogle"
                 style={{ display: 'block', width: '100%', minHeight: '250px' }}
                 data-ad-client="ca-pub-6676281664229738"
