@@ -139,9 +139,9 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
           </>
         ) : (
           <div className="reward-success">
-            <div className="success-icon">+1</div>
-            <h3>Bonus Entry Added!</h3>
-            <p>You now have an extra chance to win!</p>
+            <div className="success-icon">+2</div>
+            <h3>Bonus Entries Added!</h3>
+            <p>You now have 2 extra chances to win!</p>
             <button className="submit-btn" onClick={onClose}>
               Continue
             </button>
