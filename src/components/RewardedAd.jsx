@@ -101,12 +101,12 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
             </div>
 
             <div className="rewarded-ad-content">
-              {/* BigOleAd - Full width responsive */}
+              {/* FreeEntries - Manual ad for bonus entries */}
               <ins
                 className="adsbygoogle"
                 style={{ display: 'block', width: '100%', minHeight: '250px' }}
                 data-ad-client="ca-pub-6676281664229738"
-                data-ad-slot="3397395853"
+                data-ad-slot="1875767919"
                 data-ad-format="auto"
                 data-full-width-responsive="true"
               />
