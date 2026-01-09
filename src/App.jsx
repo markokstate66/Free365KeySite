@@ -1,6 +1,17 @@
-import { useEffect, lazy, Suspense } from 'react'
+import { useEffect, useRef, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { initAnalytics, trackPageView, initScrollTracking, resetSectionTracking } from './utils/analytics'
+
+// Signal AdSense for vignette ads on SPA navigation
+const triggerVignetteAd = () => {
+  try {
+    if (window.adsbygoogle) {
+      window.adsbygoogle.push({})
+    }
+  } catch (e) {
+    // AdSense not ready or ad blocker present
+  }
+}
 
 // Critical pages - loaded immediately
 import HomePage from './pages/HomePage'
@@ -31,6 +42,7 @@ const PageLoader = () => (
 
 function App() {
   const location = useLocation()
+  const isFirstRender = useRef(true)
 
   // Initialize analytics on mount
   useEffect(() => {
@@ -38,11 +50,18 @@ function App() {
     return cleanup
   }, [])
 
-  // Track page views on route change
+  // Track page views and trigger vignette ads on route change
   useEffect(() => {
     trackPageView(document.title, location.pathname)
     initScrollTracking()
     resetSectionTracking()
+
+    // Trigger vignette ad on SPA navigation (skip first render - that's a real page load)
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+    } else {
+      triggerVignetteAd()
+    }
   }, [location.pathname])
 
   return (
