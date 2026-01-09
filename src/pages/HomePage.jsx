@@ -1,44 +1,18 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
-
-// Track events in Azure Application Insights
-const trackEvent = (name, properties = {}) => {
-  if (window.appInsights) {
-    window.appInsights.trackEvent({ name, properties })
-  }
-}
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
-import RewardedAd from '../components/RewardedAd'
 import SEO from '../components/SEO'
 
 function HomePage() {
-  const [searchParams] = useSearchParams()
-  const referredBy = searchParams.get('ref') || ''
-
   const [registered, setRegistered] = useState(false)
   const [registrationData, setRegistrationData] = useState(null)
-  const [showRewardedAd, setShowRewardedAd] = useState(false)
-  const [totalEntries, setTotalEntries] = useState(0)
-  const [activeAdCount, setActiveAdCount] = useState(0)
-  const [isReturningUser, setIsReturningUser] = useState(false)
   const [resendStatus, setResendStatus] = useState(null) // null, 'sending', 'sent', 'error'
-  const [referralCode, setReferralCode] = useState('')
-  const [referralCount, setReferralCount] = useState(0)
-  const [referralEntries, setReferralEntries] = useState(0)
-  const [copied, setCopied] = useState(false)
 
   const handleSuccess = (data) => {
     setRegistered(true)
     setRegistrationData(data)
-    setTotalEntries(data.totalEntries || 0)
-    setActiveAdCount(data.adCount || 0)
-    setReferralCode(data.referralCode || '')
-    setReferralCount(data.referralCount || 0)
-    setReferralEntries(data.referralEntries || 0)
-    setIsReturningUser(false)
   }
 
   const handleAlreadyRegistered = async (email) => {
@@ -54,24 +28,9 @@ function HomePage() {
         const data = await response.json()
         setRegistered(true)
         setRegistrationData(data)
-        setTotalEntries(data.totalEntries || 0)
-        setActiveAdCount(data.adCount || 0)
-        setReferralCode(data.referralCode || '')
-        setReferralCount(data.referralCount || 0)
-        setReferralEntries(data.referralEntries || 0)
-        setIsReturningUser(true)
       }
     } catch (err) {
       console.error('Lookup error:', err)
-    }
-  }
-
-  const handleBonusComplete = (data) => {
-    if (data.totalEntries !== undefined) {
-      setTotalEntries(data.totalEntries)
-    }
-    if (data.adCount !== undefined) {
-      setActiveAdCount(data.adCount)
     }
   }
 
@@ -166,7 +125,7 @@ function HomePage() {
                   <p style={{ marginBottom: '20px', color: 'rgba(255,255,255,0.8)', textAlign: 'center', fontSize: '0.95rem' }}>
                     Enter to win a free Microsoft 365 Business Basic license. Winners drawn monthly!
                   </p>
-                  <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} referredBy={referredBy} />
+                  <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} />
                 </>
               ) : (
                 <div style={{ textAlign: 'center' }}>
@@ -174,30 +133,20 @@ function HomePage() {
                     {registrationData?.isVerified ? `You're In, ${registrationData?.firstName}!` : 'Almost There!'}
                   </h3>
                   {!registrationData?.isVerified ? (
-                    <p style={{ margin: '0 0 20px 0', fontSize: '0.95rem' }}>
-                      <span style={{ color: '#fbbf24' }}>Check your email</span> to verify and unlock 5 entries
+                    <p style={{ margin: '0', fontSize: '0.95rem' }}>
+                      <span style={{ color: '#fbbf24' }}>Check your email</span> to verify your registration
                       {resendStatus !== 'sent' && (
-                        <button onClick={() => { trackEvent('Verification_ResendClicked'); handleResendVerification() }} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
+                        <button onClick={() => handleResendVerification()} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
                           {resendStatus === 'sending' ? '...' : 'resend'}
                         </button>
                       )}
                       {resendStatus === 'sent' && <span style={{ color: '#4ade80', marginLeft: '8px' }}>Sent!</span>}
                     </p>
                   ) : (
-                    <p style={{ margin: '0 0 20px 0', fontSize: '1.1rem' }}>
-                      <strong>{totalEntries} entries</strong> in the drawing
+                    <p style={{ margin: '0', fontSize: '1rem', color: 'rgba(255,255,255,0.9)' }}>
+                      You're entered in all future monthly drawings. Winners are notified by email on the 1st of each month. Good luck!
                     </p>
                   )}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <button onClick={() => { trackEvent('Ad_WatchClicked'); setShowRewardedAd(true) }} style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
-                      Watch Ad for +2 Entries
-                    </button>
-                    {referralCode && (
-                      <button onClick={async () => { trackEvent('Referral_LinkCopied'); await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`); setCopied(true); setTimeout(() => setCopied(false), 2000) }} style={{ background: copied ? '#10b981' : '#6366f1', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
-                        {copied ? 'Link Copied!' : 'Copy Referral Link for +10'}
-                      </button>
-                    )}
-                  </div>
                 </div>
               )}
             </div>
@@ -246,20 +195,12 @@ function HomePage() {
           <p style={{ fontSize: '0.85rem', color: '#666', lineHeight: '1.6' }}>
             *Giveaway is limited to US residents only. Prize is a free 30-day Microsoft 365 license for 1 user.
             Winner must join our Cloud Solution Provider (CSP) reseller network to receive their license.
-            No purchase necessary. Void where prohibited. <strong>Base registration never expires. Bonus entries from watching ads are valid for 3 monthly drawings. Winners are drawn on the 1st of each month.</strong> See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
+            No purchase necessary. Void where prohibited. <strong>Winners are drawn on the 1st of each month.</strong> See <a href="/terms" style={{ color: '#6366f1' }}>Terms & Conditions</a> for full details.
           </p>
         </div>
       </section>
 
       <Footer />
-
-      {showRewardedAd && registrationData && (
-        <RewardedAd
-          registrationId={registrationData.id}
-          onComplete={handleBonusComplete}
-          onClose={() => setShowRewardedAd(false)}
-        />
-      )}
     </div>
   )
 }

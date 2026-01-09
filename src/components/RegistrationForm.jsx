@@ -7,7 +7,7 @@ const trackEvent = (name, properties = {}) => {
   }
 }
 
-function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
+function RegistrationForm({ onSuccess, onAlreadyRegistered }) {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -49,7 +49,6 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
         },
         body: JSON.stringify({
           ...formData,
-          referredBy: referredBy || '',
           registeredAt: new Date().toISOString()
         })
       })
@@ -68,7 +67,6 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
       }
 
       trackEvent('Registration_Completed', {
-        hasReferral: !!referredBy,
         joinedNewsletter: formData.joinNewsletter
       })
       onSuccess(data)
