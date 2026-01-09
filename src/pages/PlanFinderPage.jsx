@@ -495,7 +495,7 @@ function PlanFinderPage() {
       <section className="content-section" style={{ background: '#f8f9fa' }}>
         <div className="container" style={{ maxWidth: '800px' }}>
           <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>Why Use This Tool?</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '25px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '25px' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>🎯</div>
               <h3 style={{ marginBottom: '10px' }}>Personalized Recommendation</h3>
