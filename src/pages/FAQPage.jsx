@@ -9,28 +9,16 @@ const faqs = [
     answer: 'Yes! There is absolutely no cost to enter. We monetize through advertisements on our website, which allows us to give away genuine Microsoft 365 subscriptions to our winners.'
   },
   {
-    question: 'How does the entry system work?',
-    answer: 'After registering and verifying your email, you receive 5 base entries. You can earn bonus entries by watching ads (+2 entries each, valid for 3 drawings) or by referring friends (+10 entries each, valid for 6 drawings). The more entries you have, the higher your chances of winning!'
+    question: 'How do I enter?',
+    answer: 'Simply register with your name, email address, and phone number, then verify your email. Once verified, you are automatically entered into all future monthly drawings.'
   },
   {
     question: 'Do I need to verify my email?',
-    answer: 'Yes! Email verification is required to be eligible for the drawing. Unverified registrations have 0 entries. Once verified, you automatically receive 5 base entries that never expire.'
-  },
-  {
-    question: 'How do bonus entries work?',
-    answer: 'Each ad you watch earns you 2 bonus entries. These bonus entries are valid for the next 3 monthly drawings from when you watched the ad. You can return anytime to watch more ads and increase your chances.'
-  },
-  {
-    question: 'How does the referral program work?',
-    answer: 'After registering, you get a unique referral link to share with friends. When someone signs up using your link and verifies their email, you earn +10 bonus entries! Referral entries are valid for 6 monthly drawings. Share on Twitter, Facebook, LinkedIn, or email directly from your dashboard.'
+    answer: 'Yes! Email verification is required to be eligible for the drawing. Unverified registrations are not included in the drawing. Once verified, your registration remains valid for all future drawings.'
   },
   {
     question: 'How often are winners selected?',
-    answer: 'We conduct drawings on the 1st of every month. One winner is selected using a weighted random selection based on total entries. Winners are notified directly via email.'
-  },
-  {
-    question: 'How do you select winners?',
-    answer: 'Winners are selected through a weighted random drawing. The more valid entries you have (base + ad bonus + referral bonus), the higher your chances of winning. For example, someone with 25 entries (5 base + 10 from ads + 10 from a referral) has 5x the chance of winning compared to someone with just 5 base entries.'
+    answer: 'We conduct drawings on the 1st of every month. One winner is randomly selected from all verified registrations. Winners are notified directly via email.'
   },
   {
     question: 'What do winners receive?',
@@ -102,7 +90,7 @@ function FAQPage() {
             Can't find the answer you're looking for? Feel free to reach out to us.
           </p>
           <a
-            href="/#contact"
+            href="/licensing-guides#contact"
             className="submit-btn"
             style={{ display: 'inline-block', textDecoration: 'none', maxWidth: '300px' }}
           >
