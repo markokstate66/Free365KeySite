@@ -22,85 +22,20 @@ module.exports = async function (context, req) {
     }
 
     const tableClient = await getTableClient();
-    const bonusClient = await getTableClient("bonusentries");
-    const referralsClient = await getTableClient("referrals");
     const now = new Date();
-
-    // Current drawing cycle (this month's drawing since we run on 1st)
     const currentDrawingCycle = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     context.log(`Running drawing for cycle: ${currentDrawingCycle}`);
 
-    // Get all eligible registrations (verified, not won - base entry never expires)
+    // Get all eligible registrations (verified, not won)
+    // Simple: 1 entry per verified person, lasts forever
     const eligibleEntries = [];
     const registrations = tableClient.listEntities({
       queryOptions: { filter: `isWinner eq false and isVerified eq true` }
     });
 
     for await (const reg of registrations) {
-      // Count ads valid for this drawing
-      let adWatchCount = 0;
-      const bonuses = bonusClient.listEntities({
-        queryOptions: { filter: `registrationId eq '${reg.rowKey}'` }
-      });
-
-      for await (const bonus of bonuses) {
-        // Count ads valid for this drawing cycle
-        const validUntil = bonus.validUntilDrawing;
-        if (validUntil && validUntil >= currentDrawingCycle) {
-          adWatchCount++;
-        } else if (!validUntil) {
-          // Legacy entries without validUntilDrawing - check by date (90 days)
-          const earnedAt = bonus.earnedAt || bonus.claimedAt;
-          const cutoff = new Date(now);
-          cutoff.setDate(cutoff.getDate() - 90);
-          if (earnedAt && earnedAt >= cutoff.toISOString()) {
-            adWatchCount++;
-          }
-        }
-      }
-
-      // Count referrals valid for this drawing (6 drawings)
-      let referralWeight = 0;
-      let referralCount = 0;
-      try {
-        const referrals = referralsClient.listEntities({
-          queryOptions: { filter: `referrerId eq '${reg.rowKey}'` }
-        });
-
-        for await (const referral of referrals) {
-          const validUntil = referral.validUntilDrawing;
-          if (validUntil && validUntil >= currentDrawingCycle) {
-            referralCount++;
-            referralWeight += (referral.entries || 10);
-          } else if (!validUntil) {
-            // Legacy entries - check by date (180 days for 6 months)
-            const earnedAt = referral.earnedAt;
-            const cutoff = new Date(now);
-            cutoff.setDate(cutoff.getDate() - 180);
-            if (earnedAt && earnedAt >= cutoff.toISOString()) {
-              referralCount++;
-              referralWeight += (referral.entries || 10);
-            }
-          }
-        }
-      } catch (refErr) {
-        // If referrals table doesn't exist, use legacy stored value
-        referralWeight = reg.referralEntries || 0;
-        referralCount = reg.referralCount || 0;
-      }
-
-      // Weighting: verified = 5 base entries, each ad = 2 entries, referrals = 10 each
-      const baseWeight = 5;
-      const adWeight = adWatchCount * 2;
-      const totalWeight = baseWeight + adWeight + referralWeight;
       eligibleEntries.push({
-        registration: reg,
-        adWatchCount,
-        referralCount,
-        baseWeight,
-        adWeight,
-        referralWeight,
-        totalWeight
+        registration: reg
       });
     }
 
@@ -116,17 +51,9 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Create weighted pool for random selection
-    const weightedPool = [];
-    for (const entry of eligibleEntries) {
-      for (let i = 0; i < entry.totalWeight; i++) {
-        weightedPool.push(entry);
-      }
-    }
-
-    // Random selection
-    const randomIndex = Math.floor(Math.random() * weightedPool.length);
-    const winner = weightedPool[randomIndex];
+    // Simple random selection - each person has equal chance
+    const randomIndex = Math.floor(Math.random() * eligibleEntries.length);
+    const winner = eligibleEntries[randomIndex];
 
     // Mark as winner in database
     const updatedEntity = {
@@ -145,12 +72,6 @@ module.exports = async function (context, req) {
       phone: winner.registration.phone,
       companyName: winner.registration.companyName,
       registeredAt: winner.registration.registeredAt,
-      adWatchCount: winner.adWatchCount,
-      referralCount: winner.referralCount,
-      baseWeight: winner.baseWeight,
-      adWeight: winner.adWeight,
-      referralWeight: winner.referralWeight,
-      totalEntries: winner.totalWeight,
       wonAt: updatedEntity.wonAt
     };
 
@@ -168,17 +89,12 @@ module.exports = async function (context, req) {
             <tr><td style="padding: 8px 0; font-weight: bold;">Phone:</td><td>${winnerInfo.phone}</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Company:</td><td>${winnerInfo.companyName || 'N/A'}</td></tr>
             <tr><td style="padding: 8px 0; font-weight: bold;">Registered:</td><td>${new Date(winnerInfo.registeredAt).toLocaleDateString()}</td></tr>
-            <tr><td style="padding: 8px 0; font-weight: bold;">Base Weight:</td><td>${winnerInfo.baseWeight} (verified email)</td></tr>
-            <tr><td style="padding: 8px 0; font-weight: bold;">Ads Watched:</td><td>${winnerInfo.adWatchCount} (${winnerInfo.adWeight} entries)</td></tr>
-            <tr><td style="padding: 8px 0; font-weight: bold;">Referrals:</td><td>${winnerInfo.referralCount} (${winnerInfo.referralWeight} entries)</td></tr>
-            <tr><td style="padding: 8px 0; font-weight: bold;">Total Entries:</td><td>${winnerInfo.totalEntries}</td></tr>
           </table>
         </div>
 
         <div style="background: #e0e7ff; padding: 20px; border-radius: 8px;">
           <h3 style="margin-top: 0;">Drawing Statistics</h3>
           <p>Total eligible participants: ${eligibleEntries.length}</p>
-          <p>Total entries in pool: ${weightedPool.length}</p>
           <p>Drawing date: ${new Date().toLocaleString()}</p>
         </div>
 
@@ -205,8 +121,7 @@ module.exports = async function (context, req) {
         success: true,
         winner: winnerInfo,
         stats: {
-          eligibleParticipants: eligibleEntries.length,
-          totalEntriesInPool: weightedPool.length
+          eligibleParticipants: eligibleEntries.length
         }
       }
     };
