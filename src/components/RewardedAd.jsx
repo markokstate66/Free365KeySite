@@ -1,4 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+
+// GAM Ad Unit configuration
+const GAM_NETWORK_ID = '23334104956'
+const GAM_AD_UNIT_CODE = 'free365key_rewards'
 
 // Track events in Azure Application Insights
 const trackEvent = (name, properties = {}) => {
@@ -7,171 +11,315 @@ const trackEvent = (name, properties = {}) => {
   }
 }
 
-function RewardedAd({ registrationId, onComplete, onClose }) {
-  const [timeLeft, setTimeLeft] = useState(30)
-  const [canClaim, setCanClaim] = useState(false)
-  const [claiming, setClaiming] = useState(false)
-  const [claimed, setClaimed] = useState(false)
-  const [error, setError] = useState('')
-  const [adToken, setAdToken] = useState(null)
-  const [tokenError, setTokenError] = useState(false)
-  const adRef = useRef(null)
-  const adPushed = useRef(false)
-
-  // Get secure token when modal opens
-  useEffect(() => {
-    const getToken = async () => {
-      try {
-        const response = await fetch('/api/start-ad-watch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ registrationId })
-        })
-        if (response.ok) {
-          const data = await response.json()
-          setAdToken(data.token)
-        } else {
-          setTokenError(true)
-        }
-      } catch (err) {
-        console.error('Token error:', err)
-        setTokenError(true)
-      }
-    }
-    getToken()
-  }, [registrationId])
-
-  useEffect(() => {
-    if (timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
-      return () => clearTimeout(timer)
-    } else {
-      setCanClaim(true)
-    }
-  }, [timeLeft])
-
-  // Load AdSense ad with retry logic
-  useEffect(() => {
-    const pushAd = () => {
-      if (adPushed.current) return true
-      if (adRef.current && window.adsbygoogle) {
-        try {
-          (window.adsbygoogle = window.adsbygoogle || []).push({})
-          adPushed.current = true
-          return true
-        } catch (e) {
-          console.log('Ad push error:', e)
-        }
-      }
-      return false
-    }
-
-    // Try immediately
-    if (pushAd()) return
-
-    // Retry every 500ms until ad loads or 5 seconds pass
-    let attempts = 0
-    const maxAttempts = 10
-    const interval = setInterval(() => {
-      attempts++
-      if (pushAd() || attempts >= maxAttempts) {
-        clearInterval(interval)
-      }
-    }, 500)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const handleClaim = async () => {
-    if (!adToken) {
-      setError('Session error - please close and try again')
+// Load IMA SDK script
+const loadImaScript = () => {
+  return new Promise((resolve, reject) => {
+    if (window.google?.ima) {
+      resolve()
       return
     }
 
-    setClaiming(true)
-    setError('')
+    const script = document.createElement('script')
+    script.src = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js'
+    script.async = true
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error('Failed to load IMA SDK'))
+    document.head.appendChild(script)
+  })
+}
 
-    try {
-      const response = await fetch('/api/bonus-entry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ registrationId, token: adToken })
-      })
+function RewardedAd({ registrationId, onComplete, onClose }) {
+  const [adState, setAdState] = useState('loading') // loading, ready, playing, completed, error
+  const [error, setError] = useState('')
+  const [adProgress, setAdProgress] = useState(0)
+  const [adDuration, setAdDuration] = useState(0)
 
-      const data = await response.json()
+  const videoRef = useRef(null)
+  const adContainerRef = useRef(null)
+  const adsLoaderRef = useRef(null)
+  const adsManagerRef = useRef(null)
+  const adDisplayContainerRef = useRef(null)
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to claim bonus entry')
+  // Build the VAST tag URL for GAM rewarded ads
+  const getAdTagUrl = useCallback(() => {
+    const customData = encodeURIComponent(JSON.stringify({ registrationId }))
+    const correlator = Date.now()
+    const descriptionUrl = encodeURIComponent(window.location.href)
+
+    return `https://pubads.g.doubleclick.net/gampad/ads?` +
+      `iu=/${GAM_NETWORK_ID}/${GAM_AD_UNIT_CODE}` +
+      `&description_url=${descriptionUrl}` +
+      `&tfcd=0` +
+      `&npa=0` +
+      `&sz=400x300` +
+      `&gdfp_req=1` +
+      `&output=vast` +
+      `&unviewed_position_start=1` +
+      `&env=vp` +
+      `&impl=s` +
+      `&correlator=${correlator}` +
+      `&cust_params=custom_data%3D${customData}`
+  }, [registrationId])
+
+  // Initialize IMA SDK and request ad
+  useEffect(() => {
+    let isMounted = true
+
+    const initializeAds = async () => {
+      try {
+        await loadImaScript()
+        if (!isMounted) return
+
+        const google = window.google
+
+        // Create ad display container
+        adDisplayContainerRef.current = new google.ima.AdDisplayContainer(
+          adContainerRef.current,
+          videoRef.current
+        )
+
+        // Create ads loader
+        adsLoaderRef.current = new google.ima.AdsLoader(adDisplayContainerRef.current)
+
+        // Listen for ads manager loaded
+        adsLoaderRef.current.addEventListener(
+          google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
+          (event) => {
+            if (!isMounted) return
+
+            const adsRenderingSettings = new google.ima.AdsRenderingSettings()
+            adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true
+
+            adsManagerRef.current = event.getAdsManager(videoRef.current, adsRenderingSettings)
+
+            // Add event listeners
+            adsManagerRef.current.addEventListener(google.ima.AdEvent.Type.LOADED, () => {
+              if (isMounted) setAdState('ready')
+            })
+
+            adsManagerRef.current.addEventListener(google.ima.AdEvent.Type.STARTED, () => {
+              if (isMounted) {
+                setAdState('playing')
+                trackEvent('Ad_Started')
+              }
+            })
+
+            adsManagerRef.current.addEventListener(google.ima.AdEvent.Type.AD_PROGRESS, (e) => {
+              if (isMounted) {
+                const adData = e.getAdData()
+                setAdProgress(adData.currentTime || 0)
+                setAdDuration(adData.duration || 0)
+              }
+            })
+
+            adsManagerRef.current.addEventListener(google.ima.AdEvent.Type.COMPLETE, () => {
+              if (isMounted) {
+                setAdState('completed')
+                trackEvent('Ad_WatchCompleted')
+                // SSV callback will be triggered server-side by Google
+                // We show success and call onComplete
+                if (onComplete) {
+                  onComplete({ success: true, message: 'Ad completed - reward pending verification' })
+                }
+              }
+            })
+
+            adsManagerRef.current.addEventListener(google.ima.AdEvent.Type.SKIPPED, () => {
+              if (isMounted) {
+                trackEvent('Ad_Skipped')
+                onClose()
+              }
+            })
+
+            adsManagerRef.current.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, (e) => {
+              if (isMounted) {
+                console.error('Ad error:', e.getError())
+                setError('Ad failed to load. Please try again.')
+                setAdState('error')
+                trackEvent('Ad_Error', { error: e.getError().toString() })
+              }
+            })
+
+            // Initialize and start
+            try {
+              adsManagerRef.current.init(400, 300, google.ima.ViewMode.NORMAL)
+            } catch (initError) {
+              console.error('AdsManager init error:', initError)
+              setError('Failed to initialize ad')
+              setAdState('error')
+            }
+          },
+          false
+        )
+
+        // Listen for ad errors
+        adsLoaderRef.current.addEventListener(
+          google.ima.AdErrorEvent.Type.AD_ERROR,
+          (event) => {
+            if (!isMounted) return
+            console.error('AdsLoader error:', event.getError())
+            setError('No ads available. Please try again later.')
+            setAdState('error')
+            trackEvent('Ad_LoadError', { error: event.getError().toString() })
+          },
+          false
+        )
+
+        // Request ads
+        const adsRequest = new google.ima.AdsRequest()
+        adsRequest.adTagUrl = getAdTagUrl()
+        adsRequest.linearAdSlotWidth = 400
+        adsRequest.linearAdSlotHeight = 300
+
+        adsLoaderRef.current.requestAds(adsRequest)
+        trackEvent('Ad_Requested')
+
+      } catch (err) {
+        if (isMounted) {
+          console.error('IMA initialization error:', err)
+          setError('Failed to load video ad system')
+          setAdState('error')
+        }
       }
+    }
 
-      setClaimed(true)
-      setAdToken(null) // Clear token after use
-      trackEvent('Ad_WatchCompleted')
-      if (onComplete) onComplete(data)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setClaiming(false)
+    initializeAds()
+
+    return () => {
+      isMounted = false
+      if (adsManagerRef.current) {
+        adsManagerRef.current.destroy()
+      }
+      if (adsLoaderRef.current) {
+        adsLoaderRef.current.destroy()
+      }
+    }
+  }, [getAdTagUrl, onComplete, onClose])
+
+  // Start playing the ad
+  const playAd = () => {
+    if (adDisplayContainerRef.current && adsManagerRef.current) {
+      adDisplayContainerRef.current.initialize()
+      try {
+        adsManagerRef.current.start()
+      } catch (e) {
+        console.error('AdsManager start error:', e)
+        setError('Failed to start ad')
+        setAdState('error')
+      }
     }
   }
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = Math.floor(seconds % 60)
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const remainingTime = Math.max(0, adDuration - adProgress)
 
   return (
     <div className="rewarded-ad-overlay">
       <div className="rewarded-ad-modal">
-        {!claimed ? (
-          <>
-            <div className="rewarded-ad-header">
-              <h3>Watch Ad for Bonus Entry!</h3>
-              <p>View this sponsored content to earn an extra entry into the giveaway.</p>
-            </div>
-
-            <div className="rewarded-ad-content">
-              {/* FreeEntries - Manual ad for bonus entries */}
-              <ins
-                ref={adRef}
-                className="adsbygoogle"
-                style={{ display: 'block', width: '100%', minHeight: '250px' }}
-                data-ad-client="ca-pub-6676281664229738"
-                data-ad-slot="1875767919"
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-              />
-            </div>
-
-            <div className="rewarded-ad-footer">
-              {!canClaim ? (
-                <div className="countdown">
-                  <div className="countdown-circle">
-                    <span>{timeLeft}</span>
-                  </div>
-                  <p>Please wait {timeLeft} seconds...</p>
-                </div>
-              ) : (
-                <>
-                  {error && <div className="error-message" style={{ marginBottom: '10px' }}>{error}</div>}
-                  <button
-                    className="submit-btn claim-btn"
-                    onClick={handleClaim}
-                    disabled={claiming}
-                  >
-                    {claiming ? 'Claiming...' : 'Claim Bonus Entry!'}
-                  </button>
-                </>
-              )}
-              <button className="skip-btn" onClick={() => { trackEvent('Ad_Skipped', { timeRemaining: timeLeft, couldClaim: canClaim }); onClose() }}>
-                {canClaim ? 'Close' : 'Skip'}
-              </button>
-            </div>
-          </>
-        ) : (
+        {adState === 'completed' ? (
           <div className="reward-success">
             <div className="success-icon">+2</div>
             <h3>Bonus Entries Added!</h3>
-            <p>You now have 2 extra chances to win!</p>
+            <p>You earned 2 extra chances to win!</p>
             <button className="submit-btn" onClick={onClose}>
               Continue
             </button>
           </div>
+        ) : (
+          <>
+            <div className="rewarded-ad-header">
+              <h3>Watch Video for Bonus Entry!</h3>
+              <p>Watch this short video to earn +2 bonus entries</p>
+            </div>
+
+            <div className="rewarded-ad-content">
+              {/* Video container for IMA SDK */}
+              <div
+                ref={adContainerRef}
+                className="ad-container"
+                style={{
+                  width: '100%',
+                  maxWidth: '400px',
+                  aspectRatio: '4/3',
+                  background: '#000',
+                  position: 'relative'
+                }}
+              >
+                <video
+                  ref={videoRef}
+                  style={{ width: '100%', height: '100%' }}
+                  playsInline
+                />
+              </div>
+
+              {/* Progress bar when playing */}
+              {adState === 'playing' && adDuration > 0 && (
+                <div className="ad-progress-container">
+                  <div
+                    className="ad-progress-bar"
+                    style={{ width: `${(adProgress / adDuration) * 100}%` }}
+                  />
+                  <span className="ad-time-remaining">
+                    {formatTime(remainingTime)} remaining
+                  </span>
+                </div>
+              )}
+
+              {/* Loading state */}
+              {adState === 'loading' && (
+                <div className="ad-loading">
+                  <div className="loading-spinner"></div>
+                  <p>Loading video ad...</p>
+                </div>
+              )}
+
+              {/* Error state */}
+              {adState === 'error' && (
+                <div className="ad-error">
+                  <p>{error}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="rewarded-ad-footer">
+              {adState === 'loading' && (
+                <p className="ad-status">Preparing your reward video...</p>
+              )}
+
+              {adState === 'ready' && (
+                <button className="submit-btn play-btn" onClick={playAd}>
+                  Play Video Ad
+                </button>
+              )}
+
+              {adState === 'playing' && (
+                <p className="ad-status">Watch until the end to claim your reward</p>
+              )}
+
+              {adState === 'error' && (
+                <button className="submit-btn" onClick={onClose}>
+                  Close
+                </button>
+              )}
+
+              {adState !== 'playing' && adState !== 'completed' && (
+                <button
+                  className="skip-btn"
+                  onClick={() => {
+                    trackEvent('Ad_Dismissed', { state: adState })
+                    onClose()
+                  }}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          </>
         )}
       </div>
 
@@ -193,7 +341,7 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
         .rewarded-ad-modal {
           background: white;
           border-radius: 16px;
-          max-width: 400px;
+          max-width: 450px;
           width: 100%;
           max-height: 90vh;
           overflow-y: auto;
@@ -220,13 +368,67 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
 
         .rewarded-ad-content {
           padding: 15px;
-          min-height: 400px;
+          min-height: 300px;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           background: #f8f9fa;
-          gap: 10px;
+          gap: 15px;
+        }
+
+        .ad-container {
+          border-radius: 8px;
+          overflow: hidden;
+        }
+
+        .ad-progress-container {
+          width: 100%;
+          max-width: 400px;
+          background: #e0e0e0;
+          border-radius: 4px;
+          height: 24px;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .ad-progress-bar {
+          height: 100%;
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+          transition: width 0.3s ease;
+        }
+
+        .ad-time-remaining {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 0.8rem;
+          font-weight: bold;
+          color: #333;
+        }
+
+        .ad-loading, .ad-error {
+          text-align: center;
+          color: #666;
+        }
+
+        .loading-spinner {
+          width: 40px;
+          height: 40px;
+          border: 4px solid #e0e0e0;
+          border-top-color: #6366f1;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        .ad-error p {
+          color: #dc2626;
         }
 
         .rewarded-ad-footer {
@@ -235,32 +437,13 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
           border-top: 1px solid #eee;
         }
 
-        .countdown {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .countdown-circle {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          font-size: 1.5rem;
-          font-weight: bold;
-        }
-
-        .countdown p {
-          margin: 0;
+        .ad-status {
+          margin: 0 0 10px 0;
           color: #666;
+          font-size: 0.9rem;
         }
 
-        .claim-btn {
+        .play-btn {
           animation: pulse 2s infinite;
         }
 
