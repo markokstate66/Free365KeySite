@@ -4,6 +4,18 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 const GAM_NETWORK_ID = '23334104956'
 const GAM_AD_UNIT_CODE = 'free365key_rewards'
 
+// Google's sample VAST tag for testing (always returns an ad)
+const TEST_AD_TAG = 'https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_preroll_skippable&sz=640x480&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator='
+
+// Check for test mode via URL parameter: ?testAd=true
+const isTestMode = () => {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('testAd') === 'true'
+  }
+  return false
+}
+
 // Track events in Azure Application Insights
 const trackEvent = (name, properties = {}) => {
   if (window.appInsights) {
@@ -42,6 +54,12 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
 
   // Build the VAST tag URL for GAM rewarded ads
   const getAdTagUrl = useCallback(() => {
+    // Use test ad tag if ?testAd=true is in URL
+    if (isTestMode()) {
+      console.log('[RewardedAd] Using TEST ad tag')
+      return TEST_AD_TAG + Date.now()
+    }
+
     const customData = encodeURIComponent(JSON.stringify({ registrationId }))
     const correlator = Date.now()
     const descriptionUrl = encodeURIComponent(window.location.href)
