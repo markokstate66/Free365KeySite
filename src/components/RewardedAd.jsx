@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 
 // GAM Ad Unit configuration
-const GAM_NETWORK_ID = '23334104956'
+const GAM_NETWORK_ID = '23334346660'
 const GAM_AD_UNIT_CODE = 'free365key_rewards'
 
 // Google's sample VAST tag for testing (always returns an ad)
