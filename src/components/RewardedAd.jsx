@@ -27,15 +27,30 @@ const trackEvent = (name, properties = {}) => {
 const loadImaScript = () => {
   return new Promise((resolve, reject) => {
     if (window.google?.ima) {
+      console.log('[RewardedAd] IMA SDK already loaded')
       resolve()
       return
     }
 
+    console.log('[RewardedAd] Loading IMA SDK...')
     const script = document.createElement('script')
     script.src = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js'
     script.async = true
-    script.onload = () => resolve()
-    script.onerror = () => reject(new Error('Failed to load IMA SDK'))
+    script.onload = () => {
+      console.log('[RewardedAd] IMA SDK loaded successfully')
+      // Give the SDK a moment to initialize
+      setTimeout(() => {
+        if (window.google?.ima) {
+          resolve()
+        } else {
+          reject(new Error('IMA SDK loaded but not initialized'))
+        }
+      }, 100)
+    }
+    script.onerror = (e) => {
+      console.error('[RewardedAd] Failed to load IMA SDK script:', e)
+      reject(new Error('Failed to load IMA SDK - check if ad blocker is enabled'))
+    }
     document.head.appendChild(script)
   })
 }
@@ -194,8 +209,11 @@ function RewardedAd({ registrationId, onComplete, onClose }) {
 
       } catch (err) {
         if (isMounted) {
-          console.error('IMA initialization error:', err)
-          setError('Failed to load video ad system')
+          console.error('[RewardedAd] IMA initialization error:', err)
+          const errorMsg = err.message?.includes('ad blocker')
+            ? 'Please disable your ad blocker to watch video ads'
+            : 'Failed to load video ad system. Please try again.'
+          setError(errorMsg)
           setAdState('error')
         }
       }
