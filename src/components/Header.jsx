@@ -24,7 +24,7 @@ function Header() {
           <Link to="/plan-finder" onClick={() => setMenuOpen(false)}>Plan Finder</Link>
           <Link to="/compare" onClick={() => setMenuOpen(false)}>Direct vs CSP</Link>
           <Link to="/giveaway/faq" onClick={() => setMenuOpen(false)}>Giveaway FAQ</Link>
-          <Link to="/" onClick={() => setMenuOpen(false)} style={{ background: 'rgba(255,255,255,0.15)', padding: '8px 16px', borderRadius: '6px' }}>Free Giveaway</Link>
+          <Link to="/" onClick={() => setMenuOpen(false)} style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: '8px 16px', borderRadius: '6px', marginTop: '-8px', marginBottom: '-8px' }}>Free Giveaway</Link>
         </nav>
       </div>
     </header>
