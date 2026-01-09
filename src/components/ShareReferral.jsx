@@ -6,7 +6,6 @@ function ShareReferral({ referralCode, referralCount, referralEntries }) {
   const [copied, setCopied] = useState(false)
 
   const referralLink = `${SITE_URL}/?ref=${referralCode}`
-  const shareText = "Enter for a chance to win a FREE Microsoft 365 license! No purchase necessary."
 
   const handleCopy = async () => {
     try {
@@ -16,13 +15,6 @@ function ShareReferral({ referralCode, referralCount, referralEntries }) {
     } catch (err) {
       console.error('Failed to copy:', err)
     }
-  }
-
-  const shareLinks = {
-    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(referralLink)}`,
-    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}`,
-    linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`,
-    email: `mailto:?subject=${encodeURIComponent('Free Microsoft 365 Giveaway')}&body=${encodeURIComponent(`${shareText}\n\n${referralLink}`)}`
   }
 
   return (
@@ -98,77 +90,6 @@ function ShareReferral({ referralCode, referralCount, referralEntries }) {
         >
           {copied ? 'Copied!' : 'Copy'}
         </button>
-      </div>
-
-      {/* Social Share Buttons */}
-      <div style={{
-        display: 'flex',
-        gap: '10px',
-        justifyContent: 'center',
-        flexWrap: 'wrap'
-      }}>
-        <a
-          href={shareLinks.twitter}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            padding: '10px 16px',
-            borderRadius: '8px',
-            background: '#1DA1F2',
-            color: 'white',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '0.85rem'
-          }}
-        >
-          Twitter
-        </a>
-        <a
-          href={shareLinks.facebook}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            padding: '10px 16px',
-            borderRadius: '8px',
-            background: '#4267B2',
-            color: 'white',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '0.85rem'
-          }}
-        >
-          Facebook
-        </a>
-        <a
-          href={shareLinks.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            padding: '10px 16px',
-            borderRadius: '8px',
-            background: '#0077B5',
-            color: 'white',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '0.85rem'
-          }}
-        >
-          LinkedIn
-        </a>
-        <a
-          href={shareLinks.email}
-          style={{
-            padding: '10px 16px',
-            borderRadius: '8px',
-            background: '#666',
-            color: 'white',
-            textDecoration: 'none',
-            fontWeight: '600',
-            fontSize: '0.85rem'
-          }}
-        >
-          Email
-        </a>
       </div>
     </div>
   )
