@@ -65,6 +65,11 @@
       }
     },
     {
+      "route": "/faq",
+      "redirect": "/giveaway/faq",
+      "statusCode": 301
+    },
+    {
       "route": "/*",
       "serve": "/index.html",
       "statusCode": 200

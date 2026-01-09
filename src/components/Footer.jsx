@@ -9,7 +9,7 @@ function Footer() {
         <Link to="/licensing-guides">Licensing Guide</Link>
         <Link to="/plan-finder">Plan Finder</Link>
         <Link to="/compare">Direct vs CSP</Link>
-        <Link to="/faq">FAQ</Link>
+        <Link to="/giveaway/faq">Giveaway FAQ</Link>
         <Link to="/">Giveaway</Link>
         <Link to="/privacy">Privacy</Link>
         <Link to="/terms">Terms</Link>

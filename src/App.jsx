@@ -70,7 +70,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
-        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/giveaway/faq" element={<FAQPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />

@@ -72,8 +72,8 @@ function FAQPage() {
   return (
     <div>
       <SEO
-        title="FAQ"
-        path="/faq"
+        title="Giveaway FAQ"
+        path="/giveaway/faq"
         description="Frequently asked questions about our free Microsoft 365 giveaway. Learn about eligibility, entry system, prizes, and how winners are selected."
       />
       <Header />

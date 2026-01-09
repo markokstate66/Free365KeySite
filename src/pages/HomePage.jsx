@@ -135,9 +135,9 @@ function HomePage() {
               <h3 style={{ margin: '0 0 5px', fontSize: '1rem' }}>Direct vs CSP</h3>
               <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Compare buying options</p>
             </a>
-            <a href="/faq" style={{ background: 'white', padding: '20px', borderRadius: '12px', textDecoration: 'none', color: 'inherit', boxShadow: '0 2px 10px rgba(0,0,0,0.08)', textAlign: 'center', transition: 'transform 0.2s' }}>
+            <a href="/giveaway/faq" style={{ background: 'white', padding: '20px', borderRadius: '12px', textDecoration: 'none', color: 'inherit', boxShadow: '0 2px 10px rgba(0,0,0,0.08)', textAlign: 'center', transition: 'transform 0.2s' }}>
               <div style={{ fontSize: '2rem', marginBottom: '10px' }}>❓</div>
-              <h3 style={{ margin: '0 0 5px', fontSize: '1rem' }}>FAQ</h3>
+              <h3 style={{ margin: '0 0 5px', fontSize: '1rem' }}>Giveaway FAQ</h3>
               <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Common questions</p>
             </a>
           </div>
