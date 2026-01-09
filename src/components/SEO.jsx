@@ -3,10 +3,10 @@ import { Helmet } from 'react-helmet-async'
 const BASE_URL = 'https://www.free365key.com'
 
 const defaultSEO = {
-  title: 'Free Microsoft 365 Key Giveaway',
-  description: 'Register for a chance to win a FREE Microsoft 365 license key. Enter our giveaway today!',
+  title: 'Free365Key - Microsoft 365 Licensing Guide, Plan Finder & Resources',
+  description: 'Your complete Microsoft 365 resource hub. Compare Business Basic, Standard, and Premium plans. Use our Plan Finder tool to choose the right license. Plus enter our monthly free license giveaway!',
   image: `${BASE_URL}/og-image.png`,
-  imageAlt: 'Free365Key - Win a Free Microsoft 365 License'
+  imageAlt: 'Free365Key - Microsoft 365 Licensing Resources & Guides'
 }
 
 function SEO({ title, description, path = '/', noindex = false, image, imageAlt }) {
