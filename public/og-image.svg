@@ -10,13 +10,26 @@
   <rect width="1200" height="630" fill="url(#bg)"/>
 
   <!-- Main Title -->
-  <text x="600" y="250" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">Free365Key</text>
+  <text x="600" y="200" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">Free365Key</text>
 
   <!-- Subtitle -->
-  <text x="600" y="340" font-family="Arial, sans-serif" font-size="42" fill="rgba(255,255,255,0.95)" text-anchor="middle">Win a FREE Microsoft 365 License</text>
+  <text x="600" y="290" font-family="Arial, sans-serif" font-size="38" fill="rgba(255,255,255,0.95)" text-anchor="middle">Your Microsoft 365 Resource Hub</text>
+
+  <!-- Feature pills -->
+  <rect x="150" y="340" width="240" height="50" rx="25" fill="rgba(255,255,255,0.2)"/>
+  <text x="270" y="373" font-family="Arial, sans-serif" font-size="22" fill="white" text-anchor="middle">Licensing Guides</text>
+
+  <rect x="420" y="340" width="200" height="50" rx="25" fill="rgba(255,255,255,0.2)"/>
+  <text x="520" y="373" font-family="Arial, sans-serif" font-size="22" fill="white" text-anchor="middle">Plan Finder</text>
+
+  <rect x="650" y="340" width="240" height="50" rx="25" fill="rgba(255,255,255,0.2)"/>
+  <text x="770" y="373" font-family="Arial, sans-serif" font-size="22" fill="white" text-anchor="middle">Plan Comparison</text>
+
+  <rect x="920" y="340" width="230" height="50" rx="25" fill="rgba(255,255,255,0.2)"/>
+  <text x="1035" y="373" font-family="Arial, sans-serif" font-size="22" fill="white" text-anchor="middle">Free Giveaway</text>
 
   <!-- Tagline -->
-  <text x="600" y="420" font-family="Arial, sans-serif" font-size="28" fill="rgba(255,255,255,0.8)" text-anchor="middle">Monthly Giveaway - No Purchase Necessary</text>
+  <text x="600" y="470" font-family="Arial, sans-serif" font-size="26" fill="rgba(255,255,255,0.85)" text-anchor="middle">Compare plans, find the right license, and enter our monthly giveaway</text>
 
   <!-- Bottom URL -->
   <text x="600" y="560" font-family="Arial, sans-serif" font-size="24" fill="rgba(255,255,255,0.6)" text-anchor="middle">www.free365key.com</text>
