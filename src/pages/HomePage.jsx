@@ -12,7 +12,6 @@ import Footer from '../components/Footer'
 import RegistrationForm from '../components/RegistrationForm'
 import Newsletter from '../components/Newsletter'
 import RewardedAd from '../components/RewardedAd'
-import ContactForm from '../components/ContactForm'
 import SEO from '../components/SEO'
 
 function HomePage() {
@@ -144,69 +143,76 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="form-section">
-        {!registered ? (
-          <>
-            <h2>Monthly Free License Giveaway</h2>
-            <p style={{ marginBottom: '20px', color: 'rgba(255,255,255,0.8)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
-              Enter for a chance to win a free Microsoft 365 Business Basic license. Winners drawn on the 1st of every month!
-            </p>
-            <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} referredBy={referredBy} />
-          </>
-        ) : (
-          <div className="success-message">
-            {/* Header */}
-            <h3 style={{ marginBottom: '10px' }}>
-              {registrationData?.isVerified ? `You're In, ${registrationData?.firstName}!` : 'Almost There!'}
-            </h3>
-
-            {/* Verification or entry status */}
-            {!registrationData?.isVerified ? (
-              <p style={{ margin: '0 0 20px 0', fontSize: '0.95rem' }}>
-                <span style={{ color: '#fbbf24' }}>Check your email</span> to verify and unlock 5 entries
-                {resendStatus !== 'sent' && (
-                  <button onClick={() => { trackEvent('Verification_ResendClicked'); handleResendVerification() }} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
-                    {resendStatus === 'sending' ? '...' : 'resend'}
-                  </button>
-                )}
-                {resendStatus === 'sent' && <span style={{ color: '#4ade80', marginLeft: '8px' }}>Sent!</span>}
-              </p>
-            ) : (
-              <p style={{ margin: '0 0 20px 0', fontSize: '1.1rem' }}>
-                <strong>{totalEntries} entries</strong> in the drawing
-              </p>
-            )}
-
-            {/* Action buttons */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '400px', margin: '0 auto' }}>
-              <button onClick={() => { trackEvent('Ad_WatchClicked'); setShowRewardedAd(true) }} style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
-                Watch Ad for +2 Entries
-              </button>
-
-              {referralCode && (
+      {/* Giveaway + Newsletter Side by Side */}
+      <section style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', padding: '50px 20px' }}>
+        <div className="container" style={{ maxWidth: '1000px' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '30px',
+            alignItems: 'start'
+          }}>
+            {/* Giveaway Form */}
+            <div style={{
+              background: 'rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '16px',
+              padding: '30px',
+              color: 'white'
+            }}>
+              {!registered ? (
                 <>
-                  <button onClick={async () => { trackEvent('Referral_LinkCopied'); await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`); setCopied(true); setTimeout(() => setCopied(false), 2000) }} style={{ background: copied ? '#10b981' : '#6366f1', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
-                    {copied ? 'Link Copied!' : 'Copy Referral Link for +10'}
-                  </button>
-
-                  <div style={{ display: 'flex', gap: '10px' }}>
-                    {(() => {
-                      const url = encodeURIComponent(`https://www.free365key.com/?ref=${referralCode}`)
-                      const txt = encodeURIComponent("Win a FREE Microsoft 365 license!")
-                      return (
-                        <>
-                          <a href={`https://twitter.com/intent/tweet?text=${txt}&url=${url}`} onClick={() => trackEvent('Share_Twitter')} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#1DA1F2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Twitter</a>
-                          <a href={`https://www.facebook.com/sharer/sharer.php?u=${url}`} onClick={() => trackEvent('Share_Facebook')} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#4267B2', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>Facebook</a>
-                          <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${url}`} onClick={() => trackEvent('Share_LinkedIn')} target="_blank" rel="noopener noreferrer" style={{ flex: 1, padding: '12px', borderRadius: '8px', background: '#0077B5', color: 'white', textDecoration: 'none', fontSize: '0.9rem', fontWeight: '600', textAlign: 'center' }}>LinkedIn</a>
-                        </>
-                      )
-                    })()}
-                  </div>
+                  <h2 style={{ margin: '0 0 10px', fontSize: '1.5rem', textAlign: 'center' }}>Free License Giveaway</h2>
+                  <p style={{ marginBottom: '20px', color: 'rgba(255,255,255,0.8)', textAlign: 'center', fontSize: '0.95rem' }}>
+                    Enter to win a free Microsoft 365 Business Basic license. Winners drawn monthly!
+                  </p>
+                  <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} referredBy={referredBy} />
                 </>
+              ) : (
+                <div style={{ textAlign: 'center' }}>
+                  <h3 style={{ marginBottom: '10px' }}>
+                    {registrationData?.isVerified ? `You're In, ${registrationData?.firstName}!` : 'Almost There!'}
+                  </h3>
+                  {!registrationData?.isVerified ? (
+                    <p style={{ margin: '0 0 20px 0', fontSize: '0.95rem' }}>
+                      <span style={{ color: '#fbbf24' }}>Check your email</span> to verify and unlock 5 entries
+                      {resendStatus !== 'sent' && (
+                        <button onClick={() => { trackEvent('Verification_ResendClicked'); handleResendVerification() }} disabled={resendStatus === 'sending'} style={{ background: 'none', border: 'none', color: '#a5b4fc', textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', marginLeft: '8px' }}>
+                          {resendStatus === 'sending' ? '...' : 'resend'}
+                        </button>
+                      )}
+                      {resendStatus === 'sent' && <span style={{ color: '#4ade80', marginLeft: '8px' }}>Sent!</span>}
+                    </p>
+                  ) : (
+                    <p style={{ margin: '0 0 20px 0', fontSize: '1.1rem' }}>
+                      <strong>{totalEntries} entries</strong> in the drawing
+                    </p>
+                  )}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <button onClick={() => { trackEvent('Ad_WatchClicked'); setShowRewardedAd(true) }} style={{ background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
+                      Watch Ad for +2 Entries
+                    </button>
+                    {referralCode && (
+                      <button onClick={async () => { trackEvent('Referral_LinkCopied'); await navigator.clipboard.writeText(`https://www.free365key.com/?ref=${referralCode}`); setCopied(true); setTimeout(() => setCopied(false), 2000) }} style={{ background: copied ? '#10b981' : '#6366f1', color: 'white', border: 'none', borderRadius: '8px', padding: '14px', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', width: '100%' }}>
+                        {copied ? 'Link Copied!' : 'Copy Referral Link for +10'}
+                      </button>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
+
+            {/* Newsletter */}
+            <div style={{
+              background: 'white',
+              borderRadius: '16px',
+              padding: '30px',
+              color: '#1a1a1a'
+            }}>
+              <Newsletter />
+            </div>
           </div>
-        )}
+        </div>
       </section>
 
       <section className="features">
@@ -232,23 +238,6 @@ function HomePage() {
             <h3>Enterprise Security</h3>
             <p>Protect your business with advanced threat protection and data loss prevention.</p>
           </div>
-        </div>
-      </section>
-
-      <section id="contact" className="features contact-section" style={{ background: '#f8f9fa' }}>
-        <h2>Need More Licenses?</h2>
-        <div className="container" style={{ maxWidth: '600px' }}>
-          <p style={{ fontSize: '1.1rem', marginBottom: '30px', color: '#666', textAlign: 'center' }}>
-            We offer competitive pricing on Microsoft 365 licenses for businesses of all sizes.
-            Fill out the form below for volume discounts and enterprise packages.
-          </p>
-          <ContactForm />
-        </div>
-      </section>
-
-      <section className="newsletter-section">
-        <div className="container">
-          <Newsletter />
         </div>
       </section>
 

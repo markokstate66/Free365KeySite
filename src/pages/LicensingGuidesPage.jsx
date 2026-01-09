@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import ContactForm from '../components/ContactForm'
 import SEO from '../components/SEO'
 
 const plans = [
@@ -713,13 +714,24 @@ function LicensingGuidesPage() {
         </div>
       </section>
 
+      {/* Need More Licenses Section */}
+      <section id="contact" className="content-section" style={{ background: '#f8f9fa' }}>
+        <div className="container" style={{ maxWidth: '600px' }}>
+          <h2 style={{ textAlign: 'center', marginBottom: '15px' }}>Need More Licenses?</h2>
+          <p style={{ fontSize: '1.1rem', marginBottom: '30px', color: '#666', textAlign: 'center' }}>
+            We offer competitive pricing on Microsoft 365 licenses for businesses of all sizes.
+            Fill out the form below for volume discounts and enterprise packages.
+          </p>
+          <ContactForm />
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="content-section" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
         <div className="container" style={{ textAlign: 'center', maxWidth: '700px' }}>
-          <h2 style={{ color: 'white', marginBottom: '20px' }}>Ready to Get Started?</h2>
+          <h2 style={{ color: 'white', marginBottom: '20px' }}>Try Microsoft 365 Free</h2>
           <p style={{ marginBottom: '30px', color: 'rgba(255,255,255,0.9)', fontSize: '1.1rem' }}>
-            Enter our monthly giveaway for a chance to try Microsoft 365 Business Basic free,
-            or contact us for competitive pricing on volume licenses.
+            Enter our monthly giveaway for a chance to win a free Microsoft 365 Business Basic license.
           </p>
           <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link
@@ -749,20 +761,6 @@ function LicensingGuidesPage() {
             >
               Find Your Plan
             </Link>
-            <a
-              href="/#contact"
-              className="submit-btn"
-              style={{
-                display: 'inline-block',
-                textDecoration: 'none',
-                background: 'transparent',
-                border: '2px solid white',
-                color: 'white',
-                padding: '15px 30px'
-              }}
-            >
-              Contact for Pricing
-            </a>
           </div>
         </div>
       </section>
