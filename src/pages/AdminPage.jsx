@@ -139,7 +139,7 @@ function AdminPage() {
   }
 
   const deleteRegistration = async (id, email) => {
-    if (!confirm(`Are you sure you want to delete the registration for ${email}? This will also remove any bonus entries.`)) return
+    if (!confirm(`Are you sure you want to delete the registration for ${email}?`)) return
     try {
       const response = await fetch(`/api/mgmt-registrations?id=${id}`, {
         method: 'DELETE'

@@ -44,17 +44,6 @@ module.exports = async function (context, req) {
       return;
     }
 
-    // Get bonus entry count for personalized message
-    const bonusClient = await getTableClient("bonusentries");
-    let bonusCount = 0;
-    const bonuses = bonusClient.listEntities({
-      queryOptions: { filter: `registrationId eq '${winnerId}'` }
-    });
-    for await (const bonus of bonuses) {
-      bonusCount++;
-    }
-    const totalEntries = 1 + bonusCount;
-
     // Send congratulations email to winner
     const winnerEmailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -66,7 +55,7 @@ module.exports = async function (context, req) {
           <p style="margin: 10px 0 0 0;">A FREE 30-day Microsoft 365 License</p>
         </div>
 
-        <p>Your ${bonusCount > 0 ? totalEntries + ' entries (1 registration + ' + bonusCount + ' bonus)' : 'entry'} paid off!</p>
+        <p>Your entry paid off!</p>
 
         ${customMessage ? `<div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;"><p style="margin: 0;">${customMessage}</p></div>` : ''}
 

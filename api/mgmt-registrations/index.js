@@ -49,24 +49,6 @@ module.exports = async function (context, req) {
         }
       }
 
-      // Also delete any bonus entries for this registration
-      try {
-        const bonusTableClient = await getTableClient("bonusentries");
-        const bonusEntries = bonusTableClient.listEntities({
-          queryOptions: { filter: `registrationId eq '${id}'` }
-        });
-
-        for await (const entry of bonusEntries) {
-          try {
-            await bonusTableClient.deleteEntity(entry.partitionKey, entry.rowKey);
-          } catch (e) {
-            context.log.warn("Failed to delete bonus entry:", e.message);
-          }
-        }
-      } catch (e) {
-        context.log.warn("Error cleaning up bonus entries:", e.message);
-      }
-
       context.log(`Deleted registration ${id}`);
       context.res = {
         status: 200,

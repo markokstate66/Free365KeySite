@@ -63,51 +63,6 @@ module.exports = async function (context, req) {
       verifiedAt: new Date().toISOString()
     }, "Merge");
 
-    // Award referral bonus to the referrer (+10 entries, valid for 6 drawings)
-    if (registration.referredBy) {
-      try {
-        const referrerEntries = tableClient.listEntities({
-          queryOptions: { filter: `referralCode eq '${registration.referredBy}'` }
-        });
-
-        for await (const referrer of referrerEntries) {
-          const currentReferralCount = referrer.referralCount || 0;
-
-          // Calculate validUntilDrawing (6 months from now)
-          const now = new Date();
-          const validUntilDate = new Date(now.getFullYear(), now.getMonth() + 6, 1);
-          const validUntilDrawing = `${validUntilDate.getFullYear()}-${String(validUntilDate.getMonth() + 1).padStart(2, '0')}`;
-
-          // Store referral in referrals table (like ad bonuses)
-          const referralsClient = await getTableClient("referrals");
-          const { v4: uuidv4 } = require("uuid");
-
-          await referralsClient.createEntity({
-            partitionKey: "referral",
-            rowKey: uuidv4(),
-            referrerId: referrer.rowKey,
-            referredId: id,
-            referredEmail: registration.email,
-            earnedAt: now.toISOString(),
-            validUntilDrawing: validUntilDrawing,
-            entries: 10
-          });
-
-          // Update referrer's count (for display purposes)
-          await tableClient.updateEntity({
-            partitionKey: "registration",
-            rowKey: referrer.rowKey,
-            referralCount: currentReferralCount + 1
-          }, "Merge");
-
-          context.log(`Awarded +10 referral entries to ${referrer.email} for referring ${registration.email} (valid until ${validUntilDrawing})`);
-          break;
-        }
-      } catch (referralError) {
-        context.log.error("Failed to award referral bonus:", referralError);
-      }
-    }
-
     context.res = {
       status: 200,
       headers: { "Content-Type": "application/json" },

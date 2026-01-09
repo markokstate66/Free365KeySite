@@ -9,7 +9,7 @@ function HowItWorksPage() {
       <SEO
         title="How It Works"
         path="/how-it-works"
-        description="Learn how to enter our free Microsoft 365 giveaway. Register, verify email, earn bonus entries by watching ads or referring friends, and win!"
+        description="Learn how to enter our free Microsoft 365 giveaway. Register, verify your email, and you're entered in all future monthly drawings!"
       />
       <Header />
 
@@ -28,7 +28,7 @@ function HowItWorksPage() {
               <div className="step-content">
                 <h3>Register Your Entry</h3>
                 <p>
-                  Fill out the simple registration form on our homepage with your name and email address.
+                  Fill out the simple registration form on our <Link to="/giveaway" style={{ color: '#667eea' }}>giveaway page</Link> with your name and email address.
                   Make sure to use a valid email as this is how we'll contact winners.
                 </p>
               </div>
@@ -39,8 +39,8 @@ function HowItWorksPage() {
               <div className="step-content">
                 <h3>Confirm Your Email</h3>
                 <p>
-                  Check your inbox for a confirmation email. Click the link to verify your entry
-                  and unlock <strong>5 base entries</strong> in the drawing.
+                  Check your inbox for a confirmation email. Click the link to verify your entry.
+                  Once verified, you're automatically entered in <strong>all future monthly drawings</strong>.
                 </p>
               </div>
             </div>
@@ -48,39 +48,16 @@ function HowItWorksPage() {
             <div className="step">
               <div className="step-number">3</div>
               <div className="step-content">
-                <h3>Watch Ads for Bonus Entries</h3>
+                <h3>Wait for the Drawing</h3>
                 <p>
-                  Watch short ads to earn <strong>+2 bonus entries</strong> each! Each ad bonus is valid for the next
-                  <strong> 3 monthly drawings</strong>. Watch as many as you want to boost your chances.
+                  We conduct random drawings on the 1st of every month. Every verified participant
+                  has an equal chance of winning. No need to re-enter each month!
                 </p>
               </div>
             </div>
 
             <div className="step">
               <div className="step-number">4</div>
-              <div className="step-content">
-                <h3>Share & Refer Friends</h3>
-                <p>
-                  Get your unique referral link and share it with friends. When someone signs up using your link
-                  and verifies their email, you earn <strong>+10 bonus entries</strong> valid for <strong>6 monthly drawings</strong>!
-                  Share on Twitter, Facebook, LinkedIn, or email.
-                </p>
-              </div>
-            </div>
-
-            <div className="step">
-              <div className="step-number">5</div>
-              <div className="step-content">
-                <h3>Wait for the Drawing</h3>
-                <p>
-                  We conduct random drawings on the 1st of every month. The more entries you have
-                  (base + ads + referrals), the higher your chances of winning!
-                </p>
-              </div>
-            </div>
-
-            <div className="step">
-              <div className="step-number">6</div>
               <div className="step-content">
                 <h3>Claim Your Prize</h3>
                 <p>
@@ -120,7 +97,7 @@ function HowItWorksPage() {
           <p style={{ marginBottom: '30px', color: '#666' }}>
             It only takes 30 seconds to register for your chance to win!
           </p>
-          <Link to="/" className="submit-btn" style={{ display: 'inline-block', textDecoration: 'none', maxWidth: '300px' }}>
+          <Link to="/giveaway" className="submit-btn" style={{ display: 'inline-block', textDecoration: 'none', maxWidth: '300px' }}>
             Enter Now
           </Link>
         </div>
