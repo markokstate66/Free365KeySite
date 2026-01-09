@@ -170,8 +170,8 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
             checked={formData.agreeTerms}
             onChange={handleChange}
           />
-          <label htmlFor="agreeTerms">
-            I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy Policy</a> *
+          <label htmlFor="agreeTerms" style={{ color: 'white' }}>
+            I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#a5b4fc' }}>Terms of Service</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#a5b4fc' }}>Privacy Policy</a> *
           </label>
         </div>
       </div>
@@ -185,7 +185,7 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
             checked={formData.agreeMarketing}
             onChange={handleChange}
           />
-          <label htmlFor="agreeMarketing">
+          <label htmlFor="agreeMarketing" style={{ color: 'white' }}>
             I agree to receive promotional emails and special offers about Microsoft licensing
           </label>
         </div>
@@ -200,7 +200,7 @@ function RegistrationForm({ onSuccess, onAlreadyRegistered, referredBy }) {
             checked={formData.joinNewsletter}
             onChange={handleChange}
           />
-          <label htmlFor="joinNewsletter">
+          <label htmlFor="joinNewsletter" style={{ color: 'white' }}>
             Subscribe to our newsletter for Microsoft 365 tips, tricks, and giveaway announcements
           </label>
         </div>
