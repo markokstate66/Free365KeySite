@@ -26,6 +26,7 @@ const UnsubscribePage = lazy(() => import('./pages/UnsubscribePage'))
 const VerifyEmailPage = lazy(() => import('./pages/VerifyEmailPage'))
 const ComparePage = lazy(() => import('./pages/ComparePage'))
 const LicensingGuidesPage = lazy(() => import('./pages/LicensingGuidesPage'))
+const PlanFinderPage = lazy(() => import('./pages/PlanFinderPage'))
 
 // Loading fallback component
 const PageLoader = () => (
@@ -77,6 +78,7 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/compare" element={<ComparePage />} />
         <Route path="/licensing-guides" element={<LicensingGuidesPage />} />
+        <Route path="/plan-finder" element={<PlanFinderPage />} />
       </Routes>
     </Suspense>
   )

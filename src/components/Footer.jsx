@@ -6,11 +6,13 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-links">
-        <Link to="/">Home</Link>
-        <Link to="/privacy">Privacy Policy</Link>
-        <Link to="/terms">Terms of Service</Link>
         <Link to="/licensing-guides">Licensing Guide</Link>
-        <a href="mailto:contact@free365key.com">Contact</a>
+        <Link to="/plan-finder">Plan Finder</Link>
+        <Link to="/compare">Direct vs CSP</Link>
+        <Link to="/faq">FAQ</Link>
+        <Link to="/">Giveaway</Link>
+        <Link to="/privacy">Privacy</Link>
+        <Link to="/terms">Terms</Link>
       </div>
       <p className="footer-copy">
         &copy; {currentYear} Free365Key. All rights reserved.

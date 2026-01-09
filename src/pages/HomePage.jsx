@@ -99,26 +99,58 @@ function HomePage() {
   return (
     <div>
       <SEO
+        title="Free365Key - Microsoft 365 Resources, Guides & Free License Giveaway"
         path="/"
-        description="Register for a chance to win a FREE Microsoft 365 license key. Enter our monthly giveaway today - no purchase necessary!"
+        description="Your complete resource for Microsoft 365 licensing. Compare plans, find the right license, and enter our monthly giveaway for a free Microsoft 365 license."
       />
       <Header />
 
       <section className="hero">
         <div className="container">
-          <h1>Win a FREE Microsoft 365 License!</h1>
+          <h1>Your Microsoft 365 Resource Hub</h1>
           <p>
-            Register now for your chance to win a free Microsoft 365 trial.
+            Expert guides, plan comparisons, and tools to help you choose the right Microsoft 365 license.
             <br />
-            Winners drawn on the 1st of every month!
+            Plus enter our monthly giveaway for a free license!
           </p>
+        </div>
+      </section>
+
+      {/* Quick Links Section */}
+      <section style={{ background: '#f8f9fa', padding: '30px 20px' }}>
+        <div className="container" style={{ maxWidth: '900px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+            <a href="/licensing-guides" style={{ background: 'white', padding: '20px', borderRadius: '12px', textDecoration: 'none', color: 'inherit', boxShadow: '0 2px 10px rgba(0,0,0,0.08)', textAlign: 'center', transition: 'transform 0.2s' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '10px' }}>📚</div>
+              <h3 style={{ margin: '0 0 5px', fontSize: '1rem' }}>Licensing Guide</h3>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Compare all M365 plans</p>
+            </a>
+            <a href="/plan-finder" style={{ background: 'white', padding: '20px', borderRadius: '12px', textDecoration: 'none', color: 'inherit', boxShadow: '0 2px 10px rgba(0,0,0,0.08)', textAlign: 'center', transition: 'transform 0.2s' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '10px' }}>🎯</div>
+              <h3 style={{ margin: '0 0 5px', fontSize: '1rem' }}>Plan Finder</h3>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Find your perfect plan</p>
+            </a>
+            <a href="/compare" style={{ background: 'white', padding: '20px', borderRadius: '12px', textDecoration: 'none', color: 'inherit', boxShadow: '0 2px 10px rgba(0,0,0,0.08)', textAlign: 'center', transition: 'transform 0.2s' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '10px' }}>⚖️</div>
+              <h3 style={{ margin: '0 0 5px', fontSize: '1rem' }}>Direct vs CSP</h3>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Compare buying options</p>
+            </a>
+            <a href="/faq" style={{ background: 'white', padding: '20px', borderRadius: '12px', textDecoration: 'none', color: 'inherit', boxShadow: '0 2px 10px rgba(0,0,0,0.08)', textAlign: 'center', transition: 'transform 0.2s' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '10px' }}>❓</div>
+              <h3 style={{ margin: '0 0 5px', fontSize: '1rem' }}>FAQ</h3>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: '#666' }}>Common questions</p>
+            </a>
+          </div>
         </div>
       </section>
 
       <section className="form-section">
         {!registered ? (
           <>
-            <h2>Enter the Giveaway</h2>
+            <h2>Monthly Free License Giveaway</h2>
+            <p style={{ marginBottom: '20px', color: 'rgba(255,255,255,0.8)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' }}>
+              Enter for a chance to win a free Microsoft 365 Business Basic license. Winners drawn on the 1st of every month!
+            </p>
             <RegistrationForm onSuccess={handleSuccess} onAlreadyRegistered={handleAlreadyRegistered} referredBy={referredBy} />
           </>
         ) : (
